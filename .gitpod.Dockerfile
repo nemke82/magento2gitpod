@@ -58,4 +58,3 @@ USER gitpod
 
 RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
-RUN service nginx start &
