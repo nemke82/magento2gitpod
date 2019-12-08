@@ -28,7 +28,9 @@ RUN apt-get update \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
     
 #Install xDebug
-RUN apt-get install xdebug \
+RUN add-apt-repository ppa:ondrej/php \
+    apt-get update \
+    apt-get install xdebug \
     && echo "zend_extension=$(find / -name xdebug.so)" > /etc/php/7.2/mods-available/xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini
