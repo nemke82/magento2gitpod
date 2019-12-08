@@ -8,6 +8,8 @@ RUN apt-get -y install python
 RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
 RUN apt install software-properties-common
+RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
+RUN echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 #Install php-fpm7.2
 RUN apt-get update \
@@ -43,9 +45,6 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///var/run/blackfire/agent.sock
-
-RUN wget -O - https://packagecloud.io/gpg.key | apt-key add - && \
-    echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 RUN apt-get update && \
     apt-get install -y \
