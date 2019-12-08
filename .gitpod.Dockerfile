@@ -71,7 +71,7 @@ COPY nginx.conf /etc/nginx
 USER root
 
 ENV BLACKFIRE_LOG_LEVEL 1
-ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
+ENV BLACKFIRE_LOG_FILE /var/log/blackfire/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///tmp/blackfire/agent.sock
 
 RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
@@ -94,3 +94,6 @@ COPY blackfire-php.ini /etc/php/7.2/cli/conf.d/92-blackfire-config.ini
 COPY blackfire-run.sh /blackfire-run.sh
 
 ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
+
+RUN chown -R gitpod:gitpod /var/log/blackfire
+RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
