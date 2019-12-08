@@ -75,6 +75,7 @@ ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///var/run/blackfire/agent.sock
 
 RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
+    && curl -sS https://packages.blackfire.io/gpg.key | sudo apt-key add \
     && echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
     && apt-get update \
     && apt-get install -y blackfire-agent \
