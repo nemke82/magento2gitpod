@@ -29,7 +29,7 @@ RUN apt-get update \
     
 #Adjust few options for xDebug
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini
     #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini \
     #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.2/mods-available/xdebug.ini \
     #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.2/mods-available/xdebug.ini \
@@ -70,13 +70,11 @@ COPY nginx.conf /etc/nginx
 
 USER root
 
-FROM yappabe/php:7.2
-
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///var/run/blackfire/agent.sock
 
-RUN wget -O - https://packagecloud.io/gpg.key | apt-key add - \
+RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
     && echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
     && apt-get update \
     && apt-get install -y blackfire-agent \
