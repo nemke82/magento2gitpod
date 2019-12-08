@@ -9,12 +9,6 @@ RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
 RUN apt install software-properties-common
 
-# Register the packagecloud key
-RUN wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
-
-# Add deb http://packages.blackfire.io/debian any main to /etc/apt/sources.list.d/blackfire.list
-RUN echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
-
 #Install php-fpm7.2
 RUN apt-get update \
     && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
@@ -49,6 +43,13 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///var/run/blackfire/agent.sock
+
+# Register the packagecloud key
+RUN wget -c https://packagecloud.io/gpg.key \
+    && apt-key add gpg.key
+
+# Add deb http://packages.blackfire.io/debian any main to /etc/apt/sources.list.d/blackfire.list
+RUN echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
 
 RUN apt-get update && \
     apt-get install -y \
