@@ -97,3 +97,5 @@ ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
+RUN mkdir -p /var/run/blackfire
+RUN chown -R gitpod:gitpod /var/run/blackfire
