@@ -8,8 +8,6 @@ RUN apt-get -y install python
 RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
 RUN apt install software-properties-common
-RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
-RUN echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 #Install php-fpm7.2
 RUN apt-get update \
@@ -51,11 +49,12 @@ RUN apt-get update && \
     blackfire-agent \
     blackfire-php
 
-RUN \
-    version=$(php -r "echo PHP_MAJOR_VERSION, PHP_MINOR_VERSION;") \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${version} \
+RUN export VERSION=`php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;"` \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${VERSION} \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
+    && mv /tmp/blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
+    && echo "extension=blackfire.so\nblackfire.agent_socket=\${BLACKFIRE_PORT}" > $PHP_INI_DIR/conf.d/blackfire.ini \
+    && rm -Rf /tmp/*
 
 COPY blackfire-agent.ini /etc/blackfire/agent
 COPY blackfire-php.ini /etc/php/7.2/fpm/conf.d/92-blackfire-config.ini
