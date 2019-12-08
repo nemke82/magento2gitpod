@@ -73,6 +73,8 @@ USER root
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /var/log/blackfire/blackfire.log
 ENV BLACKFIRE_SOCKET unix:///tmp/blackfire/agent.sock
+ENV BLACKFIRE_SOURCEDIR /etc/blackfire
+ENV BLACKFIRE_USER gitpod
 
 RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
     && curl -sS https://packages.blackfire.io/gpg.key | sudo apt-key add \
@@ -99,3 +101,4 @@ RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
 RUN mkdir -p /var/run/blackfire
 RUN chown -R gitpod:gitpod /var/run/blackfire
+RUN chown -R gitpod:gitpod /etc/blackfire
