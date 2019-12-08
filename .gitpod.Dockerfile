@@ -27,13 +27,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
     
-#Install xDebug
-#RUN add-apt-repository -y ppa:ondrej/php \
-    #&& apt-get update \
-    #&& apt-get install xdebug \
-    #&& echo "zend_extension=$(find / -name xdebug.so)" > /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini
+#Adjust few options for xDebug
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.2/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.2/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
