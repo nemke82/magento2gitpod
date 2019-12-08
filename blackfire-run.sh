@@ -13,4 +13,8 @@ done
 blackfire-agent --register
 /etc/init.d/blackfire-agent restart
 
-/bin/bash /run.sh
+blackfire config
+
+#restart php7.2-fpm and nginx
+service php7.2-fpm reload && service php-7.2-fpm restart
+service nginx restart
