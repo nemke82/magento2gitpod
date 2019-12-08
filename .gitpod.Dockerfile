@@ -72,7 +72,7 @@ USER root
 
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /tmpfs/logs/blackfire.log
-ENV BLACKFIRE_SOCKET unix:///var/run/blackfire/agent.sock
+ENV BLACKFIRE_SOCKET unix:///tmp/blackfire/agent.sock
 
 RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
     && curl -sS https://packages.blackfire.io/gpg.key | sudo apt-key add \
