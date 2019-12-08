@@ -28,10 +28,10 @@ RUN apt-get update \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
     
 #Install xDebug
-RUN yes | pecl install xdebug \
-    #&& echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    #&& echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    #&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN apt-get install xdebug \
+    && echo "zend_extension=$(find / -name xdebug.so)" > /etc/php/7.2/mods-available/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php/7.2/mods-available/xdebug.ini
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
