@@ -15,6 +15,8 @@ blackfire-agent --register
 
 blackfire config
 
-#restart php7.2-fpm and nginx
-service php7.2-fpm reload && service php-7.2-fpm restart
-service nginx restart
+cat /etc/blackfire/agent | grep "server-id=" | sed 's/server-id/blackfire.server_id/' >> /etc/php/7.2/cli/conf.d/92-blackfire-config.ini
+cat /etc/blackfire/agent | grep "server-token=" | sed 's/server-token/blackfire.server_token/' >> /etc/php/7.2/cli/conf.d/92-blackfire-config.ini
+
+#restart php7.2-fpm
+service php7.2-fpm reload && service php7.2-fpm restart
