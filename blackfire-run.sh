@@ -9,4 +9,4 @@ cat /etc/blackfire/agent | grep "server-token=" | sed 's/server-token/blackfire.
 blackfire-agent --socket="unix:///tmp/agent.sock" &
 
 #restart php7.2-fpm
-service php7.2-fpm reload && service php7.2-fpm restart
+service php7.2-fpm stop && service php7.2-fpm restart
