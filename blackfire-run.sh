@@ -17,3 +17,5 @@ echo "blackfire.agent_socket=unix:///tmp/agent.sock" >> /etc/php/7.2/cli/conf.d/
 
 #restart php7.2-fpm
 service php7.2-fpm stop && service php7.2-fpm restart
+
+blackfire-agent --socket=unix:///tmp/agent.sock &
