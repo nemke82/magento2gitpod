@@ -11,4 +11,3 @@ tasks:
   - command: cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh
   - command: /usr/sbin/php-fpm7.2 --fpm-config php-fpm.conf &
   - command: cd /workspace/magento2gitpod && wget -c https://magento.mirror.hypernode.com/releases/magento-2.3.3.tar.gz
-  - command: mysql -e 'create database nemanja;'
