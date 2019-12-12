@@ -102,3 +102,4 @@ RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
 RUN mkdir -p /var/run/blackfire
 RUN chown -R gitpod:gitpod /var/run/blackfire
 RUN chown -R gitpod:gitpod /etc/blackfire
+RUN chown -R gitpod:gitpod /etc/php
