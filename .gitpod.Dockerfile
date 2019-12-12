@@ -72,7 +72,7 @@ USER root
 
 ENV BLACKFIRE_LOG_LEVEL 1
 ENV BLACKFIRE_LOG_FILE /var/log/blackfire/blackfire.log
-ENV BLACKFIRE_SOCKET unix:///tmp/blackfire/agent.sock
+ENV BLACKFIRE_SOCKET unix:///tmp/agent.sock
 ENV BLACKFIRE_SOURCEDIR /etc/blackfire
 ENV BLACKFIRE_USER gitpod
 
