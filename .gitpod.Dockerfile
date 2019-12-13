@@ -7,6 +7,7 @@ RUN apt-get -y install apt-utils
 RUN apt-get -y install python
 RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
+RUN apt-get -y install rsync
 RUN apt install software-properties-common
 
 #Install php-fpm7.2
