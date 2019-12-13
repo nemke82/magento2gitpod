@@ -97,6 +97,12 @@ COPY blackfire-run.sh /blackfire-run.sh
 
 ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
 
+# Install Redis.
+RUN sudo apt-get update \
+ && sudo apt-get install -y \
+  redis-server \
+ && sudo rm -rf /var/lib/apt/lists/*
+
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
 RUN mkdir -p /var/run/blackfire
