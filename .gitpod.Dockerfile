@@ -103,6 +103,11 @@ RUN sudo apt-get update \
  && sudo apt-get install -y \
   redis-server \
  && sudo rm -rf /var/lib/apt/lists/*
+ 
+ #n98-magerun2 tool.
+ RUN wget https://files.magerun.net/n98-magerun2.phar \
+     && chmod +x ./n98-magerun2.phar
+     && mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
