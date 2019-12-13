@@ -36,15 +36,10 @@ slow_query_log=1
 sort_buffer_size=2G
 thread_pool_size=20
 tmp_table_size=2G
-transaction-isolation=READ-COMMITTED"
-
-myisam-recover-options  = BACKUP
-query_cache_limit	    = 1M
-query_cache_size        = 16M
+transaction-isolation=READ-COMMITTED
 
 general_log_file        = /var/log/mysql/mysql.log
 general_log             = 1
 log_error               = /var/log/mysql/error.log
 
-expire_logs_days	= 10
 max_binlog_size     = 100M
