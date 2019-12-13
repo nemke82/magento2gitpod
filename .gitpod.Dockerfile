@@ -17,7 +17,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y php7.2-fpm php7.2-common php7.2-cli php7.2-imagick php7.2-gd php7.2-mysql \
        php7.2-pgsql php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-soap php7.2-zip php7.2-curl \
-       php7.2-bcmath php7.2-sqlite3 php-xdebug \
+       php7.2-bcmath php7.2-sqlite3 php7.2-apcu php-xdebug \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
@@ -108,6 +108,9 @@ RUN sudo apt-get update \
  RUN wget https://files.magerun.net/n98-magerun2.phar \
      && chmod +x ./n98-magerun2.phar
      && mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
+     
+#Install APCU
+RUN apt-get install php7.2-apcu -y
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
