@@ -115,6 +115,9 @@ RUN sudo apt-get update \
 RUN apt-get install php7.2-apcu -y
 RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
 
+# Install tools in docker host
+RUN apt-get install -y strace
+
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
 RUN mkdir -p /var/run/blackfire
