@@ -34,7 +34,6 @@ query_cache_size=4G
 query_cache_type=1
 slow_query_log=1
 sort_buffer_size=2G
-thread_pool_size=20
 tmp_table_size=2G
 transaction-isolation=READ-COMMITTED
 
