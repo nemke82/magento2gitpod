@@ -124,3 +124,4 @@ RUN mkdir -p /var/run/blackfire
 RUN chown -R gitpod:gitpod /var/run/blackfire
 RUN chown -R gitpod:gitpod /etc/blackfire
 RUN chown -R gitpod:gitpod /etc/php
+RUN chown -R gitpod:gitpod /home/gitpod
