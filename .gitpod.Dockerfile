@@ -113,6 +113,7 @@ RUN sudo apt-get update \
      
 #Install APCU
 RUN apt-get install php7.2-apcu -y
+RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
