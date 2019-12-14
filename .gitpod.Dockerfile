@@ -105,6 +105,7 @@ RUN sudo apt-get update \
  && sudo apt-get install -y \
   redis-server \
  && sudo rm -rf /var/lib/apt/lists/*
+RUN echo never > /sys/kernel/mm/transparent_hugepage/enabled
  
  #n98-magerun2 tool.
  RUN wget https://files.magerun.net/n98-magerun2.phar \
