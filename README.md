@@ -13,24 +13,24 @@ Gitpod will now launch a workspace container for you in the cloud, containing a 
 More info: https://www.gitpod.io/docs/10_getting_started/
 
 Services/Tools installed:
-- Nginx
-- PHP 7.2 based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php)
-- Python (base version)
-- rsync
-- mc (Midnight commander)
-- MySQL (Oracle) 5.7 version
-- xDebug (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled.
-- Blackfire installed). Note: Please run ./blackfire-run.sh to enter your Server/Client ID and Token's.
-- Redis installed. Note: Please run 'redis-server &' to start it.
+- **Nginx**
+- **PHP 7.2** based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php). To add additional PHP extensions, please update https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L15 block.
+- **Python** (base version)
+- **rsync**
+- **mc** (Midnight commander)
+- **MySQL** (Oracle) 5.7 version
+- **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled.
+- **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
+- **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 
 TO INSTALL Magento 2.3.3 (latest):
-start ./m2-install.sh once workspace deployed
+start **./m2-install.sh** once workspace deployed
 
 MySQL:
-username: root
+username: root <BR>
 no password defined
 
-Create database, example:
-mysql -e 'create database nemanja;'
+Create database, example: <BR>
+mysql -e 'create database nemanja;' <BR>
 
 In case you need to adjust certain my.cnf settings, please edit https://github.com/nemke82/magento2gitpod/blob/master/mysql.cnf file and redeploy GitPod workspace
