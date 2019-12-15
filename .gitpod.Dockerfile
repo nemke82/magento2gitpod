@@ -42,6 +42,9 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+#Enable ptrace so we can use strace to php-fpm for example
+RUN sed -i 's/1/0/g' /etc/sysctl.d/10-ptrace.conf
+
 # Install MySQL
 RUN apt-get update \
  && apt-get install -y mysql-server \
