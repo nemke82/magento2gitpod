@@ -21,6 +21,7 @@ Services/Tools installed:
 - **MySQL** (Oracle) 5.7 version
 - **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled.
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
+- **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 
 TO INSTALL Magento 2.3.3 (latest):
