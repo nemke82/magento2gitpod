@@ -23,6 +23,7 @@ Services/Tools installed:
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
+- **ElasticSearch 5.6.16**. Note: Please run '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' to start it.
 
 TO INSTALL Magento 2.3.3 (latest):
 start **./m2-install.sh** once workspace deployed
