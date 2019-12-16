@@ -145,6 +145,21 @@ RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
 RUN apt-get update -y
 RUN apt-get install -y strace
 
+#Install ElasticSearch 5.6.8
+#some_ important _library
+RUN apt-get -y update && apt-get install wget build-essential gcc make -y
+RUN apt-get install common-software-properties  -y
+#Install_JAVA
+RUN apt-get install default-jdk -y
+RUN apt-get install openjdk-8-jre -y
+RUN apt-get update
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+RUN echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list
+RUN apt-get update &&  apt-get install elasticsearch -y
+RUN apt-get install git -y
+RUN apt-get install python2.7 -y
+RUN apt-get install vim  -y
+
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
 RUN mkdir -p /var/run/blackfire
