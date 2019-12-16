@@ -26,6 +26,9 @@ Services/Tools installed:
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
   '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node'
 
+Every listed service installation code is added within .gitpod.Dockerfile
+You can split them into separate workspaces and share it among themself if you know what you are doing.
+
 TO INSTALL Magento 2.3.3 (latest):
 start **./m2-install.sh** once workspace deployed
 
