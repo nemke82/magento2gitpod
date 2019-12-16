@@ -123,7 +123,9 @@ RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' >
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://127.0.0.1:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/cli/conf.d/40-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/cli/conf.d/40-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/fpm/conf.d/40-tideways.ini
+RUN rm -f /etc/php/7.2/cli/20-tideways.ini
 
 # Install Redis.
 RUN sudo apt-get update \
