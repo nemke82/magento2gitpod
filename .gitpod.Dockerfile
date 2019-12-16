@@ -145,7 +145,7 @@ RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
 RUN apt-get update -y
 RUN apt-get install -y strace
 
-#Install ElasticSearch 5.6.8
+#Install ElasticSearch 5.6.16
 #some_ important _library
 RUN apt-get -y update && apt-get install wget build-essential gcc make -y
 
@@ -166,3 +166,4 @@ RUN chown -R gitpod:gitpod /var/run/blackfire
 RUN chown -R gitpod:gitpod /etc/blackfire
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /home/gitpod/.composer
+RUN chown -R gitpod:gitpod /etc/elasticsearch/
