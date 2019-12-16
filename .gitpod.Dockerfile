@@ -105,7 +105,7 @@ ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
 
 #Install Tideways
 FROM debian:stable-slim
-RUN apt-get update && apt-get install -yq --no-install-recommends gnupg2 curl sudo ca-certificates
+RUN apt-get update
 RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list && \
     curl -sS 'https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg' | apt-key add -
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -yq tideways-daemon && \
