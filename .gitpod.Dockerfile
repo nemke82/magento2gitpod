@@ -8,6 +8,7 @@ RUN apt-get -y install python
 RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
 RUN apt-get -y install rsync
+RUN apt-get -y install curl
 RUN apt-get -y install openssh-client
 RUN apt-get -y install mc
 RUN apt install software-properties-common
