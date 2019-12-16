@@ -167,3 +167,4 @@ RUN chown -R gitpod:gitpod /etc/blackfire
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /home/gitpod/.composer
 RUN chown -R gitpod:gitpod /etc/elasticsearch/
+RUN chown -R gitpod:gitpod /etc/init.d/
