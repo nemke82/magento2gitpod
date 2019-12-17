@@ -24,7 +24,12 @@ Services/Tools installed:
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
-  '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node'
+  '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+  
+  Some extensions like ElasticSuite (https://github.com/Smile-SA/elasticsuite/wiki/ServerConfig-5.x) requires two ElasticSearch plugins to be installed. You can install them with the following commands:<BR>
+  
+  $ES_HOME/bin/elasticsearch-plugin install analysis-phonetic <BR>
+  $ES_HOME/bin/elasticsearch-plugin install analysis-icu <BR>
 
 Every listed service installation code is added within .gitpod.Dockerfile
 You can split them into separate workspaces and share it among themself if you know what you are doing.
