@@ -32,7 +32,7 @@ RUN apt-get update \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
     
 #Adjust few options for xDebug
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini
     #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.2/mods-available/xdebug.ini
     #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini \
     #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.2/mods-available/xdebug.ini \
