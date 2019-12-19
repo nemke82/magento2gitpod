@@ -40,12 +40,6 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini \
     #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini \
     #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini
 
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-    && ln -sf /dev/stderr /var/log/nginx/error.log
-
-#Enable ptrace so we can use strace to php-fpm for example
-RUN sed -i 's/1/0/g' /etc/sysctl.d/10-ptrace.conf
-
 # Install MySQL
 RUN apt-get update \
  && apt-get install -y mysql-server \
@@ -140,10 +134,6 @@ RUN sudo apt-get update \
      
 #Install APCU
 RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
-
-# Install tools in docker host
-RUN apt-get update -y
-RUN apt-get install -y strace
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
