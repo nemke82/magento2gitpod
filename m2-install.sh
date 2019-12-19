@@ -14,7 +14,7 @@ php bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-ser
 php bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=127.0.0.1 --page-cache-redis-db=2
 
 php bin/magento config:set web/cookie/cookie_path "/" --lock-env &&
-php bin/magento config:set web/cookie/cookie_domain ".gitpod" --lock-env &&
+php bin/magento config:set web/cookie/cookie_domain ".gitpod.io" --lock-env &&
 
 echo "Click here and then Open Browser button  --------------------------------------------------------------"
 echo "                                                                                                      |"
