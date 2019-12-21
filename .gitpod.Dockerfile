@@ -152,7 +152,6 @@ RUN chown -R gitpod:gitpod /etc/nginx
 RUN chown -R gitpod:gitpod /home/gitpod/.composer
 RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
-RUN sysctl -p
 
 #Install ElasticSearch 5.6.16
 #some_ important _library
