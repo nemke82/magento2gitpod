@@ -12,6 +12,9 @@ RUN apt-get -y install curl
 RUN apt-get -y install openssh-client
 RUN apt-get -y install mc
 RUN apt install software-properties-common
+RUN apt-get -y install gcc make autoconf libc-dev pkg-config
+RUN apt-get -y install php7.2-dev
+RUN apt-get -y install libmcrypt-dev
 
 #Install php-fpm7.2
 RUN apt-get update \
@@ -20,8 +23,9 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y php7.2-fpm php7.2-common php7.2-cli php7.2-imagick php7.2-gd php7.2-mysql \
        php7.2-pgsql php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-soap php7.2-zip php7.2-curl \
-       php7.2-bcmath php7.2-mcrypt php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php-xdebug php-redis \
+       php7.2-bcmath php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php-xdebug php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
+    && pecl install mcrypt-1.0.1 \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
     && chown -R gitpod:gitpod /etc/php \
@@ -30,7 +34,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
-    
+
 #Adjust few options for xDebug
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini
     #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.2/mods-available/xdebug.ini
