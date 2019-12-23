@@ -52,3 +52,6 @@ Sometimes it may happen that the exposed port 8002 used for Nginx does not work 
 If you are moving your own installation don't foget to adjust following cookie paths: <BR>
 **web/cookie/path to "/"**
 **web/cookie/domain to ".gitpod.io"**
+  
+You may fork this repo and boot it on your own server or local computer:
+https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
