@@ -22,6 +22,7 @@ Services/Tools installed:
 - **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled.
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
+- **Newrelic**. Note: Please run **newrelic-daemon -c /etc/newrelic/newrelic.cfg** to initiate daemon. Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key. Requires Fresh M2 installation (run m2install.sh) or your store to finish process of validation. <BR>
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
   '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
