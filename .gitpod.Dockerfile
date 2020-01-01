@@ -167,6 +167,8 @@ RUN \
      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
          /etc/php/7.2/cli/conf.d/newrelic.ini
 RUN chown -R gitpod:gitpod /etc/php
+RUN chown -R gitpod:gitpod /etc/newrelic
+COPY newrelic.cfg /etc/newrelic
 
 USER gitpod
 
