@@ -164,7 +164,10 @@ RUN curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.4.1.
          /etc/php/7.2/fpm/conf.d/newrelic.ini && \
         sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-     /etc/php/7.2/cli/conf.d/newrelic.ini
+     /etc/php/7.2/cli/conf.d/newrelic.ini && \
+     
+     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/fpm/conf.d/newrelic.ini && \
+     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/cli/conf.d/newrelic.ini
      
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
