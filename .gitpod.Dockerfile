@@ -162,7 +162,7 @@ RUN \
       rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
         sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-         /usr/local/etc/php/conf.d/newrelic.ini /etc/php/7.2/fpm/conf.d/newrelic.ini
+         /etc/php/7.2/fpm/conf.d/newrelic.ini
 
 USER gitpod
 
