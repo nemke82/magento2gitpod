@@ -165,15 +165,13 @@ RUN \
          /etc/php/7.2/fpm/conf.d/newrelic.ini && \
         sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-         /etc/php/7.2/cli/conf.d/newrelic.ini
-         
+         /etc/php/7.2/cli/conf.d/newrelic.ini && \
          sed -i -e 's/"/var/log/newrelic/newrelic-daemon.log"/"/tmp/newrelic-daemon.log"/' \
      -e 's/"/var/log/newrelic/php_agent.log"/"/tmp/php_agent.log"/' \
          /etc/php/7.2/fpm/conf.d/newrelic.ini && \
         sed -i -e 's/"/var/log/newrelic/newrelic-daemon.log"/"/tmp/newrelic-daemon.log"/' \
      -e 's/"/var/log/newrelic/php_agent.log"/"/tmp/php_agent.log"/' \
          /etc/php/7.2/cli/conf.d/newrelic.ini && \
-         
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
