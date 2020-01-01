@@ -154,8 +154,7 @@ RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 
 #New Relic
-RUN \
-  curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.4.1.250-linux.tar.gz | tar -C /tmp -zx && \
+RUN curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.4.1.250-linux.tar.gz | tar -C /tmp -zx && \
    export NR_INSTALL_USE_CP_NOT_LN=1 && \
     export NR_INSTALL_SILENT=1 && \
      /tmp/newrelic-php5-*/newrelic-install install && \
@@ -166,6 +165,7 @@ RUN \
         sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
      /etc/php/7.2/cli/conf.d/newrelic.ini \
+
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
