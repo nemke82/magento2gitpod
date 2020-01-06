@@ -79,6 +79,10 @@ RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-serve
 RUN wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 
+# Install Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+
 USER root
 
 ENV BLACKFIRE_LOG_LEVEL 1
