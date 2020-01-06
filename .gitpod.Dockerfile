@@ -184,5 +184,6 @@ RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.
 ENV ES_HOME="$HOME/elasticsearch-5.6.16"
 
 #Selenium required for MTF
-RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar &&
-wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar && \
+wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip && \
+unzip chromedriver_linux64.zip
