@@ -32,7 +32,7 @@ Services/Tools installed:
   $ES_HOME/bin/elasticsearch-plugin install analysis-phonetic <BR>
   $ES_HOME/bin/elasticsearch-plugin install analysis-icu <BR>
   
-  - **MFTF (Magento 2 Multi Functional Testing Framework)** 
+- **MFTF (Magento 2 Multi Functional Testing Framework)** 
 Follow https://github.com/magento/magento2-functional-testing-framework/blob/develop/docs/getting-started.md guidelines.
 Note: Please run following command to start Selenium and Chromedriver (as required):
 
