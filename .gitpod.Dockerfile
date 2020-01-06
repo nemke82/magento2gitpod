@@ -75,9 +75,9 @@ RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
 
 #Selenium required for MTF
-RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar \
-wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip \
-unzip chromedriver_linux64.zip
+RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+RUN wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
+RUN unzip chromedriver_linux64.zip
 
 USER root
 
