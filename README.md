@@ -36,8 +36,8 @@ Services/Tools installed:
 Follow https://github.com/magento/magento2-functional-testing-framework/blob/develop/docs/getting-started.md guidelines.
 Note: Please run following command to start Selenium and Chromedriver (as required):
 
-java -Dwebdriver.chrome.driver=chromedriver -jar $HOME/selenium-server-standalone-3.141.59.jar &
-$HOME/chromedriver &
+java -Dwebdriver.chrome.driver=chromedriver -jar $HOME/selenium-server-standalone-3.141.59.jar & <BR>
+$HOME/chromedriver & <BR>
 
 Every listed service installation code is added within .gitpod.Dockerfile
 You can split them into separate workspaces and share it among themself if you know what you are doing.
