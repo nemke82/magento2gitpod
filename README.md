@@ -31,16 +31,16 @@ Services/Tools installed:
   
   $ES_HOME/bin/elasticsearch-plugin install analysis-phonetic <BR>
   $ES_HOME/bin/elasticsearch-plugin install analysis-icu <BR>
-
-Every listed service installation code is added within .gitpod.Dockerfile
-You can split them into separate workspaces and share it among themself if you know what you are doing.
-
-- **MFTF (Magento 2 Multi Functional Testing Framework)** 
+  
+  - **MFTF (Magento 2 Multi Functional Testing Framework)** 
 Follow https://github.com/magento/magento2-functional-testing-framework/blob/develop/docs/getting-started.md guidelines.
 Note: Please run following command to start Selenium and Chromedriver (as required):
 
 java -Dwebdriver.chrome.driver=chromedriver -jar $HOME/selenium-server-standalone-3.141.59.jar &
 $HOME/chromedriver &
+
+Every listed service installation code is added within .gitpod.Dockerfile
+You can split them into separate workspaces and share it among themself if you know what you are doing.
 
 TO INSTALL Magento 2.3.3 (latest):
 start **./m2-install.sh** once workspace deployed
