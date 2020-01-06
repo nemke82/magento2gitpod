@@ -74,6 +74,11 @@ USER gitpod
 RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
 
+#Selenium required for MTF
+RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar \
+wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip \
+unzip chromedriver_linux64.zip
+
 USER root
 
 ENV BLACKFIRE_LOG_LEVEL 1
@@ -182,8 +187,3 @@ RUN bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
 RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.16.tar.gz --output elasticsearch-5.6.16.tar.gz \
     && tar -xzf elasticsearch-5.6.16.tar.gz
 ENV ES_HOME="$HOME/elasticsearch-5.6.16"
-
-#Selenium required for MTF
-RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar && \
-wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip && \
-unzip chromedriver_linux64.zip
