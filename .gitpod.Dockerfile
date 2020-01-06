@@ -9,6 +9,7 @@ RUN apt-get -y install python-mysqldb
 RUN apt-get -y install nginx
 RUN apt-get -y install rsync
 RUN apt-get -y install curl
+RUN apt-get -y install libnss3-dev
 RUN apt-get -y install openssh-client
 RUN apt-get -y install mc
 RUN apt install software-properties-common
@@ -181,3 +182,7 @@ RUN bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
 RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.16.tar.gz --output elasticsearch-5.6.16.tar.gz \
     && tar -xzf elasticsearch-5.6.16.tar.gz
 ENV ES_HOME="$HOME/elasticsearch-5.6.16"
+
+#Selenium required for MTF
+RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar &&
+wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
