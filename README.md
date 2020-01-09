@@ -34,6 +34,8 @@ Services/Tools installed:
   
 - **MFTF (Magento 2 Multi Functional Testing Framework)** 
 Follow https://github.com/magento/magento2-functional-testing-framework/blob/develop/docs/getting-started.md guidelines.
+Installer is here: **chmod a+rwx m2-install-solo.sh && bash m2-install-solo.sh**
+
 Note: Please run following command to start Selenium and Chromedriver (as required):
 
 java -Dwebdriver.chrome.driver=chromedriver -jar $HOME/selenium-server-standalone-3.141.59.jar & <BR>
