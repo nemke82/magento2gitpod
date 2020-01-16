@@ -19,7 +19,8 @@ Services/Tools installed:
 - **rsync**
 - **mc** (Midnight commander)
 - **MySQL** (Oracle) 5.7 version
-- **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled.
+- **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled. There are neat tools where you can just import log file and watch graphically explained on the https://xdebug.org/docs/profiler address. I've tested http://sourceforge.net/projects/qcachegrindwin/ binary for Windows OS and it is working as expected.
+Small video on how-to can be viewed here: https://transfer.sh/PrMrY/video-011620-2020-01-16_13.28.37.mp4
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
 - **Newrelic**. Note: Please run **newrelic-daemon -c /etc/newrelic/newrelic.cfg** to initiate daemon. Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key. Requires Fresh M2 installation (run m2install.sh) or your store to finish process of validation. <BR>
