@@ -46,14 +46,18 @@ Every listed service installation code is added within .gitpod.Dockerfile
 You can split them into separate workspaces and share it among themself if you know what you are doing.
 
 TO INSTALL Magento 2.3.3 (latest):
-start **./m2-install.sh** once workspace deployed
+**./m2-install.sh**
 
-MySQL:
+For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run:
+**m2-install-solo.sh**
+
+MySQL (default settings):
 username: root <BR>
 no password defined
 
-Create database, example: <BR>
+In case you need to create additional database: <BR>
 mysql -e 'create database nemanja;' <BR>
+(where "nemanja" is database name used) <BR>
 
 In case you need to adjust certain my.cnf settings, please edit https://github.com/nemke82/magento2gitpod/blob/master/mysql.cnf file and redeploy GitPod workspace.
 
