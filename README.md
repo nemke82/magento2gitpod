@@ -45,10 +45,10 @@ $HOME/chromedriver & <BR>
 Every listed service installation code is added within .gitpod.Dockerfile
 You can split them into separate workspaces and share it among themself if you know what you are doing.
 
-TO INSTALL Magento 2.3.3 (latest):
+TO INSTALL Magento 2.3.3 (latest): <BR>
 **./m2-install.sh**
 
-For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run:
+For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
 **m2-install-solo.sh**
 
 MySQL (default settings):
