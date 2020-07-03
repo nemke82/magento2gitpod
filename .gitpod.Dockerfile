@@ -14,7 +14,6 @@ RUN apt-get -y install openssh-client
 RUN apt-get -y install mc
 RUN apt install -y software-properties-common
 RUN apt-get -y install gcc make autoconf libc-dev pkg-config
-RUN apt-get -y install php7.2-dev
 RUN apt-get -y install libmcrypt-dev
 
 #Install php-fpm7.2
