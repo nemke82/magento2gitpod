@@ -12,3 +12,4 @@ tasks:
   - command: /usr/sbin/php-fpm7.2 --fpm-config php-fpm.conf &
   - command: rm -f /etc/php/7.2/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.2/fpm/conf.d/20-tideways.ini
   - command: cd /workspace/magento2gitpod && wget -c https://magento.mirror.hypernode.com/releases/magento-2.3.5.tar.gz
+  - command: chmod a+rwx menu.sh && ./menu.sh
