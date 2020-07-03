@@ -26,7 +26,11 @@ Small video on how-to can be viewed here: https://transfer.sh/PrMrY/video-011620
 - **Newrelic**. Note: Please run **newrelic-daemon -c /etc/newrelic/newrelic.cfg** to initiate daemon. Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key. Requires Fresh M2 installation (run m2install.sh) or your store to finish process of validation. <BR>
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
-  '$ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+  '$ES_HOME56/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+- **ElasticSearch 6.8.9**. Note: Please run following command to start it: <BR>
+  '$ES_HOME68/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+- **ElasticSearch 7.8.0**. Note: Please run following command to start it: <BR>
+  '$ES_HOME78/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
   
   Some extensions like ElasticSuite (https://github.com/Smile-SA/elasticsuite/wiki/ServerConfig-5.x) requires two ElasticSearch plugins to be installed. You can install them with the following commands:<BR>
   
@@ -70,3 +74,12 @@ If you are moving your own installation don't foget to adjust following cookie p
   
 You may fork this repo and boot it on your own server or local computer:
 https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
+
+**Changelog 2020-07-03:**
+- Updated m2-install.sh script to install latest Magento 2.3.5 version
+- Support for ElasticSearch 5.6, 6.8 and 7.8
+- Menu installer (menu.sh) added.
+- Option to start/stop services from menu.sh file added.
+- MySQL (my.cnf) file adjusted with new settings.
+- Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
+- MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
