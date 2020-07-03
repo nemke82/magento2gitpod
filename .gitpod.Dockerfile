@@ -5,7 +5,7 @@ USER root
 RUN apt-get update
 RUN apt-get -y install apt-utils
 RUN apt-get -y install python
-RUN apt-get -y install python-mysqldb
+RUN apt-get install -y libmysqlclient-dev
 RUN apt-get -y install nginx
 RUN apt-get -y install rsync
 RUN apt-get -y install curl
