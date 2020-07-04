@@ -29,7 +29,7 @@ RUN apt-get update \
        php7.2-bcmath php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php-xdebug php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && pecl channel-update pecl.php.net \
-    && pecl install mcrypt-1.0.1 \
+    #&& pecl install mcrypt-1.0.1 \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
     && chown -R gitpod:gitpod /etc/php \
