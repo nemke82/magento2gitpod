@@ -51,13 +51,13 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini
 
 # Install MySQL
 RUN apt-get update \
- && apt-get install gnupg2 \
+ && apt-get -y install gnupg2 \
  && apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
  && mkdir /var/run/mysqld \
  && wget https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
  && dpkg -i percona-release_latest.stretch_all.deb \
  && apt-get update \
- && apt-get install percona-server-server-5.7 \
+ && apt-get -y install percona-server-server-5.7 \
  && chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
 
 # Install our own MySQL config
