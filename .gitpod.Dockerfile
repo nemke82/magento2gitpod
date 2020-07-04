@@ -54,11 +54,12 @@ RUN apt-get update \
  && apt-get -y install gnupg2 \
  && apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
  && mkdir /var/run/mysqld \
- && wget https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
- && dpkg -i percona-release_latest.stretch_all.deb \
+ && bash -c 'echo deb http://repo.percona.com/apt trusty main >> /etc/apt/sources.list' \
+ && bash -c 'echo deb-src http://repo.percona.com/apt trusty main >> /etc/apt/sources.list' \
  && apt-get update \
- && rm -r -f /var/lib/mysql \
- && apt-get -y install percona-server-server-5.7 \
+ && echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections \
+ && echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections \
+ && apt-get install -qq -y percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 \
  && chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
 
 # Install our own MySQL config
