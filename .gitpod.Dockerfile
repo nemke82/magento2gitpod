@@ -234,3 +234,7 @@ ENV ES_HOME68="$HOME/elasticsearch-6.8.9"
 RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.0-linux-x86_64.tar.gz --output elasticsearch-7.8.0-linux-x86_64.tar.gz \
     && tar -xzf elasticsearch-7.8.0-linux-x86_64.tar.gz
 ENV ES_HOME78="$HOME/elasticsearch-7.8.0-linux-x86_64"
+
+#NVM support
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+RUN export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
