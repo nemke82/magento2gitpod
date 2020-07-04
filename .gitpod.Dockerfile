@@ -54,6 +54,7 @@ RUN apt-get update \
  && apt-get -y install gnupg2 \
  && apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
  && mkdir /var/run/mysqld \
+ && apt-key adv --keyserver keys.gnupg.net --recv-keys 1C4CBDCDCD2EFD2A \
  && bash -c 'echo deb http://repo.percona.com/apt trusty main >> /etc/apt/sources.list' \
  && bash -c 'echo deb-src http://repo.percona.com/apt trusty main >> /etc/apt/sources.list' \
  && apt-get update \
