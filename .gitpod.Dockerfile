@@ -3,6 +3,7 @@ FROM gitpod/workspace-full
 USER root
 
 RUN apt-get update
+RUN apt-get -y install lsb-release
 RUN apt-get -y install apt-utils
 RUN apt-get -y install python
 RUN apt-get install -y libmysqlclient-dev
