@@ -18,7 +18,7 @@ Services/Tools installed:
 - **Python** (base version)
 - **rsync**
 - **mc** (Midnight commander)
-- **MySQL** (Oracle) 5.7 version
+- **MySQL** (Percona) 5.7 version (latest)
 - **xDebug** (latest version). Note: Uncomment lines in https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L36 if you need additional options enabled. There are neat tools where you can just import log file and watch graphically explained on the https://xdebug.org/docs/profiler address. I've tested http://sourceforge.net/projects/qcachegrindwin/ binary for Windows OS and it is working as expected.
 Small video on how-to can be viewed here: https://transfer.sh/PrMrY/video-011620-2020-01-16_13.28.37.mp4
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
@@ -83,3 +83,4 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - MySQL (my.cnf) file adjusted with new settings.
 - Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
 - MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
+- MySQL switched to Percona 5.7 (latest)
