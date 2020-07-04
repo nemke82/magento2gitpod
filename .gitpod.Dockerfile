@@ -232,6 +232,7 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash 
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+RUN chown -R gitpod:gitpod /usr/local/nvm
 
 USER gitpod
 
