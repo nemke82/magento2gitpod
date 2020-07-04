@@ -57,7 +57,7 @@ For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 p
 
 MySQL (default settings):
 username: root <BR>
-no password defined
+password: nem4540 <BR>
 
 In case you need to create additional database: <BR>
 mysql -e 'create database nemanja;' <BR>
@@ -83,4 +83,4 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - MySQL (my.cnf) file adjusted with new settings.
 - Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
 - MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
-- MySQL switched to Percona 5.7 (latest)
+- MySQL switched to Percona 5.7 (latest). Root password defined (it was not previously). Check above for changes.
