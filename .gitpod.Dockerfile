@@ -75,7 +75,7 @@ RUN set -ex; \
 		percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 \
 	;
 	
-RUN chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
+RUN chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring
 
 # Install our own MySQL config
 COPY mysql.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
