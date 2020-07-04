@@ -215,6 +215,8 @@ RUN \
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
+RUN rm -f /usr/bin/php
+RUN ln -s /usr/bin/php7.2 /usr/bin/php
 
 USER gitpod
 
