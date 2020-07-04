@@ -50,17 +50,32 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini
     #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini
 
 # Install MySQL
+ENV PERCONA_MAJOR 5.7
 RUN apt-get update \
  && apt-get -y install gnupg2 \
  && apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
  && mkdir /var/run/mysqld \
  && wget -c https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
  && dpkg -i percona-release_latest.stretch_all.deb \
- && apt-get update \
- && echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections \
- && echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections \
- && apt-get install -qq -y percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 \
- && chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
+ && apt-get update
+
+RUN set -ex; \
+	{ \
+		for key in \
+			percona-server-server/root_password \
+			percona-server-server/root_password_again \
+			"percona-server-server-$PERCONA_MAJOR/root-pass" \
+			"percona-server-server-$PERCONA_MAJOR/re-root-pass" \
+		; do \
+			echo "percona-server-server-$PERCONA_MAJOR" "$key" password 'unused'; \
+		done; \
+	} | debconf-set-selections; \
+	apt-get update; \
+	apt-get install -y \
+		percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 \
+	; \
+	rm -rf /var/lib/apt/lists/*; \
+    chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
 
 # Install our own MySQL config
 COPY mysql.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
