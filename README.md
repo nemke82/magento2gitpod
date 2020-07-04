@@ -25,6 +25,7 @@ Small video on how-to can be viewed here: https://transfer.sh/PrMrY/video-011620
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
 - **Newrelic**. Note: Please run **newrelic-daemon -c /etc/newrelic/newrelic.cfg** to initiate daemon. Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key. Requires Fresh M2 installation (run m2install.sh) or your store to finish process of validation. <BR>
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
+- **NodeJS/NPM NVM Manager**. Note: run nvm ls-remote to list available versions, then nvm install to install specific version or latest. 
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
   '$ES_HOME56/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
 - **ElasticSearch 6.8.9**. Note: Please run following command to start it: <BR>
