@@ -57,6 +57,7 @@ RUN apt-get update \
  && wget https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
  && dpkg -i percona-release_latest.stretch_all.deb \
  && apt-get update \
+ && rm -r -f /var/lib/mysql \
  && apt-get -y install percona-server-server-5.7 \
  && chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring /var/lib/mysql-upgrade
 
