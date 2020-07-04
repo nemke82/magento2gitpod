@@ -236,8 +236,8 @@ RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.
 ENV ES_HOME78="$HOME/elasticsearch-7.8.0-linux-x86_64"
 
 #NVM support
-RUN mkdir -p ~/.nvm
-ENV NVM_DIR ~/.nvm
+RUN mkdir -p /usr/local/nvm
+ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 0.10.33
 
 # Install nvm with node and npm
