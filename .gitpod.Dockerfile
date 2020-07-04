@@ -167,19 +167,26 @@ RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 
 #New Relic
-RUN curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.11.0.267-linux.tar.gz | tar -C /tmp -zx && \
-   export NR_INSTALL_USE_CP_NOT_LN=1 && \
-    export NR_INSTALL_SILENT=1 && \
-     /tmp/newrelic-php5-*/newrelic-install install && \
-      rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-        sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
-     -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-         /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-        sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
-     -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-     /etc/php/7.2/cli/conf.d/newrelic.ini && \   
-     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/cli/conf.d/newrelic.ini
+RUN \
+  curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.11.0.267-linux.tar.gz | tar -C /tmp -zx && \
+  export NR_INSTALL_USE_CP_NOT_LN=1 && \
+  export NR_INSTALL_SILENT=1 && \
+  /tmp/newrelic-php5-*/newrelic-install install && \
+  rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
+  sed -i \
+      -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
+      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
+      -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
+      -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
+      /etc/php/7.2/cli/conf.d/newrelic.ini && \
+  sed -i \
+      -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
+      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
+      -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
+      -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
+      /etc/php/7.2/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/cli/conf.d/newrelic.ini
      
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
