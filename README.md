@@ -81,6 +81,7 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - Menu installer (menu.sh) added.
 - Option to start/stop services from menu.sh file added.
 - MySQL (my.cnf) file adjusted with new settings.
+- NodeJS/NPM NVM Manager.
 - Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
 - MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
 - MySQL switched to Percona 5.7 (latest). Root password defined (it was not previously). Check above for changes.
