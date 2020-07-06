@@ -48,9 +48,14 @@ action3() {
 }
 
 action4() {
-    echo "Stopping Redis service"
-    ps aux | grep redis | awk {'print $2'} | xargs kill -s 9;
-    echo -n "Redis service stopped! Press enter to continue ... "
+    echo "Installing MagePack service"
+    cd /workspace/magento2gitpod &&
+    /usr/bin/php -dmemory_limit=20000M /usr/bin/composer require creativestyle/magesuite-magepack &&
+    n98-magerun2 setup:upgrade && n98-magerun2 setup:di:compile && n98-magerun2 setup:static-content:deploy &&
+    n98-magerun2 cache:clean && n98-magerun2 cache:flush &&
+    nvm install 14.5.0 &&
+    npm install -g magepack &&
+    echo -n "MagePack tool successfully installed! Press enter to continue ... visit https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ for more details how to proceed further "
     read response
 
     return 1
