@@ -156,6 +156,7 @@ action15() {
     echo "xdebug.remote_autostart=on" >> /etc/php/7.2/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini;
+    echo "xdebug.remote_port=9001" >> /etc/php/7.2/mods-available/xdebug.ini;
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.2/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini;
