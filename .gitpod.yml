@@ -5,7 +5,7 @@ image:
 ports:
 - port: 8002
 - port: 9001
-onOpen: ignore
+
 vscode:
   extensions:
     - felixfbecker.php-debug@1.13.0:WX8Y3EpQk3zgahy41yJtNQ==
