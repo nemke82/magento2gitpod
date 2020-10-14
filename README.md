@@ -1,5 +1,5 @@
 # magento2gitpod
-Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.2, PHP-FPM and lot more...
+Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.3, PHP-FPM and lot more...
 
 *How-to instructions:*
 1) Register on https://gitpod.io 
@@ -86,3 +86,9 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
 - MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
 - MySQL switched to Percona 5.7 (latest). Root password defined (it was not previously). Check above for changes.
+
+
+**Changelog 2020-10-14:**
+- PHP 7.2 depreciated and left as optional in the Dockerfile
+- PHP 7.3 latest support
+- php-fpm.conf file updated to use PHP 7.3 latest
