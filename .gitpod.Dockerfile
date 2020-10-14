@@ -21,13 +21,32 @@ RUN apt install -y php-dev
 RUN apt install -y php-pear
 
 #Install php-fpm7.2
+#RUN apt-get update \
+#    && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
+#    && add-apt-repository -y ppa:ondrej/php \
+#    && apt-get update \
+#    && apt-get install -y php7.2-fpm php7.2-common php7.2-cli php7.2-imagick php7.2-gd php7.2-mysql \
+#       php7.2-pgsql php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-soap php7.2-zip php7.2-curl \
+#       php7.2-bcmath php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php7.2-intl php-xdebug php-redis \
+#    && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
+#    && mkdir /run/php \
+#    && chown gitpod:gitpod /run/php \
+#    && chown -R gitpod:gitpod /etc/php \
+#    && apt-get remove -y --purge software-properties-common \
+#    && apt-get -y autoremove \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+#    && echo "daemon off;" >> /etc/nginx/nginx.conf
+    
+    
+#Install php-fpm7.3
 RUN apt-get update \
     && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
-    && apt-get install -y php7.2-fpm php7.2-common php7.2-cli php7.2-imagick php7.2-gd php7.2-mysql \
-       php7.2-pgsql php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-soap php7.2-zip php7.2-curl \
-       php7.2-bcmath php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php7.2-intl php-xdebug php-redis \
+    && apt-get install -y php7.3-fpm php7.3-common php7.3-cli php7.3-imagick php7.3-gd php7.3-mysql \
+       php7.3-pgsql php7.3-imap php-memcached php7.3-mbstring php7.3-xml php7.3-xmlrpc php7.3-soap php7.3-zip php7.3-curl \
+       php7.3-bcmath php7.3-sqlite3 php7.3-apcu php7.3-apcu-bc php7.3-intl php-xdebug php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
@@ -39,13 +58,13 @@ RUN apt-get update \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
 
 #Adjust few options for xDebug
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.2/mods-available/xdebug.ini
-    #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.2/mods-available/xdebug.ini
-    #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini \
-    #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
+    #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini
+    #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.3/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.3/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
@@ -91,7 +110,7 @@ USER root
 
 #Copy nginx default and php-fpm.conf file
 #COPY default /etc/nginx/sites-available/default
-COPY php-fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+COPY php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
@@ -130,8 +149,8 @@ RUN \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
 
 COPY blackfire-agent.ini /etc/blackfire/agent
-COPY blackfire-php.ini /etc/php/7.2/fpm/conf.d/92-blackfire-config.ini
-COPY blackfire-php.ini /etc/php/7.2/cli/conf.d/92-blackfire-config.ini
+COPY blackfire-php.ini /etc/php/7.3/fpm/conf.d/92-blackfire-config.ini
+COPY blackfire-php.ini /etc/php/7.3/cli/conf.d/92-blackfire-config.ini
 
 COPY blackfire-run.sh /blackfire-run.sh
 
@@ -156,9 +175,9 @@ RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' >
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/cli/conf.d/40-tideways.ini
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/fpm/conf.d/40-tideways.ini
-RUN rm -f /etc/php/7.2/cli/20-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.3/cli/conf.d/40-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.3/fpm/conf.d/40-tideways.ini
+RUN rm -f /etc/php/7.3/cli/20-tideways.ini
 
 # Install Redis.
 RUN sudo apt-get update \
@@ -172,10 +191,10 @@ RUN sudo apt-get update \
      && mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
      
 #Install APCU
-RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
-RUN echo "priority=25" > /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
-RUN echo "extension=apcu.so" >> /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
-RUN echo "extension=apc.so" >> /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
+RUN echo "apc.enable_cli=1" > /etc/php/7.3/cli/conf.d/20-apcu.ini
+RUN echo "priority=25" > /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
+RUN echo "extension=apcu.so" >> /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
+RUN echo "extension=apc.so" >> /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
 
 RUN chown -R gitpod:gitpod /var/log/blackfire
 RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
@@ -195,28 +214,28 @@ RUN \
   export NR_INSTALL_SILENT=1 && \
   /tmp/newrelic-php5-*/newrelic-install install && \
   rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-  touch /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-  touch /etc/php/7.2/cli/conf.d/newrelic.ini && \
+  touch /etc/php/7.3/fpm/conf.d/newrelic.ini && \
+  touch /etc/php/7.3/cli/conf.d/newrelic.ini && \
   sed -i \
       -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
       -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
       -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
       -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
-      /etc/php/7.2/cli/conf.d/newrelic.ini && \
+      /etc/php/7.3/cli/conf.d/newrelic.ini && \
   sed -i \
       -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
       -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
       -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
       -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
-      /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/cli/conf.d/newrelic.ini
+      /etc/php/7.3/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.3/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.3/cli/conf.d/newrelic.ini
      
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
 RUN rm -f /usr/bin/php
-RUN ln -s /usr/bin/php7.2 /usr/bin/php
+RUN ln -s /usr/bin/php7.3 /usr/bin/php
 
 #NVM support
 RUN mkdir -p /usr/local/nvm
