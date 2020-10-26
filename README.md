@@ -27,11 +27,11 @@ Small video on how-to can be viewed here: https://transfer.sh/PrMrY/video-011620
 - **Redis**. Note: Please run 'redis-server &' to start it or run it without & in the separate tab.
 - **NodeJS/NPM NVM Manager**. Note: run nvm ls-remote to list available versions, then nvm install to install specific version or latest. 
 - **ElasticSearch 5.6.16**. Note: Please run following command to start it: <BR>
-  '$ES_HOME56/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+  '$ES_HOME56/bin/elasticsearch -d -p $ES_HOME56/pid -Ediscovery.type=single-node' <BR>
 - **ElasticSearch 6.8.9**. Note: Please run following command to start it: <BR>
-  '$ES_HOME68/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+  '$ES_HOME68/bin/elasticsearch -d -p $ES_HOME68/pid -Ediscovery.type=single-node' <BR>
 - **ElasticSearch 7.8.0**. Note: Please run following command to start it: <BR>
-  '$ES_HOME78/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node' <BR>
+  '$ES_HOME78/bin/elasticsearch -d -p $ES_HOME78/pid -Ediscovery.type=single-node' <BR>
   
   Some extensions like ElasticSuite (https://github.com/Smile-SA/elasticsuite/wiki/ServerConfig-5.x) requires two ElasticSearch plugins to be installed. You can install them with the following commands:<BR>
   
