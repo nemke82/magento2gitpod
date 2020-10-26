@@ -5,7 +5,7 @@ git clone https://github.com/magento/magento2.git && cd magento2 && cp -avr .* /
 url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url
 
 redis-server &
-$ES_HOME78/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node &
+$ES_HOME78/bin/elasticsearch -d -p $ES_HOME78/pid -Ediscovery.type=single-node &
 mysql -e 'create database nemanja;' &&
 composer install && php bin/magento setup:install --db-name='nemanja' --db-user='root' --db-password='nem4540' --base-url=$url --backend-frontname='admin' --admin-user='admin' --admin-password='adm4540' --admin-email='ne@nemanja.io' --admin-firstname='Nemanja' --admin-lastname='Djuric' --use-rewrites='1' --use-secure='1' --base-url-secure=$url --use-secure-admin='1' --language='en_US' --db-host='127.0.0.1' --cleanup-database --timezone='America/New_York' --currency='USD' --session-save='redis'
 
