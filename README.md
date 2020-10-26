@@ -14,7 +14,7 @@ More info: https://www.gitpod.io/docs/10_getting_started/
 
 Services/Tools installed:
 - **Nginx**
-- **PHP 7.2** based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php). To add additional PHP extensions, please update https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L15 block.
+- **PHP 7.3** based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php). To add additional PHP extensions, please update https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L15 block.
 - **Python** (base version)
 - **rsync**
 - **mc** (Midnight commander)
