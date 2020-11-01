@@ -510,9 +510,9 @@ RUN set -eux; \
 	[ ! -e "$RABBITMQ_DATA_DIR/.erlang.cookie" ]; \
 # Ensure RabbitMQ was installed correctly by running a few commands that do not depend on a running server, as the rabbitmq user
 # If they all succeed, it's safe to assume that things have been set up correctly
-	gosu rabbitmq rabbitmqctl help; \
-	gosu rabbitmq rabbitmqctl list_ciphers; \
-	gosu rabbitmq rabbitmq-plugins list; \
+	gosu gitpod rabbitmqctl help; \
+	gosu gitpod rabbitmqctl list_ciphers; \
+	gosu gitpod rabbitmq-plugins list; \
 # no stale cookies
 	rm "$RABBITMQ_DATA_DIR/.erlang.cookie"
 
