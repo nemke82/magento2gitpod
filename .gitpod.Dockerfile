@@ -270,6 +270,8 @@ RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.
     && tar -xzf elasticsearch-7.8.0-linux-x86_64.tar.gz
 ENV ES_HOME78="$HOME/elasticsearch-7.8.0"
 
+USER root
+
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
