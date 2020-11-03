@@ -50,7 +50,12 @@ $HOME/chromedriver & <BR>
 Every listed service installation code is added within .gitpod.Dockerfile
 You can split them into separate workspaces and share it among themself if you know what you are doing.
 
-TO INSTALL Magento 2.3.5 (latest): <BR>
+- **RabbitMQ support**
+default username/password: guest/guest <BR>
+For browser open 15762 browser (already exposed) <BR>
+Rest commands can be used as per RabbitMQ guidelines https://www.rabbitmq.com/cli.html
+
+TO INSTALL Magento 2.3.6 (latest): <BR>
 **./m2-install.sh**
 
 For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
@@ -92,3 +97,6 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - PHP 7.2 depreciated and left as optional in the Dockerfile
 - PHP 7.3 latest support
 - php-fpm.conf file updated to use PHP 7.3 latest
+
+**Changelog 2020-11-03:**
+- RabbitMQ Support
