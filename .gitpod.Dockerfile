@@ -513,8 +513,6 @@ RUN set -eux; \
 	gosu gitpod rabbitmqctl help; \
 	gosu gitpod rabbitmqctl list_ciphers; \
 	gosu gitpod rabbitmq-plugins list; \
-# no stale cookies
-	rm "$RABBITMQ_DATA_DIR/.erlang.cookie"
 
 # Added for backwards compatibility - users can simply COPY custom plugins to /plugins
 RUN ln -sf /opt/rabbitmq/plugins /plugins
