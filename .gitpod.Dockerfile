@@ -515,7 +515,7 @@ RUN set -eux; \
 	gosu gitpod rabbitmq-plugins list; \
 
 # Added for backwards compatibility - users can simply COPY custom plugins to /plugins
-ln -sf /opt/rabbitmq/plugins /plugins; \
+ln -sf /opt/rabbitmq/plugins /plugins;
 
 # set home so that any `--user` knows where to put the erlang cookie
 ENV HOME $RABBITMQ_DATA_DIR
