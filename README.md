@@ -55,7 +55,7 @@ default username/password: guest/guest <BR>
 For browser open 15762 browser (already exposed) <BR>
 Rest commands can be used as per RabbitMQ guidelines https://www.rabbitmq.com/cli.html
 
-TO INSTALL Magento 2.3.6 (latest): <BR>
+TO INSTALL Magento 2.4.1 (latest): <BR>
 **./m2-install.sh**
 
 For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
@@ -99,4 +99,4 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - php-fpm.conf file updated to use PHP 7.3 latest
 
 **Changelog 2020-11-03:**
-- RabbitMQ Support
+- RabbitMQ Support and integrated to m2-install.sh and m2-install-solo.sh (dev github repo) installations
