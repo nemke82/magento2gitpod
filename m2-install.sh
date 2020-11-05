@@ -1,6 +1,8 @@
 #!/bin/bash
 cd /workspace/magento2gitpod &&
-composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.3.6 /workspace/magento2gitpod &&
+composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.3.6 magento2 &&
+cd magento2 && cp -avr .* /workspace/magento2gitpod &&
+cd /workspace/magento2gitpod && rm -r -f magento2 &&
 mysql -e 'create database nemanja;' &&
 url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url
 
