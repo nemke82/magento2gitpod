@@ -528,16 +528,16 @@ ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
 #Install Cron
 RUN apt-get update \
-    apt-get -y install cron
+    && apt-get -y install cron
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log \
-    touch /var/run/crond.pid \
-    chown -R gitpod:gitpod /etc/init.d \
-    chown -R gitpod:gitpod /var/run/crond.pid \
-    chown -R gitpod:gitpod /etc/cron.d \
-    chown -R gitpod:gitpod /etc/cron.daily \
-    chown -R gitpod:gitpod /etc/cron.hourly \
-    chown -R gitpod:gitpod /etc/cron.monthly \
-    chown -R gitpod:gitpod /etc/cron.weekly \
+    && touch /var/run/crond.pid \
+    && chown -R gitpod:gitpod /etc/init.d \
+    && chown -R gitpod:gitpod /var/run/crond.pid \
+    && chown -R gitpod:gitpod /etc/cron.d \
+    && chown -R gitpod:gitpod /etc/cron.daily \
+    && chown -R gitpod:gitpod /etc/cron.hourly \
+    && chown -R gitpod:gitpod /etc/cron.monthly \
+    && chown -R gitpod:gitpod /etc/cron.weekly \
     chown -R gitpod:gitpod /etc/crontab
