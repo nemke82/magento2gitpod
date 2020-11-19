@@ -529,7 +529,6 @@ ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 #Install Cron
 RUN apt-get update
 RUN apt-get -y install cron
-RUN chown -R gitpod:gitpod /var/run/crond.pid
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
