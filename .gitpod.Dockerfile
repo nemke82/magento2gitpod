@@ -535,3 +535,9 @@ RUN touch /var/log/cron.log
 RUN touch /var/run/crond.pid
 RUN chown -R gitpod:gitpod /etc/init.d
 RUN chown -R gitpod:gitpod /var/run/crond.pid
+RUN chown -R gitpod:gitpod /etc/cron.d
+RUN chown -R gitpod:gitpod /etc/cron.daily
+RUN chown -R gitpod:gitpod /etc/cron.hourly
+RUN chown -R gitpod:gitpod /etc/cron.monthly
+RUN chown -R gitpod:gitpod /etc/cron.weekly
+RUN chown -R gitpod:gitpod /etc/crontab
