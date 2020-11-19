@@ -527,17 +527,17 @@ VOLUME $RABBITMQ_DATA_DIR
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
 #Install Cron
-RUN apt-get update
-RUN apt-get -y install cron
+RUN apt-get update \
+    apt-get -y install cron
 
 # Create the log file to be able to run tail
-RUN touch /var/log/cron.log
-RUN touch /var/run/crond.pid
-RUN chown -R gitpod:gitpod /etc/init.d
-RUN chown -R gitpod:gitpod /var/run/crond.pid
-RUN chown -R gitpod:gitpod /etc/cron.d
-RUN chown -R gitpod:gitpod /etc/cron.daily
-RUN chown -R gitpod:gitpod /etc/cron.hourly
-RUN chown -R gitpod:gitpod /etc/cron.monthly
-RUN chown -R gitpod:gitpod /etc/cron.weekly
-RUN chown -R gitpod:gitpod /etc/crontab
+RUN touch /var/log/cron.log \
+    touch /var/run/crond.pid \
+    chown -R gitpod:gitpod /etc/init.d \
+    chown -R gitpod:gitpod /var/run/crond.pid \
+    chown -R gitpod:gitpod /etc/cron.d \
+    chown -R gitpod:gitpod /etc/cron.daily \
+    chown -R gitpod:gitpod /etc/cron.hourly \
+    chown -R gitpod:gitpod /etc/cron.monthly \
+    chown -R gitpod:gitpod /etc/cron.weekly \
+    chown -R gitpod:gitpod /etc/crontab
