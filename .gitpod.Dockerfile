@@ -118,7 +118,7 @@ USER gitpod
 RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
 
-#Selenium required for MTF
+#Selenium required for MFTF
 RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
 RUN wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
