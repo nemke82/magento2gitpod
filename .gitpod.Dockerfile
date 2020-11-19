@@ -532,3 +532,4 @@ RUN apt-get -y install cron
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
+RUN chown -R gitpod:gitpod /etc/init.d
