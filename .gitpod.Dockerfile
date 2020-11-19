@@ -203,7 +203,6 @@ RUN chown -R gitpod:gitpod /var/run/blackfire
 RUN chown -R gitpod:gitpod /etc/blackfire
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/nginx
-RUN chown -R gitpod:gitpod /home/gitpod/.composer
 RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 
