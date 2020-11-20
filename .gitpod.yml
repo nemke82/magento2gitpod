@@ -20,4 +20,3 @@ tasks:
   - command: chmod a+rwx menu.sh && ./menu.sh
   - command: /opt/rabbitmq/sbin/rabbitmq-server &
   - command: rabbitmq-plugins enable rabbitmq_management
-  - command: service cron start &
