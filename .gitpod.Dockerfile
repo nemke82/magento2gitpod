@@ -542,3 +542,5 @@ RUN touch /var/log/cron.log \
     && chown -R gitpod:gitpod /etc/cron.weekly \
     && chown -R gitpod:gitpod /etc/crontab \
     && chown -R gitpod:gitpod /usr/sbin/cron
+    
+CMD ["cron", "-f"]
