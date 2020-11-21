@@ -13,11 +13,13 @@ vscode:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
-  - before: sudo /sbin/cron -f -L8
-  - command: service nginx start &
+  - before: /sbin/cron -f -L8
+  - name: "Services/Installer Menu"
+    command: service nginx start &
              cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh &&
              /usr/sbin/php-fpm7.3 --fpm-config php-fpm.conf &
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &&
-             chmod a+rwx menu.sh && ./menu.sh
+  - name: "Services/Installer Menu"
+    command: chmod a+rwx menu.sh && ./menu.sh
