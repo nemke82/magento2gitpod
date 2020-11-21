@@ -16,10 +16,15 @@ tasks:
   - before: /sbin/cron -f -L8
   - openMode: tab-after
   - command: service nginx start &
+  - openMode: tab-before
   - command: cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh
+  - openMode: tab-before
   - command: /usr/sbin/php-fpm7.3 --fpm-config php-fpm.conf &
+  - openMode: tab-before
   - command: rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini
+  - openMode: tab-before
   - command: chmod a+rwx menu.sh && ./menu.sh
+  - openMode: tab-before
   - command: /opt/rabbitmq/sbin/rabbitmq-server &
+  - openMode: tab-before
   - command: rabbitmq-plugins enable rabbitmq_management
-  - openMode: tab-after
