@@ -541,4 +541,3 @@ RUN set -ex \
     /etc/pam.d/cron
 
 COPY start-cron /usr/sbin
-CMD ["start-cron"]
