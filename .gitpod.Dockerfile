@@ -541,3 +541,5 @@ RUN set -ex \
     /etc/pam.d/cron
 
 COPY start-cron /usr/sbin
+RUN chmod a+rwx /usr/sbin/start-cron
+CMD ["/usr/sbin/start-cron"]
