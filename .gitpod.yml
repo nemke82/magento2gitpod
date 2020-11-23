@@ -13,7 +13,7 @@ vscode:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
-  - before: /sbin/cron -f -L8
+  - init: /sbin/cron -f -L8
   - name: "Services"
     command: service nginx start &
              cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh &
