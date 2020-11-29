@@ -525,21 +525,3 @@ VOLUME $RABBITMQ_DATA_DIR
 # Setting all environment variables that control language preferences, behaviour differs - https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html#The-LANGUAGE-variable
 # https://docs.docker.com/samples/library/ubuntu/#locales
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
-
-#Install Cron
-RUN set -ex \
-    && apt-get clean && apt-get update \
-# install cron
-    && apt-get install -y cron \
-    && rm -rf /var/lib/apt/lists/* \
-# making logging pipe
-    && mkfifo --mode 0666 /var/log/cron.log \
-# make pam_loginuid.so optional for cron
-# see https://github.com/docker/docker/issues/5663#issuecomment-42550548
-    && sed --regexp-extended --in-place \
-    's/^session\s+required\s+pam_loginuid.so$/session optional pam_loginuid.so/' \
-    /etc/pam.d/cron
-
-COPY start-cron /usr/sbin
-RUN chmod a+rwx /usr/sbin/start-cron
-CMD ["/usr/sbin/start-cron"]
