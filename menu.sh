@@ -195,8 +195,8 @@ actionX() {
 ## NOTE: If these are not all the same width
 ##       the menu highlight will look wonky
 menuItems=(
-    " 1. Install Magento 2.3.5 latest"
-    " 2. Install Magento 2.4.0 (dev)"
+    " 1. Install Magento 2.4.1 latest"
+    " 2. Install Magento 2.4-develop (dev)"
     " 3. Install Baler tool"
     " 4. Install MagePack tool"
     " 5. Start Redis service"
