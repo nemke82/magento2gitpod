@@ -100,3 +100,8 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 
 **Changelog 2020-11-03:**
 - RabbitMQ Support and integrated to m2-install.sh and m2-install-solo.sh (dev github repo) installations
+
+**Changelog 2020-12-11:**
+- Completely rewritten menu.sh file and it's location (now in the editor area) and labeled.
+- menu.sh file updated with Magento 2 Loop cron task.
+- Added installer for Magento 2.4.1 using composer and Magento 2.4-develop using Git clone ways.
