@@ -15,7 +15,7 @@ vscode:
 tasks:
   - openIn: main
     command: chmod a+rwx menu.sh && ./menu.sh
-  - openIn: bottom
+  - openMode: split-bottom
     name: "Services"
     command: service nginx start &
              cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh &
