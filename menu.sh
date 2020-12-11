@@ -1,253 +1,164 @@
 #!/bin/bash
 
-# Ensure we are running under bash
-if [ "$BASH_SOURCE" = "" ]; then
-    /bin/bash "$0"
-    exit 0
-fi
+# while-menu-dialog: a menu driven system information program
 
-# Load Bash menu file
-. "bash-menu.sh"
+DIALOG_CANCEL=1
+DIALOG_ESC=255
+HEIGHT=0
+WIDTH=0
 
-
-################################
-## Action menus
-##
-## Start/Stop/Restart services/features.
-################################
-action1() {
-    echo "Starting installation of Magento 2.4.1 version"
-    chmod a+rwx m2-install.sh && ./m2-install.sh;
-
-    echo -n "Installation completed! Press enter to continue ... "
-    read response
-
-    return 1
+display_result() {
+  dialog --title "$1" \
+    --no-collapse \
+    --msgbox "$result" 0 0
 }
 
-action2() {
-    echo "Starting installation of Magento 2.4-develop version"
-    chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh;
-    echo -n "Installation completed! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action3() {
-    echo "Install Baler tool"
-    git clone https://github.com/magento/baler.git  &&
-    cd baler &&
-    npm install &&
-    npm run build &&
-    alias baler='/workspace/magento2gitpod/baler/bin/baler'
-    echo -n "Baler tool successfully installed! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action4() {
-    echo "Installing MagePack service"
-    cd /workspace/magento2gitpod &&
-    /usr/bin/php -dmemory_limit=20000M /usr/bin/composer require creativestyle/magesuite-magepack &&
-    n98-magerun2 setup:upgrade && n98-magerun2 setup:di:compile && n98-magerun2 setup:static-content:deploy &&
-    n98-magerun2 cache:clean && n98-magerun2 cache:flush &&
-    nvm install 14.5.0 &&
-    npm install -g magepack &&
-    echo -n "MagePack tool successfully installed! Press enter to continue ... visit https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ for more details how to proceed further "
-    read response
-
-    return 1
-}
-
-action5() {
-    echo "Starting Redis service"
-    redis-server &
-    echo -n "Redis service started! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action6() {
-    echo "Stopping Redis service"
-    ps aux | grep redis | awk {'print $2'} | xargs kill -s 9;
-    echo -n "Redis service stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action7() {
-    echo "Starting ElasticSearch service"
-    $ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node &
-    echo -n "ElasticSearch service started! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action8() {
-    echo "Stopping ElasticSearch service"
-    ps aux | grep elastic | awk {'print $2'} | xargs kill -s 9;
-    echo -n "ElasticSearch service stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action9() {
-    echo "Starting Blackfire service"
-    chmod a+rwx ./blackfire-run.sh && ./blackfire-run.sh && service php7.2-fpm reload;
-    echo -n "Blackfire service started! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action10() {
-    echo "Stopping Blackfire service"
-    ps aux | grep blackfire | awk {'print $2'} | xargs kill -s 9;
-    echo -n "Blackfire service stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action11() {
-    echo "Starting Newrelic service, Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key."
-    newrelic-daemon -c /etc/newrelic/newrelic.cfg &
-    echo -n "Newrelic service started! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action12() {
-    echo "Stopping Newrelic service"
-    ps aux | grep newrelic | awk {'print $2'} | xargs kill -s 9;
-    echo -n "Newrelic service stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action13() {
-    echo "Starting Tideways service, Please update .env-file located in repo with TIDEWAYS_APIKEY"
-    /usr/bin/tideways-daemon --address 0.0.0.0:9135 &
-    echo -n "Tideways service started! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action14() {
-    echo "Stopping Tideways service"
-    ps aux | grep tideways | awk {'print $2'} | xargs kill -s 9;
-    echo -n "Tideways service stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action15() {
-    echo "Configuring xDebug PHP settings"
-    echo "xdebug.remote_autostart=on" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.profiler_enable=On" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.remote_port=9001" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.show_error_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini;
-    echo "xdebug.show_exception_trace=On" >> /etc/php/7.2/mods-available/xdebug.ini;
-    service php7.2-fpm reload;
-    echo -n "Services successfully configured and php-fpm restarted! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-action16() {
-    echo "Disabling xDebug PHP settings"
-    ps aux | grep tideways | awk {'print $2'} | xargs kill -s 9;
-    echo -n "xDebug stopped! Press enter to continue ... "
-    read response
-
-    return 1
-}
-
-actionX() {
-    return 0
-}
-
-
-################################
-## Setup Example Menu
-################################
-
-## Menu Item Text
-##
-## It makes sense to have "Exit" as the last item,
-## as pressing Esc will jump to last item (and
-## pressing Esc while on last item will perform the
-## associated action).
-##
-## NOTE: If these are not all the same width
-##       the menu highlight will look wonky
-menuItems=(
-    " 1. Install Magento 2.4.1 latest"
-    " 2. Install Magento 2.4-develop (dev)"
-    " 3. Install Baler tool"
-    " 4. Install MagePack tool"
-    " 5. Start Redis service"
-    " 6. Stop Redis service"
-    " 7. Start ElasticSearch service"
-    " 8. Stop ElasticSearch service"
-    " 9. Start Blackfire service"
-    "10. Stop Blackfire service"
-    "11. Start Newrelic service"
-    "12. Stop Newrelic service"
-    "13. Start Tideways service"
-    "14. Stop Tideways service"
-    "15. Start xDebug service"
-    "16. Stop xDebug service"
-    "Q. Exit  "
-)
-
-## Menu Item Actions
-menuActions=(
-    action1
-    action2
-    action3
-    action4
-    action5
-    action6
-    action7
-    action8
-    action9
-    action10
-    action11
-    action12
-    action13
-    action14
-    action15
-    action16
-    actionX
-)
-
-## Override some menu defaults
-menuTitle=" Controller room"
-menuFooter=" Enter=Select, Navigate via Up/Down/First number/letter"
-menuWidth=60
-menuLeft=25
-menuHighlight=$DRAW_COL_YELLOW
-
-
-################################
-## Run Menu
-################################
-menuInit
-menuLoop
-
-
-exit 0
+while true; do
+  exec 3>&1
+  selection=$(dialog \
+    --backtitle "Installer/Services menu" \
+    --title "Menu" \
+    --clear \
+    --cancel-label "Exit" \
+    --menu "Please select:" $HEIGHT $WIDTH 4 \
+    "1" "Display System Information" \
+    "2" "Display Disk Space" \
+    "3" "Display Home Space Utilization" \
+    "4" "Install Magento 2.4.1 latest" \
+    "5" "Install Magento 2.4-develop (dev)" \
+    "6" "Install Baler tool" \
+    "7" "Install MagePack tool" \
+    "8" "Start Redis service" \
+    "9" "Stop Redis service" \
+    "10" "Start ElasticSearch service" \
+    "11" "Stop ElasticSearch service" \
+    "12" "Start Blackfire service" \
+    "13" "Stop Blackfire service" \
+    "14" "Start Newrelic service" \
+    "15" "Stop Newrelic service" \
+    "16" "Start Tideways service" \
+    "17" "Stop Tideways service" \
+    "18" "Start xDebug service" \
+    "19" "Stop xDebug service" \
+    "20" "Start Cron service" \
+    2>&1 1>&3)
+  exit_status=$?
+  exec 3>&-
+  case $exit_status in
+    $DIALOG_CANCEL)
+      clear
+      echo "Program terminated."
+      exit
+      ;;
+    $DIALOG_ESC)
+      clear
+      echo "Program aborted." >&2
+      exit 1
+      ;;
+  esac
+  case $selection in
+    0 )
+      clear
+      echo "Program terminated."
+      ;;
+    1 )
+      result=$(echo "Hostname: $HOSTNAME"; uptime)
+      display_result "System Information"
+      ;;
+    2 )
+      result=$(df -h)
+      display_result "Disk Space"
+      ;;
+    3 )
+      if [[ $(id -u) -eq 0 ]]; then
+        result=$(du -sh /home/* 2> /dev/null)
+        display_result "Home Space Utilization (All Users)"
+      else
+        result=$(du -sh $HOME 2> /dev/null)
+        display_result "Home Space Utilization ($USER)"
+      fi
+      ;;
+    4 )
+      result=$(chmod a+rwx m2-install.sh && ./m2-install.sh)
+      display_result "Installation completed! Press enter to continue ..."
+      ;;
+    5 )
+      result=$(chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh)
+      display_result "Installation completed! Press enter to continue ..."
+      ;;
+    6 )
+      result=$(git clone https://github.com/magento/baler.git && cd baler && npm install && npm run build;alias baler='/workspace/magento2gitpod/baler/bin/baler'&)
+      display_result "Baler tool successfully installed! Press enter to continue ..."
+      ;;
+    7 )
+      result=$(cd /workspace/magento2gitpod && /usr/bin/php -dmemory_limit=20000M /usr/bin/composer require creativestyle/magesuite-magepack && n98-magerun2 setup:upgrade && n98-magerun2 setup:di:compile && n98-magerun2 setup:static-content:deploy && n98-magerun2 cache:clean && n98-magerun2 cache:flush && nvm install 14.5.0 && npm install -g magepack)
+      display_result "MagePack tool successfully installed! Press enter to continue ... visit https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ for more details how to proceed further"
+      ;;
+    8 )
+      result=$(redis-server &)
+      display_result "Redis service started! Press enter to continue ...Installation completed! Press enter to continue ..."
+      ;;
+    9 )
+      result=$(ps aux | grep redis | awk {'print $2'} | xargs kill -s 9)
+      display_result "Redis service stopped! Press enter to continue ..."
+      ;;
+    10 )
+      result=$($ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node &)
+      display_result "ElasticSearch service started! Press enter to continue ..."
+      ;;
+    11 )
+      result=$(ps aux | grep elastic | awk {'print $2'} | xargs kill -s 9)
+      display_result "ElasticSearch service stopped! Press enter to continue ..."
+      ;;
+    12 )
+      result=$(chmod a+rwx ./blackfire-run.sh && ./blackfire-run.sh && service php7.3-fpm reload)
+      display_result "Blackfire service started! Press enter to continue ..."
+      ;;
+    13 )
+      result=$(ps aux | grep blackfire | awk {'print $2'} | xargs kill -s 9)
+      display_result "Blackfire service stopped! Press enter to continue ..."
+      ;;
+    14 )
+      result=$(newrelic-daemon -c /etc/newrelic/newrelic.cfg &)
+      display_result "Newrelic service started! Press enter to continue ... Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key."
+      ;;
+    15 )
+      result=$(ps aux | grep newrelic | awk {'print $2'} | xargs kill -s 9)
+      display_result "Newrelic service stopped! Press enter to continue ..."
+      ;;
+    16 )
+      result=$(/usr/bin/tideways-daemon --address 0.0.0.0:9135 &)
+      display_result "Tideways service started! Press enter to continue ... Starting Tideways service, Please update .env-file located in repo with TIDEWAYS_APIKEY"
+      ;;
+    17 )
+      result=$(ps aux | grep tideways | awk {'print $2'} | xargs kill -s 9)
+      display_result "Tideways service stopped! Press enter to continue ..."
+      ;;
+    18 )
+      result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_port=9001" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
+    service php7.3-fpm reload;)
+      display_result "Services successfully configured and php-fpm restarted! Press enter to continue ..."
+      ;;
+    19 )
+      result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_enable=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_enable=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_port=9001" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.show_error_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.show_exception_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    service php7.3-fpm reload;)
+      display_result "xDebug stopped! Press enter to continue ..."
+      ;;
+    20 )
+      result=$(while true; do /usr/bin/php /workspace/magento2gitpod/bin/magento cron:run >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/update/cron.php >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/bin/magento setup:cron:run >> /workspace/magento2gitpod/var/log/cron.log; sleep 60; done &)
+      display_result "Magento 2 Cron service started successfully. Press enter to continue ..."
+      ;;
+  esac
+done
