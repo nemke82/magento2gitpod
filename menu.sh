@@ -16,7 +16,7 @@ fi
 ## Start/Stop/Restart services/features.
 ################################
 action1() {
-    echo "Starting installation of Magento 2.3.5 version"
+    echo "Starting installation of Magento 2.4.1 version"
     chmod a+rwx m2-install.sh && ./m2-install.sh;
 
     echo -n "Installation completed! Press enter to continue ... "
@@ -26,7 +26,7 @@ action1() {
 }
 
 action2() {
-    echo "Starting installation of Magento 2.4.0 version"
+    echo "Starting installation of Magento 2.4-develop version"
     chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh;
     echo -n "Installation completed! Press enter to continue ... "
     read response
