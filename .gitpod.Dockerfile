@@ -19,6 +19,7 @@ RUN apt-get -y install libmcrypt-dev
 RUN mkdir -p /tmp/pear/cache
 RUN apt install -y php-dev
 RUN apt install -y php-pear
+RUN apt-get -y install dialog
 
 #Install php-fpm7.2
 #RUN apt-get update \
