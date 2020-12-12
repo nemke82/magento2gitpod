@@ -58,7 +58,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
 
-#Adjust few options for xDebug
+#Adjust few options for xDebug and disable it by default
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
     #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini
     #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini \
@@ -66,6 +66,8 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
     #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.3/mods-available/xdebug.ini \
     #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini \
     #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini
+RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
+RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
