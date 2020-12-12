@@ -1,6 +1,11 @@
 # magento2gitpod
 Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.3, PHP-FPM and lot more...
 
+<blockquote class="imgur-embed-pub" lang="en" data-id="zQsVpvO" data-context="false" ><a href="//imgur.com/zQsVpvO"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+
+Watch full video how you can easily setup Magento 2 Dev environment right in your browser:
+https://youtu.be/ZydOkPWJPT8
+
 *How-to instructions:*
 1) Register on https://gitpod.io 
 2) Fork https://github.com/nemke82/magento2gitpod to your repo
