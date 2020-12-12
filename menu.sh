@@ -80,7 +80,7 @@ while true; do
       ;;
     4 )
       chmod a+rwx m2-install.sh && ./m2-install.sh && clear
-      result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo "$url)
+      result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo $url)
       display_result "Installation completed! Please visit"
       ;;
     5 )
