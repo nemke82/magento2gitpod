@@ -79,11 +79,13 @@ while true; do
       fi
       ;;
     4 )
-      result=$(chmod a+rwx m2-install.sh && ./m2-install.sh)
+      chmod a+rwx m2-install.sh && ./m2-install.sh;
+      result=$()
       display_result "Installation completed! Press enter to continue ..."
       ;;
     5 )
-      result=$(chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh)
+      chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh
+      result=$()
       display_result "Installation completed! Press enter to continue ..."
       ;;
     6 )
