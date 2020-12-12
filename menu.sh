@@ -79,14 +79,14 @@ while true; do
       fi
       ;;
     4 )
-      chmod a+rwx m2-install.sh && ./m2-install.sh;
-      result=$()
-      display_result "Installation completed! Press enter to continue ..."
+      chmod a+rwx m2-install.sh && ./m2-install.sh && clear
+      result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo "$url)
+      display_result "Installation completed! Please visit"
       ;;
     5 )
-      chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh
-      result=$()
-      display_result "Installation completed! Press enter to continue ..."
+      chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh && clear
+      result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo $url)
+      display_result "Installation completed! Please visit"
       ;;
     6 )
       result=$(git clone https://github.com/magento/baler.git && cd baler && npm install && npm run build;alias baler='/workspace/magento2gitpod/baler/bin/baler'&)
