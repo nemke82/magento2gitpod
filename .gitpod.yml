@@ -14,6 +14,7 @@ vscode:
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
   - openIn: main
+    name: "Installer and Services menu"
     command: chmod a+rwx menu.sh && ./menu.sh
   - openMode: split-bottom
     name: "Services"
@@ -23,5 +24,5 @@ tasks:
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
-  - name: "Start Crons"
-    command: echo "while true; do /usr/bin/php /workspace/magento2gitpod/bin/magento cron:run >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/update/cron.php >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/bin/magento setup:cron:run >> /workspace/magento2gitpod/var/log/cron.log; sleep 60; done"
+  - name: "Terminal/SSH Start here"
+    command: echo "Good luck. Happy coding and testing!"
