@@ -142,6 +142,7 @@ while true; do
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
+    mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak /etc/php/7.3/fpm/conf.d/20-xdebug.ini;
     service php7.3-fpm reload;)
       display_result "Services successfully configured and php-fpm restarted! Press enter to continue ..."
       ;;
@@ -153,6 +154,7 @@ while true; do
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
+    mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak;
     service php7.3-fpm reload;)
       display_result "xDebug stopped! Press enter to continue ..."
       ;;
