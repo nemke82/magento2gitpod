@@ -16,11 +16,10 @@ tasks:
   - init: 
   - openIn: main
     name: "Installer and Services menu"
-    command: chmod a+rwx menu.sh && ./menu.sh
+    command: cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc && cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq && cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq && chmod a+rwx menu.sh && ./menu.sh
   - openMode: split-bottom
     name: "Services"
-    command: cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc && cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq && cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq
-             service nginx start &
+    command: service nginx start &
              cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh &
              /usr/sbin/php-fpm7.3 --fpm-config php-fpm.conf &
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
