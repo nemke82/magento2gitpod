@@ -118,7 +118,7 @@ RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
 
-RUN echo "lh() { \n\
+RUN echo -e "lh() { \n\
   mkdir -p /workspace/magento2gitpod/pub/lighthouse && \ \n\
   nvm install v14.15.1 && \ \n\
   /bin/bash -c "npm i -g lighthouse && lighthouse --enable-error-reporting --chrome-flags=\"--headless --no-sandbox\" $1 --output html --output-path /workspace/magento2gitpod/pub/lighthouse/index.html" && \ \n\
