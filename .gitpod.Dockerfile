@@ -118,8 +118,7 @@ RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
 
-RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc \
-    && echo $'lh() { \n\
+RUN echo 'lh() { \n\
   mkdir -p /workspace/magento2gitpod/pub/lighthouse && \ \n\
   nvm install v14.15.1 && \ \n\
   /bin/bash -c "npm i -g lighthouse && lighthouse --enable-error-reporting --chrome-flags=\"--headless --no-sandbox\" $1 --output html --output-path /workspace/magento2gitpod/pub/lighthouse/index.html" && \ \n\
@@ -535,3 +534,5 @@ VOLUME $RABBITMQ_DATA_DIR
 # Setting all environment variables that control language preferences, behaviour differs - https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html#The-LANGUAGE-variable
 # https://docs.docker.com/samples/library/ubuntu/#locales
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
+COPY /home/gitpod/.bashrc /var/lib/rabbitmq \
+     && /home/gitpod/.cargo /var/lib/rabbitmq
