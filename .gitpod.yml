@@ -24,5 +24,6 @@ tasks:
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
+             cp /home/gitpod/.bashrc /var/lib/rabbitmq/
   - name: "Terminal/SSH Start here"
     command: echo "Good luck. Happy coding and testing!"
