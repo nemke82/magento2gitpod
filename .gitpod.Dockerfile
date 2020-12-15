@@ -122,7 +122,7 @@ RUN echo 'lh() { \n\
   mkdir -p /workspace/magento2gitpod/pub/lighthouse && \ \n\
   nvm install v14.15.1 && \ \n\
   /bin/bash -c "npm i -g lighthouse && lighthouse --enable-error-reporting --chrome-flags=\"--headless --no-sandbox\" $1 --output html --output-path /workspace/magento2gitpod/pub/lighthouse/index.html" && \ \n\
-  url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url && \ \n\
+  url=$(gp url | awk -F"//" {"print $2"}) && url+="/" && url="https://8002-"$url && \ \n\
   gp preview $url/lighthouse/index.html \n\
 }' >> ~/.bashrc
 COPY nginx.conf /etc/nginx
