@@ -27,5 +27,6 @@ tasks:
              cp /home/gitpod/.bashrc /var/lib/rabbitmq/
              cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq
              cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq
+             source ~/.bashrc
   - name: "Terminal/SSH Start here"
-    command: echo "Good luck. Happy coding and testing!"
+    command: source ~/.bashrc && echo "Good luck. Happy coding and testing!"
