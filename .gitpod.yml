@@ -25,4 +25,4 @@ tasks:
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
   - name: "Terminal/SSH Start here"
-    command: source /etc/lighthouse.conf;echo "Good luck. Happy coding and testing!"
+    command: source /etc/lighthouse.conf;clear;echo "Good luck. Happy coding and testing!"
