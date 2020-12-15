@@ -112,3 +112,4 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 
 **Changelog 2020-12-15:**
 - Command lh added. It provides Google lighhouse report as preview in your Gitpod tab. You can check demo here:
+https://youtu.be/vbPi8zzZyBk
