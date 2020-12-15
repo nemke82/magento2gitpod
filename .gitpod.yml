@@ -13,10 +13,9 @@ vscode:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
-  - init: 
   - openIn: main
     name: "Installer and Services menu"
-    command: chmod a+rwx menu.sh && ./menu.sh
+    command: cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc && cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq && cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq && chmod a+rwx menu.sh && ./menu.sh
   - openMode: split-bottom
     name: "Services"
     command: service nginx start &
