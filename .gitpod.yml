@@ -25,4 +25,4 @@ tasks:
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
   - name: "Terminal/SSH Start here"
-    command: echo "Good luck. Happy coding and testing!"
+    command: source ~/.bashrc;echo "Good luck. Happy coding and testing!"
