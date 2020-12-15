@@ -17,6 +17,7 @@ RUN apt install -y software-properties-common
 RUN apt-get -y install gcc make autoconf libc-dev pkg-config
 RUN apt-get -y install libmcrypt-dev
 RUN mkdir -p /tmp/pear/cache
+RUN mkdir -p /etc/bash_completion.d/cargo
 RUN apt install -y php-dev
 RUN apt install -y php-pear
 RUN apt-get -y install dialog
