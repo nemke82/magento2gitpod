@@ -118,7 +118,14 @@ RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
 
-RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
+RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc \
+    && echo "lh() {
+  mkdir -p /workspace/magento2gitpod/pub/lighthouse && \
+  nvm install v14.15.1 && \
+  /bin/bash -c "npm i -g lighthouse && lighthouse --enable-error-reporting --chrome-flags=\"--headless --no-sandbox\" $1 --output html --output-path /workspace/magento2gitpod/pub/lighthouse/index.html" && \
+  url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url && \
+  gp preview $url/lighthouse/index.html
+}" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
 
 #Selenium required for MFTF
