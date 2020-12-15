@@ -97,7 +97,6 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
 - MySQL switched to Percona 5.7 (latest). Root password defined (it was not previously). Check above for changes.
 
-
 **Changelog 2020-10-14:**
 - PHP 7.2 depreciated and left as optional in the Dockerfile
 - PHP 7.3 latest support
@@ -110,3 +109,6 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 - Completely rewritten menu.sh file and it's location (now in the editor area) and labeled.
 - menu.sh file updated with Magento 2 Loop cron task.
 - Added installer for Magento 2.4.1 using composer and Magento 2.4-develop using Git clone ways.
+
+**Changelog 2020-12-15:**
+- Command lh added. It provides Google lighhouse report as preview in your Gitpod tab. You can check demo here:
