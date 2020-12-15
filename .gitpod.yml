@@ -24,10 +24,10 @@ tasks:
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
-             cat /workspace/magento2gitpod/lighthouse.conf >> /var/lib/rabbitmq/.bashrc
-             cat /workspace/magento2gitpod/lighthouse.conf >> /home/gitpod/.bashrc
+             cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc
+             cat /etc/lighthouse.conf >> /home/gitpod/.bashrc
              cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq
              cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq
-             source ~/.bashrc
+             source /home/gitpod/.bashrc
   - name: "Terminal/SSH Start here"
-    command: source ~/.bashrc && echo "Good luck. Happy coding and testing!"
+    command: source /home/gitpod/.bashrc && echo "Good luck. Happy coding and testing!"
