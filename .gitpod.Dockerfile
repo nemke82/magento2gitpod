@@ -534,5 +534,3 @@ VOLUME $RABBITMQ_DATA_DIR
 # Setting all environment variables that control language preferences, behaviour differs - https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html#The-LANGUAGE-variable
 # https://docs.docker.com/samples/library/ubuntu/#locales
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
-COPY /home/gitpod/.bashrc /var/lib/rabbitmq \
-     && /home/gitpod/.cargo /var/lib/rabbitmq
