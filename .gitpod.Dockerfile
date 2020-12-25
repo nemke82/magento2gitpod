@@ -118,7 +118,6 @@ COPY php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
-
 COPY nginx.conf /etc/nginx
 
 #Selenium required for MFTF
