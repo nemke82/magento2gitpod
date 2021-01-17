@@ -77,8 +77,8 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
 #    && sudo mkdir -p /usr/lib/php/20190902 \
 #    && sudo cp modules/xdebug.so /usr/lib/php/20190902 \
 #    && sudo bash -c "echo -e '\nzend_extension = /usr/lib/php/20190902/xdebug.so\n[XDebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\n' >> /etc/php/7.3/cli/conf.d/20-xdebug.ini"
-RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
-RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
+#RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
+#RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
