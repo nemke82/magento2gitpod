@@ -48,7 +48,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y php7.3-fpm php7.3-common php7.3-cli php7.3-imagick php7.3-gd php7.3-mysql \
        php7.3-pgsql php7.3-imap php-memcached php7.3-mbstring php7.3-xml php7.3-xmlrpc php7.3-soap php7.3-zip php7.3-curl \
-       php7.3-bcmath php7.3-sqlite3 php7.3-apcu php7.3-apcu-bc php7.3-intl php-redis \
+       php7.3-bcmath php7.3-sqlite3 php7.3-apcu php7.3-apcu-bc php7.3-intl php-dev php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
@@ -67,18 +67,16 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
     #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.3/mods-available/xdebug.ini \
     #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini \
     #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini
-    RUN sudo apt-get update -q \
-    && sudo apt-get install -y php-dev
 
-RUN wget http://xdebug.org/files/xdebug-2.9.1.tgz \
-    && tar -xvzf xdebug-2.9.1.tgz \
-    && cd xdebug-2.9.1 \
-    && phpize \
-    && ./configure \
-    && make \
-    && sudo mkdir -p /usr/lib/php/20190902 \
-    && sudo cp modules/xdebug.so /usr/lib/php/20190902 \
-    && sudo bash -c "echo -e '\nzend_extension = /usr/lib/php/20190902/xdebug.so\n[XDebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\n' >> /etc/php/7.3/cli/conf.d/20-xdebug.ini"
+#RUN wget http://xdebug.org/files/xdebug-2.9.1.tgz \
+#    && tar -xvzf xdebug-2.9.1.tgz \
+#    && cd xdebug-2.9.1 \
+#    && phpize \
+#    && ./configure \
+#    && make \
+#    && sudo mkdir -p /usr/lib/php/20190902 \
+#    && sudo cp modules/xdebug.so /usr/lib/php/20190902 \
+#    && sudo bash -c "echo -e '\nzend_extension = /usr/lib/php/20190902/xdebug.so\n[XDebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\n' >> /etc/php/7.3/cli/conf.d/20-xdebug.ini"
 RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
 RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
 
