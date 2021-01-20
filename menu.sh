@@ -143,8 +143,8 @@ while true; do
       result=$(echo "Configuring xDebug PHP settings" &&
     echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
-    echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
-    echo "xdebug.remote_port=9001" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_enable=1" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_port=9003" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
@@ -157,8 +157,8 @@ while true; do
     19 )
       result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=off" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
-    echo "xdebug.profiler_enable=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
-    echo "xdebug.remote_port=9001" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_enable=0" >> /etc/php/7.3/mods-available/xdebug.ini;
+    echo "xdebug.remote_port=9003" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
