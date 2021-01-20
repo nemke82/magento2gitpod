@@ -57,6 +57,7 @@ RUN apt-get update \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && update-alternatives --set php /usr/bin/php7.3 \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
 
 #Adjust few options for xDebug and disable it by default
@@ -69,7 +70,6 @@ RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
     #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini
 RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
 RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
-RUN update-alternatives --set php /usr/bin/php7.3
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
