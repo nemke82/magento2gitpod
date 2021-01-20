@@ -540,5 +540,5 @@ ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 COPY lighthouse.conf /etc
 RUN cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc
 RUN update-alternatives --remove php /usr/bin/php8.0 \
-    update-alternatives --remove php /usr/bin/php7.4 \
-    update-alternatives --set php /usr/bin/php7.3
+    && update-alternatives --remove php /usr/bin/php7.4 \
+    && update-alternatives --set php /usr/bin/php7.3
