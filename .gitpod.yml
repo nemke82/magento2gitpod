@@ -10,6 +10,7 @@ ports:
 vscode:
   extensions:
     - TabNine.tabnine-vscode@3.1.11:TrOGC+uTC6k193ZaAykXBg==
+    - felixfbecker.php-debug@1.13.0:WX8Y3EpQk3zgahy41yJtNQ==
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
