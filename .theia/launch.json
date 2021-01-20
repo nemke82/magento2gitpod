@@ -5,7 +5,6 @@
       "type": "php",
       "name": "Launch",
       "request": "launch",
-      "port": "9001",
       "stopOnEntry": true,
       "program": "${file}",
       "cwd": "${workspaceRoot}",
