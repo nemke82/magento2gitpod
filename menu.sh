@@ -137,16 +137,21 @@ while true; do
       display_result "Tideways service stopped! Press enter to continue ..."
       ;;
     18 )
-      result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini;
+      rm -f /etc/php/7.3/mods-available/xdebug.ini &&
+      wget http://xdebug.org/files/xdebug-2.9.8.tgz && tar -xvf xdebug-2.9.8.tgz &&
+      cd xdebug-2.9.8 && phpize && ./configure && make && clear &&
+      result=$(echo "Configuring xDebug PHP settings" &&
+    echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.remote_port=9001" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.profiler_output_name = nemanja.log" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
     echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini;
-    mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak /etc/php/7.3/fpm/conf.d/20-xdebug.ini;
-    mv /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak /etc/php/7.3/cli/conf.d/20-xdebug.ini;
-    service php7.3-fpm reload;)
+    echo "zend_extension=/workspace/magento2gitpod/xdebug-2.9.8/modules/xdebug.so" >> /etc/php/7.3/mods-available/xdebug.ini;
+    ln -s /etc/php/7.3/mods-available/xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini;
+    ln -s /etc/php/7.3/mods-available/xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini;
+    service php7.3-fpm reload;clear)
       display_result "Services successfully configured and php-fpm restarted! Press enter to continue ..."
       ;;
     19 )
