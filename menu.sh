@@ -24,7 +24,7 @@ while true; do
     "1" "Display System Information" \
     "2" "Display Disk Space" \
     "3" "Display Home Space Utilization" \
-    "4" "Install Magento 2.4.1 latest" \
+    "4" "Install Magento 2.4.2 latest" \
     "5" "Install Magento 2.4-develop (dev)" \
     "6" "Install Baler tool" \
     "7" "Install MagePack tool" \
