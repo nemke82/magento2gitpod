@@ -112,3 +112,6 @@ https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 **Changelog 2020-12-15:**
 - Command lh added. It provides Google lighhouse report as preview in your Gitpod tab. You can check demo here:
 https://youtu.be/vbPi8zzZyBk
+
+**Changelog 2021-04-13:**
+- Updated m2-install.sh script to install latest Magento 2.4.2 version
