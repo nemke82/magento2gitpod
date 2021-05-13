@@ -7,7 +7,6 @@ RUN apt-get -y install lsb-release
 RUN apt-get -y install apt-utils
 RUN apt-get -y install python
 RUN apt-get install -y libmysqlclient-dev
-RUN apt-get -y install nginx
 RUN apt-get -y install rsync
 RUN apt-get -y install curl
 RUN apt-get -y install libnss3-dev
