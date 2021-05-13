@@ -42,7 +42,7 @@ RUN apt-get -y install dialog
     
 #Install php-fpm7.3
 RUN apt-get update \
-    && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
+    && apt-get install -y curl zip unzip git software-properties-common supervisor sqlite3 \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
     && apt-get install -y php7.3-fpm php7.3-common php7.3-cli php7.3-imagick php7.3-gd php7.3-mysql \
