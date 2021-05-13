@@ -111,8 +111,6 @@ USER gitpod
 # Install default-login for MySQL clients
 COPY client.cnf /etc/mysql/conf.d/client.cnf
 
-COPY mysql-bashrc-launch.sh /etc/mysql/mysql-bashrc-launch.sh
-
 USER root
 
 #Copy nginx default and php-fpm.conf file
