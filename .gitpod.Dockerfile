@@ -104,6 +104,7 @@ RUN chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/my
 # Install our own MySQL config
 COPY mysql.cnf /etc/mysql/conf.d/mysqld.cnf
 COPY .my.cnf /home/gitpod
+COPY mysql.conf /etc/supervisor/conf.d/mysql.conf
 RUN chown gitpod:gitpod /home/gitpod/.my.cnf
 
 USER gitpod
