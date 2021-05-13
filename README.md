@@ -115,3 +115,7 @@ https://youtu.be/vbPi8zzZyBk
 
 **Changelog 2021-04-13:**
 - Updated m2-install.sh script to install latest Magento 2.4.2 version
+
+**Changelog 2021-05-13:**
+- Added supervisord to the Dockerfile
+- MySQL service moved from cold start to supervisord service (type sudo supervisorctl to check all services integrated)
