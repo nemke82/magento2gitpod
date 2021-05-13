@@ -20,8 +20,7 @@ tasks:
   - openMode: split-bottom
     name: "Services"
     command: service nginx start &
-             cd /workspace/magento2gitpod && chmod a+rwx mysql-bashrc-launch.sh && ./mysql-bashrc-launch.sh &
-             /usr/sbin/php-fpm7.3 --fpm-config php-fpm.conf &
+             cd /workspace/magento2gitpod && /usr/sbin/php-fpm7.3 --fpm-config php-fpm.conf &
              rm -f /etc/php/7.3/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.3/fpm/conf.d/20-tideways.ini &&
              /opt/rabbitmq/sbin/rabbitmq-server &
              rabbitmq-plugins enable rabbitmq_management &
