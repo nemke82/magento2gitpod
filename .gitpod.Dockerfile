@@ -59,7 +59,6 @@ RUN apt-get update \
     && update-alternatives --remove php /usr/bin/php8.0 \
     && update-alternatives --remove php /usr/bin/php7.3 \
     && update-alternatives --set php /usr/bin/php7.4 \
-    && update-alternatives --set php-config /usr/bin/php-config7.4 \
     && update-alternatives --set phpize /usr/bin/phpize7.4 \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
 
