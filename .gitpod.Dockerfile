@@ -115,7 +115,7 @@ USER root
 
 #Copy nginx default and php-fpm.conf file
 #COPY default /etc/nginx/sites-available/default
-COPY php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
+COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 RUN chown -R gitpod:gitpod /etc/php
 
 USER gitpod
@@ -243,7 +243,7 @@ RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
 RUN rm -f /usr/bin/php
-RUN ln -s /usr/bin/php7.3 /usr/bin/php
+RUN ln -s /usr/bin/php7.4 /usr/bin/php
 
 #NVM support
 RUN mkdir -p /usr/local/nvm
