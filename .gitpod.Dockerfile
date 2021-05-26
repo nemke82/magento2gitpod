@@ -40,14 +40,14 @@ RUN apt-get -y install dialog
 #    && echo "daemon off;" >> /etc/nginx/nginx.conf
     
     
-#Install php-fpm7.3
+#Install php-fpm7.4
 RUN apt-get update \
     && apt-get install -y curl zip unzip git software-properties-common supervisor sqlite3 \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
-    && apt-get install -y php7.3-fpm php7.3-common php7.3-cli php7.3-imagick php7.3-gd php7.3-mysql \
-       php7.3-pgsql php7.3-imap php-memcached php7.3-mbstring php7.3-xml php7.3-xmlrpc php7.3-soap php7.3-zip php7.3-curl \
-       php7.3-bcmath php7.3-sqlite3 php7.3-apcu php7.3-apcu-bc php7.3-intl php-dev php7.3-dev php7.3-xdebug php-redis \
+    && apt-get install -y php7.4-fpm php7.4-common php7.4-cli php7.4-imagick php7.4-gd php7.4-mysql \
+       php7.4-pgsql php7.4-imap php-memcached php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-soap php7.4-zip php7.4-curl \
+       php7.4-bcmath php7.4-sqlite3 php7.4-apcu php7.4-apcu-bc php7.4-intl php-dev php7.4-dev php7.4-xdebug php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer \
     && mkdir /run/php \
     && chown gitpod:gitpod /run/php \
@@ -57,20 +57,20 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && update-alternatives --remove php /usr/bin/php8.0 \
-    && update-alternatives --remove php /usr/bin/php7.4 \
-    && update-alternatives --set php /usr/bin/php7.3 \
+    && update-alternatives --remove php /usr/bin/php7.3 \
+    && update-alternatives --set php /usr/bin/php7.4 \
     && echo "daemon off;" >> /etc/nginx/nginx.conf
 
 #Adjust few options for xDebug and disable it by default
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.3/mods-available/xdebug.ini
-    #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.3/mods-available/xdebug.ini
-    #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.3/mods-available/xdebug.ini \
-    #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.3/mods-available/xdebug.ini \
-    #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.3/mods-available/xdebug.ini \
-    #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini \
-    #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.3/mods-available/xdebug.ini
-RUN mv /etc/php/7.3/cli/conf.d/20-xdebug.ini /etc/php/7.3/cli/conf.d/20-xdebug.ini-bak
-RUN mv /etc/php/7.3/fpm/conf.d/20-xdebug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini-bak
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/mods-available/xdebug.ini
+    #&& echo "xdebug.remote_autostart=on" >> /etc/php/7.4/mods-available/xdebug.ini
+    #&& echo "xdebug.profiler_enable=On" >> /etc/php/7.4/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_dir = /workspace/magento2pitpod" >> /etc/php/7.4/mods-available/xdebug.ini \
+    #&& echo "xdebug.profiler_output_name = nemanja.log >> /etc/php/7.4/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_error_trace=On" >> /etc/php/7.4/mods-available/xdebug.ini \
+    #&& echo "xdebug.show_exception_trace=On" >> /etc/php/7.4/mods-available/xdebug.ini
+RUN mv /etc/php/7.4/cli/conf.d/20-xdebug.ini /etc/php/7.4/cli/conf.d/20-xdebug.ini-bak
+RUN mv /etc/php/7.4/fpm/conf.d/20-xdebug.ini /etc/php/7.4/fpm/conf.d/20-xdebug.ini-bak
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
