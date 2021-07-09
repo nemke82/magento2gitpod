@@ -291,25 +291,23 @@ RUN set -eux; \
 	gosu nobody true
 
 # Default to a PGP keyserver that pgp-happy-eyeballs recognizes, but allow for substitutions locally
-ARG PGP_KEYSERVER=ha.pool.sks-keyservers.net
+ARG PGP_KEYSERVER=keyserver.ubuntu.com
 # If you are building this image locally and are getting `gpg: keyserver receive failed: No data` errors,
 # run the build with a different PGP_KEYSERVER, e.g. docker build --tag rabbitmq:3.8 --build-arg PGP_KEYSERVER=pgpkeys.eu 3.8/ubuntu
 # For context, see https://github.com/docker-library/official-images/issues/4252
 
-# Using the latest OpenSSL LTS release, with support until September 2023 - https://www.openssl.org/source/
-ENV OPENSSL_VERSION 1.1.1h
-ENV OPENSSL_SOURCE_SHA256="5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9"
+ENV OPENSSL_VERSION 1.1.1k
+ENV OPENSSL_SOURCE_SHA256="892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5"
 # https://www.openssl.org/community/omc.html
 ENV OPENSSL_PGP_KEY_IDS="0x8657ABB260F056B1E5190839D9C4D26D0E604491 0x5B2545DAB21995F4088CEFAA36CEE4DEB00CFE33 0xED230BEC4D4F2518B9D7DF41F0DB4D21C1D35231 0xC1F33DD8CE1D4CC613AF14DA9195C48241FBF7DD 0x7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C 0xE5E52560DD91C556DDBDA5D02064C53641C25E5D"
 
-# Use the latest stable Erlang/OTP release (https://github.com/erlang/otp/tags)
-ENV OTP_VERSION 23.1.1
+ENV OTP_VERSION 24.0.3
 # TODO add PGP checking when the feature will be added to Erlang/OTP's build system
-# http://erlang.org/pipermail/erlang-questions/2019-January/097067.html
-ENV OTP_SOURCE_SHA256="8094484d94bce21d76f3a6c6137098839e7bc121e170c08b472f980296684ac9"
+# https://erlang.org/pipermail/erlang-questions/2019-January/097067.html
+ENV OTP_SOURCE_SHA256="64a70fb19da9c94d11f4e756998a2e91d8c8400d7d72960b15ad544af60ebe45"
 
 # Install dependencies required to build Erlang/OTP from source
-# http://erlang.org/doc/installation_guide/INSTALL.html
+# https://erlang.org/doc/installation_guide/INSTALL.html
 # autoconf: Required to configure Erlang/OTP before compiling
 # dpkg-dev: Required to set up host & build type when compiling Erlang/OTP
 # gnupg: Required to verify OpenSSL artefacts
@@ -323,6 +321,7 @@ RUN set -eux; \
 		ca-certificates \
 		dpkg-dev \
 		gcc \
+		g++ \
 		gnupg \
 		libncurses5-dev \
 		make \
@@ -375,7 +374,7 @@ RUN set -eux; \
 # smoke test
 	openssl version; \
 	\
-	OTP_SOURCE_URL="https://github.com/erlang/otp/archive/OTP-$OTP_VERSION.tar.gz"; \
+	OTP_SOURCE_URL="https://github.com/erlang/otp/releases/download/OTP-$OTP_VERSION/otp_src_$OTP_VERSION.tar.gz"; \
 	OTP_PATH="/usr/local/src/otp-$OTP_VERSION"; \
 	\
 # Download, verify & extract OTP_SOURCE
@@ -385,7 +384,7 @@ RUN set -eux; \
 	tar --extract --file "$OTP_PATH.tar.gz" --directory "$OTP_PATH" --strip-components 1; \
 	\
 # Configure Erlang/OTP for compilation, disable unused features & applications
-# http://erlang.org/doc/applications.html
+# https://erlang.org/doc/applications.html
 # ERL_TOP is required for Erlang/OTP makefiles to find the absolute path for the installation
 	cd "$OTP_PATH"; \
 	export ERL_TOP="$OTP_PATH"; \
@@ -403,6 +402,7 @@ RUN set -eux; \
 		--disable-hipe \
 		--disable-sctp \
 		--disable-silent-rules \
+		--enable-jit \
 		--enable-clock-gettime \
 		--enable-hybrid-heap \
 		--enable-kernel-poll \
@@ -416,7 +416,6 @@ RUN set -eux; \
 		--without-diameter \
 		--without-edoc \
 		--without-erl_docgen \
-		--without-erl_interface \
 		--without-et \
 		--without-eunit \
 		--without-ftp \
@@ -461,13 +460,15 @@ RUN set -eux; \
 ENV RABBITMQ_DATA_DIR=/var/lib/rabbitmq
 # Create rabbitmq system user & group, fix permissions & allow root user to connect to the RabbitMQ Erlang VM
 RUN set -eux; \
+	groupadd --gid 999 --system rabbitmq; \
+	useradd --uid 999 --system --home-dir "$RABBITMQ_DATA_DIR" --gid rabbitmq rabbitmq; \
 	mkdir -p "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
-	chown -fR gitpod:gitpod "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
+	chown -fR rabbitmq:rabbitmq "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
 	chmod 777 "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
 	ln -sf "$RABBITMQ_DATA_DIR/.erlang.cookie" /root/.erlang.cookie
 
 # Use the latest stable RabbitMQ release (https://www.rabbitmq.com/download.html)
-ENV RABBITMQ_VERSION 3.8.9
+ENV RABBITMQ_VERSION 3.9.0-rc.1
 # https://www.rabbitmq.com/signatures.html#importing-gpg
 ENV RABBITMQ_PGP_KEY_ID="0x0A9AF2115F4687BD29803A206B73A36E6026DFCA"
 ENV RABBITMQ_HOME=/opt/rabbitmq
@@ -508,7 +509,7 @@ RUN set -eux; \
 	grep -qE '^SYS_PREFIX=\$\{RABBITMQ_HOME\}$' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
 	sed -i 's/^SYS_PREFIX=.*$/SYS_PREFIX=/' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
 	grep -qE '^SYS_PREFIX=$' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
-	chown -R gitpod:gitpod "$RABBITMQ_HOME"; \
+	chown -R rabbitmq:rabbitmq "$RABBITMQ_HOME"; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark; \
@@ -518,12 +519,20 @@ RUN set -eux; \
 	[ ! -e "$RABBITMQ_DATA_DIR/.erlang.cookie" ]; \
 # Ensure RabbitMQ was installed correctly by running a few commands that do not depend on a running server, as the rabbitmq user
 # If they all succeed, it's safe to assume that things have been set up correctly
-	gosu gitpod rabbitmqctl help; \
-	gosu gitpod rabbitmqctl list_ciphers; \
-	gosu gitpod rabbitmq-plugins list; \
+	gosu rabbitmq rabbitmqctl help; \
+	gosu rabbitmq rabbitmqctl list_ciphers; \
+	gosu rabbitmq rabbitmq-plugins list; \
+# no stale cookies
+	rm "$RABBITMQ_DATA_DIR/.erlang.cookie"
+
+# Enable Prometheus-style metrics by default (https://github.com/docker-library/rabbitmq/issues/419)
+RUN set -eux; \
+	gosu rabbitmq rabbitmq-plugins enable --offline rabbitmq_prometheus; \
+	echo 'management_agent.disable_metrics_collector = true' > /etc/rabbitmq/conf.d/management_agent.disable_metrics_collector.conf; \
+	chown rabbitmq:rabbitmq /etc/rabbitmq/conf.d/management_agent.disable_metrics_collector.conf
 
 # Added for backwards compatibility - users can simply COPY custom plugins to /plugins
-ln -sf /opt/rabbitmq/plugins /plugins;
+RUN ln -sf /opt/rabbitmq/plugins /plugins
 
 # set home so that any `--user` knows where to put the erlang cookie
 ENV HOME $RABBITMQ_DATA_DIR
