@@ -1,65 +1,44 @@
 FROM gitpod/workspace-full
 
-USER root
+RUN sudo apt-get update
+RUN sudo apt-get -y install lsb-release
+RUN sudo apt-get -y install apt-utils
+RUN sudo apt-get -y install python
+RUN sudo apt-get install -y libmysqlclient-dev
+RUN sudo apt-get -y install rsync
+RUN sudo apt-get -y install curl
+RUN sudo apt-get -y install libnss3-dev
+RUN sudo apt-get -y install openssh-client
+RUN sudo apt-get -y install mc
+RUN sudo apt install -y software-properties-common
+RUN sudo apt-get -y install gcc make autoconf libc-dev pkg-config
+RUN sudo apt-get -y install libmcrypt-dev
+RUN sudo mkdir -p /tmp/pear/cache
+RUN sudo mkdir -p /etc/bash_completion.d/cargo
+RUN sudo apt install -y php-dev
+RUN sudo apt install -y php-pear
+RUN sudo apt-get -y install dialog
 
-RUN apt-get update
-RUN apt-get -y install lsb-release
-RUN apt-get -y install apt-utils
-RUN apt-get -y install python
-RUN apt-get install -y libmysqlclient-dev
-RUN apt-get -y install rsync
-RUN apt-get -y install curl
-RUN apt-get -y install libnss3-dev
-RUN apt-get -y install openssh-client
-RUN apt-get -y install mc
-RUN apt install -y software-properties-common
-RUN apt-get -y install gcc make autoconf libc-dev pkg-config
-RUN apt-get -y install libmcrypt-dev
-RUN mkdir -p /tmp/pear/cache
-RUN mkdir -p /etc/bash_completion.d/cargo
-RUN apt install -y php-dev
-RUN apt install -y php-pear
-RUN apt-get -y install dialog
-
-#Install php-fpm7.2
-#RUN apt-get update \
-#    && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
-#    && add-apt-repository -y ppa:ondrej/php \
-#    && apt-get update \
-#    && apt-get install -y php7.2-fpm php7.2-common php7.2-cli php7.2-imagick php7.2-gd php7.2-mysql \
-#       php7.2-pgsql php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-soap php7.2-zip php7.2-curl \
-#       php7.2-bcmath php7.2-sqlite3 php7.2-apcu php7.2-apcu-bc php7.2-intl php-xdebug php-redis \
-#    && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
-#    && mkdir /run/php \
-#    && chown gitpod:gitpod /run/php \
-#    && chown -R gitpod:gitpod /etc/php \
-#    && apt-get remove -y --purge software-properties-common \
-#    && apt-get -y autoremove \
-#    && apt-get clean \
-#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-#    && echo "daemon off;" >> /etc/nginx/nginx.conf
-    
-    
 #Install php-fpm7.4
-RUN apt-get update \
-    && apt-get install -y curl zip unzip git software-properties-common supervisor sqlite3 \
-    && add-apt-repository -y ppa:ondrej/php \
-    && apt-get update \
-    && apt-get install -y php7.4-fpm php7.4-common php7.4-cli php7.4-imagick php7.4-gd php7.4-mysql \
+RUN sudo apt-get update \
+    && sudo apt-get install -y curl zip unzip git software-properties-common supervisor sqlite3 \
+    && sudo add-apt-repository -y ppa:ondrej/php \
+    && sudo apt-get update \
+    && sudo apt-get install -y php7.4-fpm php7.4-common php7.4-cli php7.4-imagick php7.4-gd php7.4-mysql \
        php7.4-pgsql php7.4-imap php-memcached php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-soap php7.4-zip php7.4-curl \
        php7.4-bcmath php7.4-sqlite3 php7.4-apcu php7.4-apcu-bc php7.4-intl php-dev php7.4-dev php7.4-xdebug php-redis \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer \
-    && mkdir /run/php \
-    && chown gitpod:gitpod /run/php \
-    && chown -R gitpod:gitpod /etc/php \
-    && apt-get remove -y --purge software-properties-common \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && update-alternatives --remove php /usr/bin/php8.0 \
-    && update-alternatives --remove php /usr/bin/php7.3 \
-    && update-alternatives --set php /usr/bin/php7.4 \
-    && echo "daemon off;" >> /etc/nginx/nginx.conf
+    && sudo mkdir /run/php \
+    && sudo chown gitpod:gitpod /run/php \
+    && sudo chown -R gitpod:gitpod /etc/php \
+    && sudo apt-get remove -y --purge software-properties-common \
+    && sudo apt-get -y autoremove \
+    && sudo apt-get clean \
+    && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && sudo update-alternatives --remove php /usr/bin/php8.0 \
+    && sudo update-alternatives --remove php /usr/bin/php7.3 \
+    && sudo update-alternatives --set php /usr/bin/php7.4 \
+    && sudo echo "daemon off;" >> /etc/nginx/nginx.conf
 
 #Adjust few options for xDebug and disable it by default
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/mods-available/xdebug.ini
@@ -74,13 +53,13 @@ RUN mv /etc/php/7.4/fpm/conf.d/20-xdebug.ini /etc/php/7.4/fpm/conf.d/20-xdebug.i
 
 # Install MySQL
 ENV PERCONA_MAJOR 5.7
-RUN apt-get update \
- && apt-get -y install gnupg2 \
- && apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
- && mkdir /var/run/mysqld \
- && wget -c https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
- && dpkg -i percona-release_latest.stretch_all.deb \
- && apt-get update
+RUN sudo apt-get update \
+ && sudo apt-get -y install gnupg2 \
+ && sudo apt-get clean && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/* \
+ && sudo mkdir /var/run/mysqld \
+ && sudo wget -c https://repo.percona.com/apt/percona-release_latest.stretch_all.deb \
+ && sudo dpkg -i percona-release_latest.stretch_all.deb \
+ && sudo apt-get update
 
 RUN set -ex; \
 	{ \
@@ -93,45 +72,38 @@ RUN set -ex; \
 			echo "percona-server-server-$PERCONA_MAJOR" "$key" password 'nem4540'; \
 		done; \
 	} | debconf-set-selections; \
-	apt-get update; \
-	apt-get install -y \
+	sudo apt-get update; \
+	sudo apt-get install -y \
 		percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 \
 	;
 	
-RUN chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring
+RUN sudo chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring
 
 # Install our own MySQL config
 COPY mysql.cnf /etc/mysql/conf.d/mysqld.cnf
 COPY .my.cnf /home/gitpod
 COPY mysql.conf /etc/supervisor/conf.d/mysql.conf
-RUN chown gitpod:gitpod /home/gitpod/.my.cnf
-
-USER gitpod
+RUN sudo chown gitpod:gitpod /home/gitpod/.my.cnf
 
 # Install default-login for MySQL clients
 COPY client.cnf /etc/mysql/conf.d/client.cnf
 
-USER root
-
 #Copy nginx default and php-fpm.conf file
 #COPY default /etc/nginx/sites-available/default
 COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
-RUN chown -R gitpod:gitpod /etc/php
+RUN sudo chown -R gitpod:gitpod /etc/php
 
-USER gitpod
 COPY nginx.conf /etc/nginx
 
 #Selenium required for MFTF
-RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-RUN wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-
-USER root
+RUN sudo wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+RUN sudo wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
+RUN sudo unzip chromedriver_linux64.zip
 
 # Install Chrome and Chromium
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install \
-    && apt-get install -yq \
+RUN sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install \
+    && sudo apt-get install -yq \
        gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
        libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
        libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 \
@@ -147,9 +119,9 @@ ENV BLACKFIRE_USER gitpod
 RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
     && curl -sS https://packages.blackfire.io/gpg.key | sudo apt-key add \
     && echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update \
-    && apt-get install -y blackfire-agent \
-    && apt-get install -y blackfire-php
+    && sudo apt-get update \
+    && sudo apt-get install -y blackfire-agent \
+    && sudo apt-get install -y blackfire-php
 
 RUN \
     version=$(php -r "echo PHP_MAJOR_VERSION, PHP_MINOR_VERSION;") \
@@ -158,35 +130,35 @@ RUN \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
 
 COPY blackfire-agent.ini /etc/blackfire/agent
-COPY blackfire-php.ini /etc/php/7.3/fpm/conf.d/92-blackfire-config.ini
-COPY blackfire-php.ini /etc/php/7.3/cli/conf.d/92-blackfire-config.ini
+COPY blackfire-php.ini /etc/php/7.4/fpm/conf.d/92-blackfire-config.ini
+COPY blackfire-php.ini /etc/php/7.4/cli/conf.d/92-blackfire-config.ini
 
 COPY blackfire-run.sh /blackfire-run.sh
 
 ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
 
 #Install Tideways
-RUN apt-get update
+RUN sudo apt-get update
 RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list && \
     curl -sS 'https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg' | apt-key add -
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -yq tideways-daemon && \
-    apt-get autoremove --assume-yes && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update && sudo apt-get install -yq tideways-daemon && \
+    sudo apt-get autoremove --assume-yes && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 ENTRYPOINT ["tideways-daemon","--hostname=tideways-daemon","--address=0.0.0.0:9135"]
 
 RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list && \
     curl -sS 'https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg' | apt-key add - && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq install tideways-php && \
-    apt-get autoremove --assume-yes && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -yq install tideways-php && \
+    sudo apt-get autoremove --assume-yes && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.3/cli/conf.d/40-tideways.ini
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.3/fpm/conf.d/40-tideways.ini
-RUN rm -f /etc/php/7.3/cli/20-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.4/cli/conf.d/40-tideways.ini
+RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.4/fpm/conf.d/40-tideways.ini
+RUN rm -f /etc/php/7.4/cli/20-tideways.ini
 
 # Install Redis.
 RUN sudo apt-get update \
@@ -197,23 +169,23 @@ RUN sudo apt-get update \
  #n98-magerun2 tool.
  RUN wget https://files.magerun.net/n98-magerun2.phar \
      && chmod +x ./n98-magerun2.phar \
-     && mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
+     && sudo mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
      
 #Install APCU
-RUN echo "apc.enable_cli=1" > /etc/php/7.3/cli/conf.d/20-apcu.ini
-RUN echo "priority=25" > /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
-RUN echo "extension=apcu.so" >> /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
-RUN echo "extension=apc.so" >> /etc/php/7.3/cli/conf.d/25-apcu_bc.ini
+RUN echo "apc.enable_cli=1" > /etc/php/7.4/cli/conf.d/20-apcu.ini
+RUN echo "priority=25" > /etc/php/7.4/cli/conf.d/25-apcu_bc.ini
+RUN echo "extension=apcu.so" >> /etc/php/7.4/cli/conf.d/25-apcu_bc.ini
+RUN echo "extension=apc.so" >> /etc/php/7.4/cli/conf.d/25-apcu_bc.ini
 
-RUN chown -R gitpod:gitpod /var/log/blackfire
-RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
-RUN mkdir -p /var/run/blackfire
-RUN chown -R gitpod:gitpod /var/run/blackfire
-RUN chown -R gitpod:gitpod /etc/blackfire
-RUN chown -R gitpod:gitpod /etc/php
-RUN chown -R gitpod:gitpod /etc/nginx
-RUN chown -R gitpod:gitpod /etc/init.d/
-RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
+RUN sudo chown -R gitpod:gitpod /var/log/blackfire
+RUN sudo chown -R gitpod:gitpod /etc/init.d/blackfire-agent
+RUN sudo mkdir -p /var/run/blackfire
+RUN sudo chown -R gitpod:gitpod /var/run/blackfire
+RUN sudo chown -R gitpod:gitpod /etc/blackfire
+RUN sudo chown -R gitpod:gitpod /etc/php
+RUN sudo chown -R gitpod:gitpod /etc/nginx
+RUN sudo chown -R gitpod:gitpod /etc/init.d/
+RUN sudo echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 
 #New Relic
 RUN \
@@ -222,31 +194,31 @@ RUN \
   export NR_INSTALL_SILENT=1 && \
   /tmp/newrelic-php5-*/newrelic-install install && \
   rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-  touch /etc/php/7.3/fpm/conf.d/newrelic.ini && \
-  touch /etc/php/7.3/cli/conf.d/newrelic.ini && \
+  touch /etc/php/7.4/fpm/conf.d/newrelic.ini && \
+  touch /etc/php/7.4/cli/conf.d/newrelic.ini && \
   sed -i \
       -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
       -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
       -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
       -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
-      /etc/php/7.3/cli/conf.d/newrelic.ini && \
+      /etc/php/7.4/cli/conf.d/newrelic.ini && \
   sed -i \
       -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
       -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
       -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
       -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
-      /etc/php/7.3/fpm/conf.d/newrelic.ini && \
-  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.3/fpm/conf.d/newrelic.ini && \
-  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.3/cli/conf.d/newrelic.ini
+      /etc/php/7.4/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.4/fpm/conf.d/newrelic.ini && \
+  sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.4/cli/conf.d/newrelic.ini
      
-RUN chown -R gitpod:gitpod /etc/php
-RUN chown -R gitpod:gitpod /etc/newrelic
+RUN sudo chown -R gitpod:gitpod /etc/php
+RUN sudo chown -R gitpod:gitpod /etc/newrelic
 COPY newrelic.cfg /etc/newrelic
-RUN rm -f /usr/bin/php
-RUN ln -s /usr/bin/php7.4 /usr/bin/php
+RUN sudo rm -f /usr/bin/php
+RUN sudo ln -s /usr/bin/php7.4 /usr/bin/php
 
 #NVM support
-RUN mkdir -p /usr/local/nvm
+RUN sudo mkdir -p /usr/local/nvm
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 0.10.33
 
@@ -260,11 +232,6 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 RUN chown -R gitpod:gitpod /usr/local/nvm
-
-USER gitpod
-
-#RUN bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-#    && sdk default java 11.0.5-open"
     
 RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.16.tar.gz --output elasticsearch-5.6.16.tar.gz \
     && tar -xzf elasticsearch-5.6.16.tar.gz
@@ -278,15 +245,13 @@ RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.
     && tar -xzf elasticsearch-7.8.0-linux-x86_64.tar.gz
 ENV ES_HOME78="$HOME/elasticsearch-7.8.0"
 
-USER root
-
 RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
+	sudo apt-get update; \
+	sudo apt-get install -y --no-install-recommends \
 # grab gosu for easy step-down from root
 		gosu \
 	; \
-	rm -rf /var/lib/apt/lists/*; \
+	sudo rm -rf /var/lib/apt/lists/*; \
 # verify that the "gosu" binary works
 	gosu nobody true
 
@@ -315,8 +280,8 @@ ENV OTP_SOURCE_SHA256="64a70fb19da9c94d11f4e756998a2e91d8c8400d7d72960b15ad544af
 RUN set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install --yes --no-install-recommends \
+	sudo apt-get update; \
+	sudo apt-get install --yes --no-install-recommends \
 		autoconf \
 		ca-certificates \
 		dpkg-dev \
@@ -327,7 +292,7 @@ RUN set -eux; \
 		make \
 		wget \
 	; \
-	rm -rf /var/lib/apt/lists/*; \
+	sudo rm -rf /var/lib/apt/lists/*; \
 	\
 	OPENSSL_SOURCE_URL="https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz"; \
 	OPENSSL_PATH="/usr/local/src/openssl-$OPENSSL_VERSION"; \
@@ -440,7 +405,7 @@ RUN set -eux; \
 	; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
-	apt-mark auto '.*' > /dev/null; \
+	sudo apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
 	find /usr/local -type f -executable -exec ldd '{}' ';' \
 		| awk '/=>/ { print $(NF-1) }' \
@@ -450,7 +415,7 @@ RUN set -eux; \
 		| sort -u \
 		| xargs -r apt-mark manual \
 	; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	sudo apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 # Check that OpenSSL still works after purging build dependencies
 	openssl version; \
@@ -460,12 +425,12 @@ RUN set -eux; \
 ENV RABBITMQ_DATA_DIR=/var/lib/rabbitmq
 # Create rabbitmq system user & group, fix permissions & allow root user to connect to the RabbitMQ Erlang VM
 RUN set -eux; \
-	groupadd --gid 999 --system rabbitmq; \
-	useradd --uid 999 --system --home-dir "$RABBITMQ_DATA_DIR" --gid rabbitmq rabbitmq; \
-	mkdir -p "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
-	chown -fR rabbitmq:rabbitmq "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
-	chmod 777 "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
-	ln -sf "$RABBITMQ_DATA_DIR/.erlang.cookie" /root/.erlang.cookie
+	sudo groupadd --gid 999 --system rabbitmq; \
+	sudo useradd --uid 999 --system --home-dir "$RABBITMQ_DATA_DIR" --gid rabbitmq rabbitmq; \
+	sudo mkdir -p "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
+	sudo chown -fR rabbitmq:rabbitmq "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
+	sudo chmod 777 "$RABBITMQ_DATA_DIR" /etc/rabbitmq /etc/rabbitmq/conf.d /tmp/rabbitmq-ssl /var/log/rabbitmq; \
+	sudo ln -sf "$RABBITMQ_DATA_DIR/.erlang.cookie" /root/.erlang.cookie
 
 # Use the latest stable RabbitMQ release (https://www.rabbitmq.com/download.html)
 ENV RABBITMQ_VERSION 3.9.0-rc.1
@@ -481,14 +446,14 @@ ENV PATH=$RABBITMQ_HOME/sbin:$PATH \
 RUN set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install --yes --no-install-recommends \
+	sudo apt-get update; \
+	sudo apt-get install --yes --no-install-recommends \
 		ca-certificates \
 		gnupg \
 		wget \
 		xz-utils \
 	; \
-	rm -rf /var/lib/apt/lists/*; \
+	sudo rm -rf /var/lib/apt/lists/*; \
 	\
 	RABBITMQ_SOURCE_URL="https://github.com/rabbitmq/rabbitmq-server/releases/download/v$RABBITMQ_VERSION/rabbitmq-server-generic-unix-latest-toolchain-$RABBITMQ_VERSION.tar.xz"; \
 	RABBITMQ_PATH="/usr/local/src/rabbitmq-$RABBITMQ_VERSION"; \
@@ -509,11 +474,11 @@ RUN set -eux; \
 	grep -qE '^SYS_PREFIX=\$\{RABBITMQ_HOME\}$' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
 	sed -i 's/^SYS_PREFIX=.*$/SYS_PREFIX=/' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
 	grep -qE '^SYS_PREFIX=$' "$RABBITMQ_HOME/sbin/rabbitmq-defaults"; \
-	chown -R rabbitmq:rabbitmq "$RABBITMQ_HOME"; \
+	sudo chown -R rabbitmq:rabbitmq "$RABBITMQ_HOME"; \
 	\
-	apt-mark auto '.*' > /dev/null; \
-	apt-mark manual $savedAptMark; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	sudo apt-mark auto '.*' > /dev/null; \
+	sudo apt-mark manual $savedAptMark; \
+	sudo apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 # verify assumption of no stale cookies
 	[ ! -e "$RABBITMQ_DATA_DIR/.erlang.cookie" ]; \
@@ -532,7 +497,7 @@ RUN set -eux; \
 	chown rabbitmq:rabbitmq /etc/rabbitmq/conf.d/management_agent.disable_metrics_collector.conf
 
 # Added for backwards compatibility - users can simply COPY custom plugins to /plugins
-RUN ln -sf /opt/rabbitmq/plugins /plugins
+RUN sudo ln -sf /opt/rabbitmq/plugins /plugins
 
 # set home so that any `--user` knows where to put the erlang cookie
 ENV HOME $RABBITMQ_DATA_DIR
@@ -545,4 +510,4 @@ VOLUME $RABBITMQ_DATA_DIR
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
 COPY lighthouse.conf /etc
-RUN cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc
+RUN sudo cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc
