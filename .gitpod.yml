@@ -2,8 +2,11 @@ image:
   file: .gitpod.Dockerfile
 ports:
 - port: 8002
+  visability: public
 - port: 9001
+  visability: public
 - port: 15672
+  visability: public
 vscode:
   extensions:
     - TabNine.tabnine-vscode@3.4.12
