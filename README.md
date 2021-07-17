@@ -34,8 +34,8 @@ Services/Tools installed:
   '$ES_HOME56/bin/elasticsearch -d -p $ES_HOME56/pid -Ediscovery.type=single-node' <BR>
 - **ElasticSearch 6.8.9**. Note: Please run following command to start it: <BR>
   '$ES_HOME68/bin/elasticsearch -d -p $ES_HOME68/pid -Ediscovery.type=single-node' <BR>
-- **ElasticSearch 7.8.0**. Note: Please run following command to start it: <BR>
-  '$ES_HOME78/bin/elasticsearch -d -p $ES_HOME78/pid -Ediscovery.type=single-node' <BR>
+- **ElasticSearch 7.9.3**. Note: Please run following command to start it: <BR>
+  '$ES_HOME79/bin/elasticsearch -d -p $ES_HOME79/pid -Ediscovery.type=single-node' <BR>
   
   Some extensions like ElasticSuite (https://github.com/Smile-SA/elasticsuite/wiki/ServerConfig-5.x) requires two ElasticSearch plugins to be installed. You can install them with the following commands:<BR>
   
@@ -122,3 +122,6 @@ https://youtu.be/vbPi8zzZyBk
 
 **Changelog 2021-05-26:**
 - Default PHP moved to PHP 7.4
+
+**Changelog 2021-07-17:**
+- Dockerfile heavily refactored as per new sudo instructions (https://www.gitpod.io/docs/config-docker#configure-a-custom-dockerfile)
