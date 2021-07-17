@@ -254,11 +254,9 @@ RUN sudo apt-key adv --keyserver "hkps://keys.openpgp.org" --recv-keys "0x0A9AF2
     && sudo echo 'deb http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list \
     && sudo echo 'deb-src http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list \
     && sudo echo 'deb https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ buster main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list \
-    && sudo echo 'deb-src https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ buster main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
-
-RUN sudo apt-get update -y
-
-RUN sudo apt-get install -y erlang-base \
+    && sudo echo 'deb-src https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ buster main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list \
+    && sudo apt-get update -y \
+    && sudo apt-get install -y erlang-base \
        erlang-asn1 erlang-crypto erlang-eldap erlang-ftp erlang-inets \
        erlang-mnesia erlang-os-mon erlang-parsetools erlang-public-key \
        erlang-runtime-tools erlang-snmp erlang-ssl \
