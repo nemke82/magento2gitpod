@@ -2,11 +2,8 @@ image:
   file: .gitpod.Dockerfile
 ports:
 - port: 8002
-  visability: public
 - port: 9001
-  visability: public
 - port: 15672
-  visability: public
 vscode:
   extensions:
     - TabNine.tabnine-vscode@3.4.12
@@ -14,14 +11,12 @@ vscode:
 tasks:
   - openIn: main
     name: "Installer and Services menu"
-    command: cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc && cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq && cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq && chmod a+rwx menu.sh && ./menu.sh
+    command: cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && chmod a+rwx menu.sh && ./menu.sh
   - openMode: tab-after
     name: "Services"
     command: service nginx start &
              cd /workspace/magento2gitpod && /usr/sbin/php-fpm7.4 --fpm-config php-fpm.conf &
              rm -f /etc/php/7.4/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.4/fpm/conf.d/20-tideways.ini &&
-             /opt/rabbitmq/sbin/rabbitmq-server &
-             rabbitmq-plugins enable rabbitmq_management &
              sudo supervisord &
   - name: "Terminal/SSH Start here"
     command: source /etc/lighthouse.conf;clear;echo "Good luck. Happy coding and testing!"
