@@ -2,14 +2,16 @@ image:
   file: .gitpod.Dockerfile
 ports:
 - port: 8002
+  visibility: public
 - port: 9001
 - port: 15672
+  visibility: public
 vscode:
   extensions:
     - TabNine.tabnine-vscode@3.4.12
     - felixfbecker.php-debug@1.13.0
 tasks:
-  - openIn: main
+  - openMode: split-right
     name: "Installer and Services menu"
     command: cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && chmod a+rwx menu.sh && ./menu.sh
   - openMode: tab-after
