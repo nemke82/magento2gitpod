@@ -266,4 +266,5 @@ RUN sudo apt-key adv --keyserver "hkps://keys.openpgp.org" --recv-keys "0x0A9AF2
 RUN sudo apt-get install rabbitmq-server -y --fix-missing
 
 COPY lighthouse.conf /etc
+COPY rabbitmq.conf /etc/rabbitmq/rabbitmq.conf
 RUN sudo cat /etc/lighthouse.conf >> /home/gitpod/.bashrc
