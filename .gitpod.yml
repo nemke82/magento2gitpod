@@ -19,11 +19,11 @@ tasks:
     command: service nginx start &
              cd /workspace/magento2gitpod && /usr/sbin/php-fpm7.4 --fpm-config php-fpm.conf &
              rm -f /etc/php/7.4/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.4/fpm/conf.d/20-tideways.ini &&
+             sudo /etc/init.d/supervisor start &&
              sudo /etc/init.d/rabbitmq-server start &
              sudo rabbitmq-plugins enable rabbitmq_management &&
              sudo rabbitmqctl add_user guest guest &&
              sudo rabbitmqctl set_user_tags guest administrator &&
-             sudo rabbitmqctl set_permissions -p / guest ".*" ".*" ".*" &&
-             sudo /etc/init.d/supervisor start
+             sudo rabbitmqctl set_permissions -p / guest ".*" ".*" ".*"
   - name: "Terminal/SSH Start here"
     command: source /etc/lighthouse.conf;clear;echo "Good luck. Happy coding and testing!"
