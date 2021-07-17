@@ -8,8 +8,8 @@ ports:
   visibility: public
 vscode:
   extensions:
-    - TabNine.tabnine-vscode@3.4.12
-    - felixfbecker.php-debug@1.13.0
+    - TabNine.tabnine-vscode@3.4.14
+    - felixfbecker.php-debug@1.16.0
 tasks:
   - openMode: split-right
     name: "Installer and Services menu"
