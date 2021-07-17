@@ -15,7 +15,7 @@ tasks:
   - openIn: main
     name: "Installer and Services menu"
     command: cat /etc/lighthouse.conf >> /var/lib/rabbitmq/.bashrc && cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cp -avr /home/gitpod/.cargo/ /var/lib/rabbitmq && cp -avr /home/gitpod/.bashrc.d/ /var/lib/rabbitmq && chmod a+rwx menu.sh && ./menu.sh
-  - openMode: split-bottom
+  - openMode: tab-after
     name: "Services"
     command: service nginx start &
              cd /workspace/magento2gitpod && /usr/sbin/php-fpm7.4 --fpm-config php-fpm.conf &
