@@ -41,6 +41,7 @@ while true; do
     "18" "Start xDebug service" \
     "19" "Stop xDebug service" \
     "20" "Start Cron service" \
+    "21" "Install PWA Studio" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -170,6 +171,10 @@ while true; do
     20 )
       result=$(while true; do /usr/bin/php /workspace/magento2gitpod/bin/magento cron:run >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/update/cron.php >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/bin/magento setup:cron:run >> /workspace/magento2gitpod/var/log/cron.log; sleep 60; done &)
       display_result "Magento 2 Cron service started successfully. Press enter to continue ..."
+      ;;
+    21 )
+      result=$(cd /workspace/magento2gitpod; bash pwa-studio-installer.sh)
+      display_result "PWA Studio installed successfully. You can start service with bash /workspace/magento2gitpod/pwa/start.sh & Press enter to continue ..."
       ;;
   esac
 done
