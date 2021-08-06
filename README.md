@@ -58,8 +58,14 @@ You can split them into separate workspaces and share it among themself if you k
 default username/password: guest/guest <BR>
 For browser open 15762 browser (already exposed) <BR>
 Rest commands can be used as per RabbitMQ guidelines https://www.rabbitmq.com/cli.html
+  
+- **PWA Studio Support**
+To start installation select field from menu.sh <BR>
+or run manually with following command: bash /workspace/magento2gitpod/pwa-studio-installer.sh <BR>
+Start service: <BR>
+bash /workspace/magento2gitpod/pwa/start.sh &
 
-TO INSTALL Magento 2.4.1 (latest): <BR>
+TO INSTALL Magento 2.4.2 (latest): <BR>
 **./m2-install.sh**
 
 For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
@@ -125,3 +131,6 @@ https://youtu.be/vbPi8zzZyBk
 
 **Changelog 2021-07-17:**
 - Dockerfile heavily refactored as per new sudo instructions (https://www.gitpod.io/docs/config-docker#configure-a-custom-dockerfile)
+
+**Changelog 2021-08-06:**
+- PWA Studio installer added to menu.sh and separate as a bash file pwa-studio-installer.sh
