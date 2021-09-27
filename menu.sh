@@ -24,7 +24,7 @@ while true; do
     "1" "Display System Information" \
     "2" "Display Disk Space" \
     "3" "Display Home Space Utilization" \
-    "4" "Install Magento 2.4.2 latest" \
+    "4" "Install Magento 2.4.3 latest" \
     "5" "Install Magento 2.4-develop (dev)" \
     "6" "Install Baler tool" \
     "7" "Install MagePack tool" \
@@ -138,6 +138,8 @@ while true; do
       display_result "Tideways service stopped! Press enter to continue ..."
       ;;
     18 )
+      sudo apt-get update;
+      sudo apt-get install -y php7.4-dev;
       rm -f /etc/php/7.4/mods-available/xdebug.ini &&
       wget http://xdebug.org/files/xdebug-2.9.8.tgz && tar -xvf xdebug-2.9.8.tgz &&
       cd xdebug-2.9.8 && phpize && ./configure --with-php-config=/usr/bin/php-config7.4 && make && clear &&
