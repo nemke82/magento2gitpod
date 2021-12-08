@@ -187,7 +187,7 @@ RUN sudo echo "net.core.somaxconn=65536" | sudo tee /etc/sysctl.conf
 
 #New Relic
 RUN \
-  curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.17.1.301-linux.tar.gz | tar -C /tmp -zx && \
+  curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz | tar -C /tmp -zx && \
   sudo NR_INSTALL_USE_CP_NOT_LN=1 NR_INSTALL_SILENT=1 /tmp/newrelic-php5-*/newrelic-install install && \
   sudo rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
   sudo touch /etc/php/7.4/fpm/conf.d/newrelic.ini && \
