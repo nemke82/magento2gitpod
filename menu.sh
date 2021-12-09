@@ -180,7 +180,7 @@ while true; do
       display_result "PWA Studio installed successfully. You can start service with bash /workspace/magento2gitpod/pwa/start.sh & Press enter to continue ..."
       ;;
     22 )
-      result=$(cd /workspace/magento2gitpod; bash cloudbeaver.sh)
+      cd /workspace/magento2gitpod; bash cloudbeaver.sh;
       display_result "CloudBeaver installed successfully. You can view SQL tool on port 8003. Press enter to continue ..."
       ;;
   esac
