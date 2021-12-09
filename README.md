@@ -134,3 +134,6 @@ https://youtu.be/vbPi8zzZyBk
 
 **Changelog 2021-08-06:**
 - PWA Studio installer added to menu.sh and separate as a bash file pwa-studio-installer.sh
+
+**Changelog 2021-12-09:**
+- CloudBeaver.io SQL tool added to menu.sh and separate as a bash file cloudbeaver.sh
