@@ -42,6 +42,7 @@ while true; do
     "19" "Stop xDebug service" \
     "20" "Start Cron service" \
     "21" "Install PWA Studio" \
+    "22" "Install CloudBeaver" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -177,6 +178,10 @@ while true; do
     21 )
       result=$(cd /workspace/magento2gitpod; bash pwa-studio-installer.sh)
       display_result "PWA Studio installed successfully. You can start service with bash /workspace/magento2gitpod/pwa/start.sh & Press enter to continue ..."
+      ;;
+    22 )
+      result=$(cd /workspace/magento2gitpod; bash cloudbeaver.sh)
+      display_result "CloudBeaver installed successfully. You can view SQL tool on port 8003. Press enter to continue ..."
       ;;
   esac
 done
