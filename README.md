@@ -140,3 +140,4 @@ https://youtu.be/vbPi8zzZyBk
   
 **Changelog 2021-12-10:**
 - MailHog SMTP server added to menu.sh and separate as a bash file mailhog.sh
+Please watch video how it works: https://youtu.be/AFOtKNPTY0M
