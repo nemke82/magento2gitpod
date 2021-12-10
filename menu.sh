@@ -43,6 +43,7 @@ while true; do
     "20" "Start Cron service" \
     "21" "Install PWA Studio" \
     "22" "Install CloudBeaver" \
+    "23" "Install MailHog SMTP server" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -182,6 +183,10 @@ while true; do
     22 )
       cd /workspace/magento2gitpod; bash cloudbeaver.sh;
       display_result "CloudBeaver installed successfully. You can view SQL tool on port 8003. Press enter to continue ..."
+      ;;
+    23 )
+      cd /workspace/magento2gitpod; bash mailhog.sh;
+      display_result "MailHog SMTP server installed successfully. You can view SQL tool on port 8025. Press enter to continue ..."
       ;;
   esac
 done
