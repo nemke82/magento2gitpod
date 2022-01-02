@@ -224,7 +224,7 @@ while true; do
       cd /workspace/magento2gitpod; bash mailhog.sh;
       display_result "MailHog SMTP server installed successfully. You can view SQL tool on port 8025. Press enter to continue ..."
       ;;
-    25 )
+    26 )
       cd /workspace/magento2gitpod; bash switch-php73.sh;
       display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
       ;;
