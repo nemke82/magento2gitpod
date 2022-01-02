@@ -13,5 +13,5 @@ sudo apt-get clean;
 sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
 sudo update-alternatives --set php /usr/bin/php7.3;
 sudo cp php-fpm73.conf /etc/php/7.3/fpm/php-fpm.conf
-/etc/init.d/php7.4-fpm stop;
-/etc/init.d/php7.3-fpm start
+sudo /etc/init.d/php7.4-fpm stop;
+sudo /etc/init.d/php7.3-fpm start
