@@ -141,3 +141,8 @@ https://youtu.be/vbPi8zzZyBk
 **Changelog 2021-12-10:**
 - MailHog SMTP server added to menu.sh and separate as a bash file mailhog.sh
 Please watch video how it works: https://youtu.be/AFOtKNPTY0M
+
+**Changelog 2022-01-02:**
+- Happy New year! Support for PHP 7.3 and xDebug 2.9 added for troubleshooting legacy Magento installations.
+  you can start it from menu.sh or as separate process using file:
+  /workspace/magento2gitpod/switch-php73.sh
