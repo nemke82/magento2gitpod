@@ -147,5 +147,5 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
   you can start it from menu.sh or as separate process using file:
   /workspace/magento2gitpod/switch-php73.sh
   
-  **Changelog 2022-01-09:**
+**Changelog 2022-01-09:**
 - Updated m2-install.sh and m2-install-solo.sh files. Added --no-interaction --no-progress to composer require and composer install due magento/magento2#34831
