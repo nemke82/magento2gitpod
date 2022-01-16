@@ -232,7 +232,7 @@ while true; do
       ;;
     27 )
       sudo apt-get update;
-      sudo apt-get install varnish;
+      sudo apt-get install varnish -y;
       sudo rm -f /etc/varnish;
       sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish;
       sudo service nginx stop;
