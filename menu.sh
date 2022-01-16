@@ -47,6 +47,8 @@ while true; do
     "24" "Install CloudBeaver" \
     "25" "Install MailHog SMTP server" \
     "26" "Switch to PHP 7.3 CLI+FPM" \
+    "27" "Start and Configure Varnish 6" \
+    "28" "Stop Varnish 6" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -228,5 +230,31 @@ while true; do
       cd /workspace/magento2gitpod; bash switch-php73.sh;
       display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
       ;;
+    27 )
+      sudo apt-get update;
+      sudo apt-get install varnish;
+      sudo rm -f /etc/varnish;
+      sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish;
+      sudo service nginx stop;
+      sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
+      sudo rm -f /etc/nginx/nginx.conf;
+      sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf;
+      n98-magerun2 config:set system/full_page_cache/caching_application 2;
+      n98-magerun2 config:set system/full_page_cache/ttl 86400;
+      n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1;
+      sudo service nginx restart &
+      sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
+      display_result "Varnish 6 successfully configured and started. Press enter to continue ..."
+      ;;
+    28 )
+      sudo service nginx stop;
+      sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
+      sudo rm -f /etc/nginx/nginx.conf;
+      sudo cp /workspace/magento2gitpod/nginx.conf /etc/nginx/nginx.conf;
+      n98-magerun2 config:set system/full_page_cache/caching_application 1;
+      n98-magerun2 config:set system/full_page_cache/ttl 86400;
+      sudo service nginx restart &
+      display_result "Varnish 6 successfully stopped. Press enter to continue ..."
+      ;; 
   esac
 done
