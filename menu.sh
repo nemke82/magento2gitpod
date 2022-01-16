@@ -242,6 +242,7 @@ while true; do
       n98-magerun2 config:set system/full_page_cache/caching_application 2;
       n98-magerun2 config:set system/full_page_cache/ttl 86400;
       n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1;
+      php bin/magento setup:config:set --http-cache-hosts=127.0.0.1;
       sudo service nginx restart &
       sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
       display_result "Varnish 6 successfully configured and started. Press enter to continue ..."
