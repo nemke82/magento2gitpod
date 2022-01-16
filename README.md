@@ -152,3 +152,8 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 
 **Changelog 2022-01-15:**
 - Varnish 6 support with Magento configuration/switch. Start/Stop added to menu.sh menu
+  To purge cache you can execute:
+  curl -X 'PURGE' -H'X-Magento-Tags-Pattern: .*' 127.0.0.1
+
+  also, useful to add invalidation to env.php:
+  php bin/magento setup:config:set --http-cache-hosts=127.0.0.1
