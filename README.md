@@ -157,3 +157,6 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 
   also, useful to add invalidation to env.php:
   php bin/magento setup:config:set --http-cache-hosts=127.0.0.1
+
+**Changelog 2022-01-25:**
+- Composer config added to m2-install.sh installation script to fix --no-interaction mode used when installing Magento
