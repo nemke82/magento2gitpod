@@ -160,3 +160,8 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 
 **Changelog 2022-01-25:**
 - Composer config added to m2-install.sh installation script to fix --no-interaction mode used when installing Magento
+
+**Changelog 2022-02-09: **
+- php-fpm 7.4 moved to supervisord, you can now reload php-fpm with sudo supervisorctl reload php-fpm command.
+- mysql data-directory is moved from /var/lib/mysql to /workspace/magento2gitpod/mysql to make it persistent when workspace times out
+- redis and elasticsearch are now automatically started when workspace started using supervisord.
