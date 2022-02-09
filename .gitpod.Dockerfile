@@ -89,6 +89,7 @@ COPY client.cnf /etc/mysql/conf.d/client.cnf
 #Copy nginx default and php-fpm.conf file
 #COPY default /etc/nginx/sites-available/default
 COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY sp-php-fpm.conf /etc/supervisor/conf.d/sp-php-fpm.conf
 RUN sudo chown -R gitpod:gitpod /etc/php
 
 COPY nginx.conf /etc/nginx
