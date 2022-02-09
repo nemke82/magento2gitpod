@@ -18,11 +18,18 @@ tasks:
     name: "Services"
     command: service nginx start &
              rm -f /etc/php/7.4/cli/conf.d/20-tideways.ini && rm -f /etc/php/7.4/fpm/conf.d/20-tideways.ini &&
+             sudo cp /workspace/magento2gitpod/sp-redis.conf /etc/supervisor/conf.d/redis.conf &&
              sudo /etc/init.d/supervisor start &&
              sudo /etc/init.d/rabbitmq-server start &
              sudo rabbitmq-plugins enable rabbitmq_management &&
              sudo rabbitmqctl add_user guest guest &&
              sudo rabbitmqctl set_user_tags guest administrator &&
-             sudo rabbitmqctl set_permissions -p / guest ".*" ".*" ".*"
+             sudo rabbitmqctl set_permissions -p / guest ".*" ".*" ".*" &&
+             sudo supervisorctl stop mysql;
+             sudo mv /var/lib/mysql /workspace/magento2gitpod/;
+             sed -i 's#/var/lib/mysql#/workspace/magento2gitpod/mysql#g' /etc/mysql/conf.d/mysqld.cnf;
+             sudo sed -i 's#/var/lib/mysql#/workspace/magento2gitpod/mysql#g' /etc/supervisor/conf.d/mysql.conf;
+             sudo supervisorctl update;
+             sudo supervisorctl reload
   - name: "Terminal/SSH Start here"
     command: source /etc/lighthouse.conf;clear;echo "Good luck. Happy coding and testing!"
