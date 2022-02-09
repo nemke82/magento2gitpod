@@ -249,6 +249,8 @@ RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.
     && tar -xzf elasticsearch-7.9.3-linux-x86_64.tar.gz
 ENV ES_HOME79="$HOME/elasticsearch-7.9.3"
 
+COPY sp-elasticsearch.conf /etc/supervisor/conf.d/elasticsearch.conf
+
 RUN sudo apt-key adv --keyserver "hkps://keys.openpgp.org" --recv-keys "0x0A9AF2115F4687BD29803A206B73A36E6026DFCA" \
     && sudo apt-key adv --keyserver "keyserver.ubuntu.com" --recv-keys "F77F1EDA57EBB1CC" \
     && sudo curl -1sLf 'https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey' | sudo apt-key add - \
