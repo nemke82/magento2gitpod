@@ -15,9 +15,9 @@ n98-magerun2 module:disable Magento_Csp &&
 n98-magerun2 module:disable Magento_TwoFactorAuth &&
 n98-magerun2 setup:upgrade &&
 
-yes | php bin/magento setup:config:set --session-save=redis --session-save-redis-host=127.0.0.1 --session-save-redis-log-level=3 --session-save-redis-db=0 --session-save-redis-port=6379 &&
-yes | php bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-server=127.0.0.1 --cache-backend-redis-db=1 &&
-yes | php bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=127.0.0.1 --page-cache-redis-db=2
+yes | php bin/magento setup:config:set --session-save=redis --session-save-redis-host=127.0.0.1 --session-save-redis-log-level=3 --session-save-redis-db=0 --session-save-redis-port=6379;
+yes | php bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-server=127.0.0.1 --cache-backend-redis-db=1;
+yes | php bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=127.0.0.1 --page-cache-redis-db=2;
 
 php bin/magento config:set web/cookie/cookie_path "/" --lock-config &&
 php bin/magento config:set web/cookie/cookie_domain ".gitpod.io" --lock-config &&
