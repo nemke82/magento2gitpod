@@ -3,6 +3,7 @@
 # Clone M2 repository (dev), for composer comment these lines and use following
 # composer create-project --no-interaction --no-progress --repository=https://repo.magento.com/ magento/project-community-edition magento2
 sudo composer selfupdate --2;
+sudo chown -R gitpod:gitpod /home/gitpod/.config/composer;
 cd /workspace/magento2gitpod &&
 git clone https://github.com/magento/magento2.git && cd magento2 && cp -avr .* /workspace/magento2gitpod &&
 cd /workspace/magento2gitpod && rm -r -f magento2 &&
