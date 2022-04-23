@@ -165,3 +165,7 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 - php-fpm 7.4 moved to supervisord, you can now reload php-fpm with sudo supervisorctl reload php-fpm command.
 - mysql data-directory is moved from /var/lib/mysql to /workspace/magento2gitpod/mysql to make it persistent when workspace times out
 - redis and elasticsearch are now automatically started when workspace started using supervisord.
+
+**Changelog 2022-04-23:**
+- PHP 8.1 support. Switch added to menu.sh and separate bash installer switch-php81.sh script
+- Installer for Magento 2.4.4 added to menu.sh
