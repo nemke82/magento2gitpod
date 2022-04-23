@@ -47,7 +47,7 @@ while true; do
     "24" "Install CloudBeaver" \
     "25" "Install MailHog SMTP server" \
     "26" "Switch to PHP 7.3 CLI+FPM" \
-    "27" "Switch to PHP 7.3 CLI+FPM" \
+    "27" "Switch to PHP 8.1 CLI+FPM" \
     "28" "Start and Configure Varnish 6" \
     "29" "Stop Varnish 6" \
     2>&1 1>&3)
