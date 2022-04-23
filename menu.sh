@@ -24,33 +24,34 @@ while true; do
     "1" "Display System Information" \
     "2" "Display Disk Space" \
     "3" "Display Home Space Utilization" \
-    "4" "Install Magento 2.4.3 latest" \
-    "5" "Install Magento 2.4-develop (dev)" \
-    "6" "Install Baler tool" \
-    "7" "Install MagePack tool" \
-    "8" "Start Redis service" \
-    "9" "Stop Redis service" \
-    "10" "Start ElasticSearch service" \
-    "11" "Stop ElasticSearch service" \
-    "12" "Start Blackfire service" \
-    "13" "Stop Blackfire service" \
-    "14" "Start Newrelic service" \
-    "15" "Stop Newrelic service" \
-    "16" "Start Tideways service" \
-    "17" "Stop Tideways service" \
-    "18" "Start xDebug service" \
-    "19" "Stop xDebug service" \
-    "20" "Start xDebug 2.9.7 service" \
-    "21" "Stop xDebug 2.9.7 service" \
-    "22" "Start Cron service" \
-    "23" "Install PWA Studio" \
-    "24" "Install CloudBeaver" \
-    "25" "Install MailHog SMTP server" \
-    "26" "Switch to PHP 7.3 CLI+FPM" \
-    "27" "Switch to PHP 8.1 CLI+FPM" \
-    "28" "Switch to MySQL 8" \
-    "29" "Start and Configure Varnish 6" \
-    "30" "Stop Varnish 6" \
+    "4" "Install Magento 2.4.4 latest" \
+    "5" "Install Magento 2.4.3-p2" \
+    "6" "Install Magento 2.4-develop (dev)" \
+    "7" "Install Baler tool" \
+    "8" "Install MagePack tool" \
+    "9" "Start Redis service" \
+    "10" "Stop Redis service" \
+    "11" "Start ElasticSearch service" \
+    "12" "Stop ElasticSearch service" \
+    "13" "Start Blackfire service" \
+    "14" "Stop Blackfire service" \
+    "15" "Start Newrelic service" \
+    "16" "Stop Newrelic service" \
+    "17" "Start Tideways service" \
+    "18" "Stop Tideways service" \
+    "19" "Start xDebug service" \
+    "20" "Stop xDebug service" \
+    "21" "Start xDebug 2.9.7 service" \
+    "22" "Stop xDebug 2.9.7 service" \
+    "23" "Start Cron service" \
+    "24" "Install PWA Studio" \
+    "25" "Install CloudBeaver" \
+    "26" "Install MailHog SMTP server" \
+    "27" "Switch to PHP 7.3 CLI+FPM" \
+    "28" "Switch to PHP 8.1 CLI+FPM" \
+    "29" "Switch to MySQL 8" \
+    "30" "Start and Configure Varnish 6" \
+    "31" "Stop Varnish 6" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -89,64 +90,70 @@ while true; do
       fi
       ;;
     4 )
+      sed -i 's#composer create-project --no-interaction --no-progress --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.3#composer create-project --no-interaction --no-progress --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.4#g' m2-install.sh;
       chmod a+rwx m2-install.sh && ./m2-install.sh && clear
       result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo $url)
       display_result "Installation completed! Please visit"
       ;;
     5 )
-      chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh && clear
+      chmod a+rwx m2-install.sh && ./m2-install.sh && clear
       result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo $url)
       display_result "Installation completed! Please visit"
       ;;
     6 )
+      chmod a+rwx m2-install-solo.sh && ./m2-install-solo.sh && clear
+      result=$(url=$(gp url | awk -F"//" {'print $2'}) && url+="/" && url="https://8002-"$url;echo $url)
+      display_result "Installation completed! Please visit"
+      ;;
+    7 )
       result=$(git clone https://github.com/magento/baler.git && cd baler && npm install && npm run build;alias baler='/workspace/magento2gitpod/baler/bin/baler'&)
       display_result "Baler tool successfully installed! Press enter to continue ..."
       ;;
-    7 )
+    8 )
       result=$(cd /workspace/magento2gitpod && /usr/bin/php -dmemory_limit=20000M /usr/bin/composer require creativestyle/magesuite-magepack && n98-magerun2 setup:upgrade && n98-magerun2 setup:di:compile && n98-magerun2 setup:static-content:deploy && n98-magerun2 cache:clean && n98-magerun2 cache:flush && nvm install 14.5.0 && npm install -g magepack)
       display_result "MagePack tool successfully installed! Press enter to continue ... visit https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ for more details how to proceed further"
       ;;
-    8 )
+    9 )
       result=$(redis-server &)
       display_result "Redis service started! Press enter to continue ...Installation completed! Press enter to continue ..."
       ;;
-    9 )
+    10 )
       result=$(ps aux | grep redis | awk {'print $2'} | xargs kill -s 9)
       display_result "Redis service stopped! Press enter to continue ..."
       ;;
-    10 )
+    11 )
       result=$($ES_HOME/bin/elasticsearch -d -p $ES_HOME/pid -Ediscovery.type=single-node &)
       display_result "ElasticSearch service started! Press enter to continue ..."
       ;;
-    11 )
+    12 )
       result=$(ps aux | grep elastic | awk {'print $2'} | xargs kill -s 9)
       display_result "ElasticSearch service stopped! Press enter to continue ..."
       ;;
-    12 )
+    13 )
       result=$(chmod a+rwx ./blackfire-run.sh && ./blackfire-run.sh && service php7.3-fpm reload)
       display_result "Blackfire service started! Press enter to continue ..."
       ;;
-    13 )
+    14 )
       result=$(ps aux | grep blackfire | awk {'print $2'} | xargs kill -s 9)
       display_result "Blackfire service stopped! Press enter to continue ..."
       ;;
-    14 )
+    15 )
       result=$(newrelic-daemon -c /etc/newrelic/newrelic.cfg &)
       display_result "Newrelic service started! Press enter to continue ... Please update .gitpod.Dockerfile (https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile) with license key."
       ;;
-    15 )
+    16 )
       result=$(ps aux | grep newrelic | awk {'print $2'} | xargs kill -s 9)
       display_result "Newrelic service stopped! Press enter to continue ..."
       ;;
-    16 )
+    17 )
       result=$(/usr/bin/tideways-daemon --address 0.0.0.0:9135 &)
       display_result "Tideways service started! Press enter to continue ... Starting Tideways service, Please update .env-file located in repo with TIDEWAYS_APIKEY"
       ;;
-    17 )
+    18 )
       result=$(ps aux | grep tideways | awk {'print $2'} | xargs kill -s 9)
       display_result "Tideways service stopped! Press enter to continue ..."
       ;;
-    18 )
+    19 )
       sudo apt-get update;
       sudo apt-get install -y php7.4-dev;
       rm -f /etc/php/7.4/mods-available/xdebug.ini &&
@@ -166,7 +173,7 @@ while true; do
       service php7.4-fpm reload;clear)
       display_result "Services successfully configured and php-fpm restarted! Press enter to continue ..."
       ;;
-    19 )
+    20 )
       result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=off" >> /etc/php/7.4/mods-available/xdebug.ini;
       echo "xdebug.profiler_enable=Off" >> /etc/php/7.4/mods-available/xdebug.ini;
       echo "xdebug.remote_enable=0" >> /etc/php/7.4/mods-available/xdebug.ini;
@@ -179,7 +186,7 @@ while true; do
       service php7.4-fpm reload;)
       display_result "xDebug stopped! Press enter to continue ..."
       ;;
-    20 )
+    21 )
       sudo apt-get update;
       sudo apt-get install -y php7.3-dev;
       rm -f /etc/php/7.3/mods-available/xdebug.ini &&
@@ -199,7 +206,7 @@ while true; do
       service php7.3-fpm reload;clear)
       display_result "Services successfully configured and php-fpm restarted! Press enter to continue ..."
       ;;
-    21 )
+    22 )
       result=$(echo "Configuring xDebug PHP settings" && echo "xdebug.remote_autostart=off" >> /etc/php/7.3/mods-available/xdebug.ini;
       echo "xdebug.profiler_enable=Off" >> /etc/php/7.3/mods-available/xdebug.ini;
       echo "xdebug.remote_enable=0" >> /etc/php/7.3/mods-available/xdebug.ini;
@@ -212,35 +219,35 @@ while true; do
       service php7.3-fpm reload;)
       display_result "xDebug 2.9.7 stopped! Press enter to continue ..."
       ;;
-    22 )
+    23 )
       result=$(while true; do /usr/bin/php /workspace/magento2gitpod/bin/magento cron:run >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/update/cron.php >> /workspace/magento2gitpod/var/log/cron.log && /usr/bin/php /workspace/magento2gitpod/bin/magento setup:cron:run >> /workspace/magento2gitpod/var/log/cron.log; sleep 60; done &)
       display_result "Magento 2 Cron service started successfully. Press enter to continue ..."
       ;;
-    23 )
+    24 )
       result=$(cd /workspace/magento2gitpod; bash pwa-studio-installer.sh)
       display_result "PWA Studio installed successfully. You can start service with bash /workspace/magento2gitpod/pwa/start.sh & Press enter to continue ..."
       ;;
-    24 )
+    25 )
       cd /workspace/magento2gitpod; bash cloudbeaver.sh;
       display_result "CloudBeaver installed successfully. You can view SQL tool on port 8003. Press enter to continue ..."
       ;;
-    25 )
+    26 )
       cd /workspace/magento2gitpod; bash mailhog.sh;
       display_result "MailHog SMTP server installed successfully. You can view SQL tool on port 8025. Press enter to continue ..."
       ;;
-    26 )
+    27 )
       cd /workspace/magento2gitpod; bash switch-php73.sh;
       display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
       ;;
-    27 )
+    28 )
       cd /workspace/magento2gitpod; bash switch-php81.sh;
       display_result "Version successfully switched to PHP 8.1 Press enter to continue ..."
       ;;
-    28 )
+    29 )
       cd /workspace/magento2gitpod; bash switch-mysql8.sh;
       display_result "Version successfully switched to MySQL 8 Press enter to continue ..."
       ;;
-    29 )
+    30 )
       sudo apt-get update;
       sudo apt-get install varnish -y;
       sudo rm -f /etc/varnish;
@@ -257,7 +264,7 @@ while true; do
       sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
       display_result "Varnish 6 successfully configured and started. Press enter to continue ..."
       ;;
-    30 )
+    31 )
       sudo service nginx stop;
       sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
       sudo rm -f /etc/nginx/nginx.conf;
