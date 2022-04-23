@@ -1,9 +1,9 @@
-sudo apt-get update;
-sudo apt-get install -y curl zip unzip git software-properties-common supervisor sqlite3;
+sudo apt-get -y update;
+sudo apt-get install -y curl zip unzip git software-properties-common sqlite3;
 sudo add-apt-repository -y ppa:ondrej/php;
-sudo apt-get update;
-sudo apt-get install -y php8.1-dev php8.1-fpm php8.1-common php8.1-cli php8.1-imagick php8.1-gd php8.1-mysql php8.1-pgsql php8.1-imap php-memcached php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-zip php8.1-curl php8.1-bcmath php8.1-sqlite3 php8.1-apcu php8.1-apcu-bc php8.1-intl php-dev php8.1-dev php-redis;
-sudo php -r "readfile('http://getcomposer.org/installer');" | sudo php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer;
+sudo apt-get update -y;
+sudo apt-get install -y php8.1-dev php8.1-fpm php8.1-common php8.1-cli php8.1-imagick php8.1-gd php8.1-mysql php8.1-pgsql php8.1-imap php-memcached php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-zip php8.1-curl php8.1-bcmath php8.1-sqlite3 php8.1-apcu php8.1-intl php-dev php8.1-dev php-redis;
+sudo php -r "readfile('http://getcomposer.org/installer');" | sudo php -- --install-dir=/usr/bin/ --version=2.3.5 --filename=composer;
 sudo mkdir /run/php;
 sudo chown gitpod:gitpod /run/php;
 sudo chown -R gitpod:gitpod /etc/php;
