@@ -232,8 +232,8 @@ while true; do
       display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
       ;;
     27 )
-      cd /workspace/magento2gitpod; bash switch-php73.sh;
-      display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
+      cd /workspace/magento2gitpod; bash switch-php81.sh;
+      display_result "Version successfully switched to PHP 8.1 Press enter to continue ..."
       ;;
     28 )
       sudo apt-get update;
