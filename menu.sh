@@ -268,14 +268,11 @@ while true; do
     31 )
       sudo apt-get update;
       sudo apt install debian-archive-keyring curl gnupg apt-transport-https -y;
-      sudo curl -fsSL https://packagecloud.io/varnishcache/varnish70/gpgkey|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/varnish.gpg
-      . /etc/os-release
-      sudo echo "deb https://packagecloud.io/varnishcache/varnish71/$ID/ $VERSION_CODENAME main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
-      sudo echo "deb-src https://packagecloud.io/varnishcache/varnish71/$ID/ $VERSION_CODENAME main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
-      sudo echo "deb https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
-      sudo echo "deb-src https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
+      sudo rm -f /etc/apt/trusted.gpg.d/varnish.gpg;
+      sudo curl -fsSL https://packagecloud.io/varnishcache/varnish71/gpgkey|sudo gpg --always-trust --dearmor -o /etc/apt/trusted.gpg.d/varnish.gpg;
+      echo "deb https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" | sudo tee /etc/apt/sources.list.d/varnishcache_varnish71.list
       sudo apt-get update;
-      sudo apt-get install varnish -y
+      sudo apt-get install varnish -y;
       sudo rm -f /etc/varnish;
       sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish;
       sudo service nginx stop;
