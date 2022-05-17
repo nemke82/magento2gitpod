@@ -170,3 +170,6 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 - PHP 8.1 support. Switch added to menu.sh and separate bash installer switch-php81.sh script
 - Installer for Magento 2.4.4 added to menu.sh (2.4.3-p2 installer left active in the menu)
 - MySQL 8 support. Switch added to menu.sh and separate bash installer switch-mysql8.sh script
+
+**Changelog 2022-05-17:**
+- Varnish 7.1 support. Switch added to menu.sh and separate bash installer switch-varnish7.sh script
