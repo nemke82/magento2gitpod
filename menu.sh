@@ -51,7 +51,8 @@ while true; do
     "28" "Switch to PHP 8.1 CLI+FPM" \
     "29" "Switch to MySQL 8" \
     "30" "Start and Configure Varnish 6" \
-    "31" "Stop Varnish 6" \
+    "31" "Start and Configure Varnish 7" \
+    "32" "Stop Varnish 6 or 7" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -265,6 +266,31 @@ while true; do
       display_result "Varnish 6 successfully configured and started. Press enter to continue ..."
       ;;
     31 )
+      sudo apt-get update;
+      sudo apt install debian-archive-keyring curl gnupg apt-transport-https -y;
+      sudo curl -fsSL https://packagecloud.io/varnishcache/varnish70/gpgkey|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/varnish.gpg
+      . /etc/os-release
+      sudo echo "deb https://packagecloud.io/varnishcache/varnish71/$ID/ $VERSION_CODENAME main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
+      sudo echo "deb-src https://packagecloud.io/varnishcache/varnish71/$ID/ $VERSION_CODENAME main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
+      sudo echo "deb https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
+      sudo echo "deb-src https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" >> /etc/apt/sources.list.d/varnishcache_varnish71.list
+      sudo apt-get update;
+      sudo apt-get install varnish -y
+      sudo rm -f /etc/varnish;
+      sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish;
+      sudo service nginx stop;
+      sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
+      sudo rm -f /etc/nginx/nginx.conf;
+      sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf;
+      n98-magerun2 config:set system/full_page_cache/caching_application 2;
+      n98-magerun2 config:set system/full_page_cache/ttl 86400;
+      n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1;
+      php bin/magento setup:config:set --http-cache-hosts=127.0.0.1;
+      sudo service nginx restart &
+      sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
+      display_result "Varnish 7 successfully configured and started. Press enter to continue ..."
+      ;;   
+    32 )
       sudo service nginx stop;
       sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
       sudo rm -f /etc/nginx/nginx.conf;
@@ -272,7 +298,7 @@ while true; do
       n98-magerun2 config:set system/full_page_cache/caching_application 1;
       n98-magerun2 config:set system/full_page_cache/ttl 86400;
       sudo service nginx restart &
-      display_result "Varnish 6 successfully stopped. Press enter to continue ..."
+      display_result "Varnish 6 or 7 successfully stopped. Press enter to continue ..."
       ;; 
   esac
 done
