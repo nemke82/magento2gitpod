@@ -241,7 +241,7 @@ while true; do
       display_result "Version successfully switched to PHP 7.3 Press enter to continue ..."
       ;;
     28 )
-      cd /workspace/magento2gitpod; bash switch-php81.sh;
+      cd /workspace/magento2gitpod; bash switch-php81.sh; sleep 10; clear
       display_result "Version successfully switched to PHP 8.1 Press enter to continue ..."
       ;;
     29 )
