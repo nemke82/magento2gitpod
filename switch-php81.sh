@@ -19,4 +19,5 @@ sudo sed -i 's#pid = /tmp/php7.4-fpm.pid#pid = /tmp/php8.1-fpm.pid#g' /workspace
 sudo sed -i 's#error_log = /tmp/php7.4-fpm.log#error_log = /tmp/php8.1-fpm.log#g' /workspace/magento2gitpod/php-fpm.conf
 sudo sed -i 's#command=/usr/sbin/php-fpm7.4 --fpm-config /workspace/magento2gitpod/php-fpm.conf#command=/usr/sbin/php-fpm8.1 --fpm-config /workspace/magento2gitpod/php-fpm.conf#g' /etc/supervisor/conf.d/sp-php-fpm.conf;
 ps aux | grep php-fpm | awk {'print $2'} | xargs kill -s 9;
-sudo supervisorctl start php-fpm
+sudo supervisorctl shutdown mysql;
+sudo service supervisor start &
