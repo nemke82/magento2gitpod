@@ -243,6 +243,7 @@ while true; do
     28 )
       cd /workspace/magento2gitpod; bash switch-php81.sh; sleep 10; clear
       display_result "Version successfully switched to PHP 8.1 Press enter to continue ..."
+      sudo service supervisor start &>/dev/null &
       ;;
     29 )
       cd /workspace/magento2gitpod; bash switch-mysql8.sh;
