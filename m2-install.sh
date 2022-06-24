@@ -22,6 +22,7 @@ yes | php bin/magento setup:config:set --page-cache=redis --page-cache-redis-ser
 
 php bin/magento config:set web/cookie/cookie_path "/" --lock-config &&
 php bin/magento config:set web/cookie/cookie_domain ".gitpod.io" --lock-config &&
+php bin/magento config:set web/secure/offloader_header "X-Forwarded-Proto" --lock-config &&
 
 n98-magerun2 cache:clean &&
 n98-magerun2 cache:flush &&
