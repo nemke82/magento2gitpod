@@ -1,5 +1,5 @@
 # magento2gitpod
-Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.4, PHP-FPM, and a lot more...
+Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.4 (older and newer versions available in the menu), PHP-FPM, and a lot more...
 
 ![](magento2gitpod.gif)
 
@@ -19,7 +19,7 @@ More info: https://www.gitpod.io/docs/10_getting_started/
 
 Services/Tools installed:
 - **Nginx**
-- **PHP 7.4** based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php). To add additional PHP extensions, please update https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L15 block.
+- **PHP 7.4** based on ppa:ondrej/php repo (https://launchpad.net/~ondrej/+archive/ubuntu/php). To add additional PHP extensions, please update https://github.com/nemke82/magento2gitpod/blob/master/.gitpod.Dockerfile#L15 block. (older and newer versions available in the menu)
 - **Python** (base version)
 - **rsync**
 - **mc** (Midnight commander)
