@@ -65,7 +65,7 @@ or run manually with following command: bash /workspace/magento2gitpod/pwa-studi
 Start service: <BR>
 bash /workspace/magento2gitpod/pwa/start.sh &
 
-TO INSTALL Magento 2.4.2 (latest): <BR>
+TO INSTALL Magento 2.4.4 (latest): <BR>
 **./m2-install.sh**
 
 For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
@@ -87,6 +87,7 @@ Sometimes it may happen that the exposed port 8002 used for Nginx does not work 
 If you are moving your own installation don't foget to adjust following cookie paths: <BR>
 **web/cookie/path to "/"**
 **web/cookie/domain to ".gitpod.io"**
+**web/secure/offloader_header to "X-Forwarded-Proto"**
   
 You may fork this repo and boot it on your own server or local computer:
 https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
