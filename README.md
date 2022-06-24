@@ -85,9 +85,9 @@ In case you need to adjust certain my.cnf settings, please edit https://github.c
 Sometimes it may happen that the exposed port 8002 used for Nginx does not work when tab is loaded in browser. To fix that, either stop/start workspace or destroy it and start process again. <BR>
 
 If you are moving your own installation don't foget to adjust following cookie paths: <BR>
-**web/cookie/path to "/"**
-**web/cookie/domain to ".gitpod.io"**
-**web/secure/offloader_header to "X-Forwarded-Proto"**
+**web/cookie/path to "/"** <BR>
+**web/cookie/domain to ".gitpod.io"** <BR>
+**web/secure/offloader_header to "X-Forwarded-Proto"** <BR>
   
 You may fork this repo and boot it on your own server or local computer:
 https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
