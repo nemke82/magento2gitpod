@@ -1,5 +1,5 @@
 # magento2gitpod
-Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL, PHP 7.4 (older and newer versions available in the menu), PHP-FPM, and a lot more...
+Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL (switch to Percona MySQL 8.x available in the menu), PHP 7.4 (older and newer versions available in the menu), PHP-FPM, and a lot more...
 
 ![](magento2gitpod.gif)
 
@@ -23,7 +23,7 @@ Services/Tools installed:
 - **Python** (base version)
 - **rsync**
 - **mc** (Midnight commander)
-- **MySQL** (Percona) 5.7 version (latest)
+- **MySQL** (Percona) 5.7 version default. (switch to Percona MySQL 8.x available in the menu)
 - **xDebug** (latest Magento 2 supported version 2.9.8). From menu area select "Start X-Debug" and wait for confirmation. Enables CLI and PHP together, then you can follow https://www.gitpod.io/docs/languages/php/#debugging-php-in-gitpod guidelines.
 - **Blackfire**. Note: Please run **./blackfire-run.sh** to enter your Server/Client ID and Token's. Sometimes it requires extra PHP-FPM restart, so please run service php7.2-fpm restart if required.
 - **Tideways**. Note: Please run **/usr/bin/tideways-daemon --address 0.0.0.0:9135 &** to initiate daemon. Please update .env-file located in repo with TIDEWAYS_APIKEY
