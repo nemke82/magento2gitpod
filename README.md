@@ -173,3 +173,6 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 
 **Changelog 2022-05-17:**
 - Varnish 7.1 support. Switch added to menu.sh and separate bash installer switch-varnish7.sh script
+
+**Changelog 2022-06-24:**
+- m2-install.sh and m2-install-solo.sh scripts updated with web/secure/offloader_header X-Forwarded-Proto to avoid redirect loop. Menu installer remains the same.
