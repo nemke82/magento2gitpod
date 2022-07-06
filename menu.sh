@@ -131,7 +131,7 @@ while true; do
       display_result "ElasticSearch service stopped! Press enter to continue ..."
       ;;
     13 )
-      result=$(chmod a+rwx ./blackfire-run.sh && ./blackfire-run.sh && service php7.3-fpm reload)
+      chmod a+rwx ./blackfire-run.sh && ./blackfire-run.sh
       display_result "Blackfire service started! Press enter to continue ..."
       ;;
     14 )
