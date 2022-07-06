@@ -177,3 +177,6 @@ Please watch video how it works: https://youtu.be/AFOtKNPTY0M
 
 **Changelog 2022-06-24:**
 - m2-install.sh and m2-install-solo.sh scripts updated with web/secure/offloader_header X-Forwarded-Proto to avoid redirect loop. Menu installer remains the same.
+
+**Changelog 2022-07-06:**
+- Blackfire installer updated to support any PHP version used (old or new). You can install it using blackfire-run.sh script or through menu.sh installer.
