@@ -49,10 +49,11 @@ while true; do
     "26" "Install MailHog SMTP server" \
     "27" "Switch to PHP 7.3 CLI+FPM" \
     "28" "Switch to PHP 8.1 CLI+FPM" \
-    "29" "Switch to MySQL 8" \
-    "30" "Start and Configure Varnish 6" \
-    "31" "Start and Configure Varnish 7" \
-    "32" "Stop Varnish 6 or 7" \
+    "29" "Switch to PHP 8.2 CLI+FPM" \
+    "30" "Switch to MySQL 8" \
+    "31" "Start and Configure Varnish 6" \
+    "32" "Start and Configure Varnish 7" \
+    "33" "Stop Varnish 6 or 7" \
     2>&1 1>&3)
   exit_status=$?
   exec 3>&-
@@ -246,10 +247,15 @@ while true; do
       sudo service supervisor start &>/dev/null &
       ;;
     29 )
+      cd /workspace/magento2gitpod; bash switch-php82.sh; sleep 10; clear
+      display_result "Version successfully switched to PHP 8.2 Press enter to continue ..."
+      sudo service supervisor start &>/dev/null &
+      ;;
+    30 )
       cd /workspace/magento2gitpod; bash switch-mysql8.sh;
       display_result "Version successfully switched to MySQL 8 Press enter to continue ..."
       ;;
-    30 )
+    31 )
       sudo apt-get update;
       sudo apt-get install varnish -y;
       sudo rm -f /etc/varnish;
@@ -266,7 +272,7 @@ while true; do
       sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
       display_result "Varnish 6 successfully configured and started. Press enter to continue ..."
       ;;
-    31 )
+    32 )
       sudo apt-get update;
       sudo apt install debian-archive-keyring curl gnupg apt-transport-https -y;
       sudo rm -f /etc/apt/trusted.gpg.d/varnish.gpg;
@@ -288,7 +294,7 @@ while true; do
       sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
       display_result "Varnish 7 successfully configured and started. Press enter to continue ..."
       ;;   
-    32 )
+    33 )
       sudo service nginx stop;
       sudo ps aux | grep nginx | awk {'print $2'} | xargs kill -s 9;
       sudo rm -f /etc/nginx/nginx.conf;
