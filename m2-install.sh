@@ -3,7 +3,7 @@ sudo composer selfupdate --2;
 sudo chown -R gitpod:gitpod /home/gitpod/.config/composer;
 cd /workspace/magento2gitpod &&
 composer config -g -a http-basic.repo.magento.com 64229a8ef905329a184da4f174597d25 a0df0bec06011c7f1e8ea8833ca7661e &&
-composer create-project --no-interaction --no-progress --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.3 magento2
+composer create-project --no-interaction --no-progress --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.6-p6 magento2
 cd magento2 && cp -avr .* /workspace/magento2gitpod;
 cd /workspace/magento2gitpod && rm -r -f magento2;
 mysql -e 'create database nemanja;';
