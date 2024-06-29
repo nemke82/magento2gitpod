@@ -1,5 +1,6 @@
 sudo supervisorctl stop mysql;
 sudo percona-release enable ps-80 release;
+sudo wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo apt-get update -y;
 set -ex; \
 	{ \

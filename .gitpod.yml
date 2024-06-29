@@ -13,7 +13,7 @@ vscode:
 tasks:
   - openMode: split-right
     name: "Installer and Services menu"
-    command: cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cd web-interface ; sudo apt install python3.8-venv ; python3 -m venv venv ; source venv/bin/activate ; pip install Flask ; pip install Flask-SocketIO ; python app.py
+    command: cat /etc/lighthouse.conf >> /home/gitpod/.bashrc && cd web-interface ; wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - ; sudo apt-get -y update ; sudo apt install -y python3.8-venv ; python3 -m venv venv ; source venv/bin/activate ; pip install Flask ; pip install Flask-SocketIO ; python app.py
   - openMode: tab-after
     name: "Services"
     command: service nginx start &
