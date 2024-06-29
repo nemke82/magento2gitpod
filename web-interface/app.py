@@ -38,7 +38,7 @@ def run_script(command_key, sid):
         'switch_php_8.1': 'cd /workspace/magento2gitpod; bash switch-php81.sh; sleep 10; clear; sudo service supervisor start &>/dev/null &',
         'switch_php_8.2': 'cd /workspace/magento2gitpod; bash switch-php82.sh; sleep 10; clear; sudo service supervisor start &>/dev/null &',
         'switch_php_8.3': 'cd /workspace/magento2gitpod; bash switch-php83.sh; sleep 10; clear; sudo service supervisor start &>/dev/null &',
-        'switch_mysql_8': 'cd /workspace/magento2gitpod; bash switch-mysql8.sh',
+        'switch_mysql_8': 'cd /workspace/magento2gitpod && sudo bash switch-mysql8.sh',
         'start_varnish_6': 'sudo apt-get update; sudo apt-get install varnish -y; sudo rm -f /etc/varnish; sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish; sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 2; n98-magerun2 config:set system/full_page_cache/ttl 86400; n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1; php bin/magento setup:config:set --http-cache-hosts=127.0.0.1; sudo service nginx restart & sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &',
         'start_varnish_7': 'sudo apt-get update; sudo apt install debian-archive-keyring curl gnupg apt-transport-https -y; sudo rm -f /etc/apt/trusted.gpg.d/varnish.gpg; sudo curl -fsSL https://packagecloud.io/varnishcache/varnish71/gpgkey|sudo gpg --always-trust --dearmor -o /etc/apt/trusted.gpg.d/varnish.gpg; echo "deb https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" | sudo tee /etc/apt/sources.list.d/varnishcache_varnish71.list; sudo apt-get update; sudo apt-get install varnish -y; sudo rm -f /etc/varnish; sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish; sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 2; n98-magerun2 config:set system/full_page_cache/ttl 86400; n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1; php bin/magento setup:config:set --http-cache-hosts=127.0.0.1; sudo service nginx restart & sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &',
         'stop_varnish': 'sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 1; n98-magerun2 config:set system/full_page_cache/ttl 86400; sudo service nginx restart &'
@@ -46,10 +46,13 @@ def run_script(command_key, sid):
 
     if command_key in commands:
         command = commands[command_key]
-        full_command = f'cd /workspace/magento2gitpod && {command}'
         try:
-            result = subprocess.run(full_command, shell=True, capture_output=True, text=True)
-            output = result.stdout + result.stderr
+            if command_key == 'switch_mysql_8':
+                result = subprocess.run(command, shell=True)
+                output = "Interactive process finished"
+            else:
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+                output = result.stdout + result.stderr
             if result.returncode == 0:
                 socketio.emit('process_complete', {'output': f'Process completed successfully.\n{output}'}, room=sid)
             else:
