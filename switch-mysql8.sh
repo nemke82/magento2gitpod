@@ -13,6 +13,7 @@ echo "percona-server-server percona-server-server/root_password_again password n
 echo "percona-server-server-8.0 percona-server-server/root-pass password nem4540" | sudo debconf-set-selections
 echo "percona-server-server-8.0 percona-server-server/re-root-pass password nem4540" | sudo debconf-set-selections
 echo "percona-server-server percona-server-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)" | sudo debconf-set-selections
+echo "percona-server-server percona-server-server/data-dir-existing select Abort installation" | sudo debconf-set-selections
 
 # Install and upgrade Percona server packages
 sudo apt-get update -y
