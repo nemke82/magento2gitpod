@@ -6,8 +6,8 @@ export DEBIAN_FRONTEND=noninteractive
 sudo supervisorctl stop mysql
 
 # Temporarily move existing MySQL data directory
-if [ -d /var/lib/mysql ]; then
-    sudo mv /var/lib/mysql /var/lib/mysql.bak
+if [ -d /workspace/magento2gitpod/mysql ]; then
+    sudo mv /workspace/magento2gitpod /workspace/magento2gitpod.bak
 fi
 
 # Enable Percona release and import Google signing key
@@ -25,18 +25,18 @@ echo "percona-server-server percona-server-server/default-auth-override select U
 # Install Percona server packages
 sudo apt-get install -y percona-server-server percona-server-client percona-server-common
 
-# Restore the original data directory
-if [ -d /var/lib/mysql.bak ]; then
-    sudo rm -rf /var/lib/mysql
-    sudo mv /var/lib/mysql.bak /var/lib/mysql
-    sudo chown -R mysql:mysql /var/lib/mysql
-fi
-
 # Update MySQL configuration
 sed -i 's#query_cache_limit=2M##g' /etc/mysql/conf.d/mysqld.cnf
 sed -i 's#query_cache_size=128M##g' /etc/mysql/conf.d/mysqld.cnf
 sed -i 's#query_cache_type=1##g' /etc/mysql/conf.d/mysqld.cnf
 echo "default_authentication_plugin=mysql_native_password" | sudo tee -a /etc/mysql/conf.d/mysqld.cnf
+
+# Check if workdir is already set and replace it, otherwise add it
+if grep -q "^workdir=" /etc/mysql/conf.d/mysqld.cnf; then
+    sudo sed -i 's#^workdir=.*#workdir=/workspace/magento2gitpod#' /etc/mysql/conf.d/mysqld.cnf
+else
+    echo "workdir=/workspace/magento2gitpod" | sudo tee -a /etc/mysql/conf.d/mysqld.cnf
+fi
 
 # Set permissions and restart MySQL
 sudo chown -R gitpod:gitpod /var/run/mysqld/
