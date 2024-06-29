@@ -2,46 +2,55 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Stop MySQL service and supervisor
+# Stop MySQL service
 sudo supervisorctl stop mysql
 
-# Temporarily move existing MySQL data directory
-if [ -d /workspace/magento2gitpod/mysql ]; then
-    sudo mv /workspace/magento2gitpod/mysql /workspace/magento2gitpod/mysql.bak
-fi
+# Remove existing Percona packages
+sudo apt-get remove --purge -y percona-server-server-8.0 percona-server-client-8.0 percona-server-common-8.0
+sudo apt-get autoremove -y
+sudo apt-get clean
 
-# Enable Percona release and import Google signing key
-sudo percona-release enable ps-80 release
-sudo wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-sudo apt-get update -y
+# Remove the MySQL directory
+sudo rm -rf /workspace/magento2gitpod/mysql
 
-# Preconfigure debconf selections
-echo "percona-server-server percona-server-server/root_password password nem4540" | sudo debconf-set-selections
-echo "percona-server-server percona-server-server/root_password_again password nem4540" | sudo debconf-set-selections
-echo "percona-server-server-8.0 percona-server-server/root-pass password nem4540" | sudo debconf-set-selections
-echo "percona-server-server-8.0 percona-server-server/re-root-pass password nem4540" | sudo debconf-set-selections
-echo "percona-server-server percona-server-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)" | sudo debconf-set-selections
+# Update package list and install gnupg2
+sudo apt-get update \
+ && sudo apt-get -y install gnupg2 \
+ && sudo apt-get clean \
+ && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
-#fix apparmor profile
-sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
-apparmor_parser -R /etc/apparmor.d/disable/usr.sbin.mysqld
+# Create necessary directories
+sudo mkdir -p /var/run/mysqld
+
+# Download and install Percona release package
+sudo wget -c https://repo.percona.com/apt/percona-release_latest.generic_all.deb \
+ && sudo dpkg -i percona-release_latest.generic_all.deb \
+ && sudo apt-get update
+
+# Preconfigure debconf selections for Percona installation
+sudo debconf-set-selections <<EOF
+percona-server-server-8.0 percona-server-server/root_password password nem4540
+percona-server-server-8.0 percona-server-server/root_password_again password nem4540
+percona-server-server-8.0/root-pass password nem4540
+percona-server-server-8.0/re-root-pass password nem4540
+EOF
 
 # Install Percona server packages
-sudo apt-get install -y percona-server-server percona-server-client percona-server-common
+sudo apt-get update \
+ && sudo apt-get install -y \
+    percona-server-server-8.0 percona-server-client-8.0 percona-server-common-8.0
 
-# Update MySQL configuration
-sed -i 's#query_cache_limit=2M##g' /etc/mysql/conf.d/mysqld.cnf
-sed -i 's#query_cache_size=128M##g' /etc/mysql/conf.d/mysqld.cnf
-sed -i 's#query_cache_type=1##g' /etc/mysql/conf.d/mysqld.cnf
-echo "default_authentication_plugin=mysql_native_password" | sudo tee -a /etc/mysql/conf.d/mysqld.cnf
+# Change ownership of MySQL directories
+sudo chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring
 
-# Check if workdir is already set and replace it, otherwise add it
-if grep -q "^workdir=" /etc/mysql/conf.d/mysqld.cnf; then
-    sudo sed -i 's#^workdir=.*#workdir=/workspace/magento2gitpod#' /etc/mysql/conf.d/mysqld.cnf
-else
-    echo "workdir=/workspace/magento2gitpod" | sudo tee -a /etc/mysql/conf.d/mysqld.cnf
-fi
+# Copy MySQL configuration files
+sudo cp mysql.cnf /etc/mysql/conf.d/mysqld.cnf
+sudo cp .my.cnf /home/gitpod
+sudo cp mysql.conf /etc/supervisor/conf.d/mysql.conf
+sudo chown gitpod:gitpod /home/gitpod/.my.cnf
 
-# Set permissions and restart MySQL
-sudo chown -R gitpod:gitpod /var/run/mysqld/
+# Copy default-login for MySQL clients
+sudo cp client.cnf /etc/mysql/conf.d/client.cnf
+
+# Start MySQL service
 sudo supervisorctl start mysql
