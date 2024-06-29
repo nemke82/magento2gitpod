@@ -14,6 +14,7 @@ echo "percona-server-server-8.0 percona-server-server/re-root-pass password nem4
 echo "percona-server-server-8.0 percona-server-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)" | sudo debconf-set-selections
 echo "percona-server-server-8.0 percona-server-server/use-exist-apparmor-profile select Use existent AppArmor profile (RECOMMENDED)" | sudo debconf-set-selections
 sudo apt-get update;
+sudo rm -r -f /var/lib/mysql;
 sudo apt-get upgrade -y percona-server-server percona-server-client percona-server-common;
 sed -i 's#query_cache_limit=2M##g' /etc/mysql/conf.d/mysqld.cnf;
 sed -i 's#query_cache_size=128M##g' /etc/mysql/conf.d/mysqld.cnf;
