@@ -4,7 +4,7 @@ import subprocess
 import threading
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='gevent')
 
 def run_script(command_key, sid):
     commands = {
