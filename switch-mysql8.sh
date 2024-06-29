@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 sudo supervisorctl stop mysql
 
 # Remove existing Percona packages
-sudo apt-get remove --purge -y percona-server-server-8.0 percona-server-client-8.0 percona-server-common-8.0
+DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y percona-server-server-5.7 percona-server-client-5.7 percona-server-common-5.7 percona-server-server percona-server-client percona-server-common
 sudo apt-get autoremove -y
 sudo apt-get clean
 
@@ -25,20 +25,21 @@ sudo mkdir -p /var/run/mysqld
 # Download and install Percona release package
 sudo wget -c https://repo.percona.com/apt/percona-release_latest.generic_all.deb \
  && sudo dpkg -i percona-release_latest.generic_all.deb \
- && sudo apt-get update
+ && sudo apt-get update -y
 
 # Preconfigure debconf selections for Percona installation
-sudo debconf-set-selections <<EOF
-percona-server-server-8.0 percona-server-server/root_password password nem4540
-percona-server-server-8.0 percona-server-server/root_password_again password nem4540
-percona-server-server-8.0/root-pass password nem4540
-percona-server-server-8.0/re-root-pass password nem4540
-EOF
+echo "percona-server-server-8.0 percona-server-server/root_password password nem4540" | sudo debconf-set-selections
+echo "percona-server-server-8.0 percona-server-server/root_password_again password nem4540" | sudo debconf-set-selections
+echo "percona-server-server-8.0 percona-server-server/root-pass password nem4540" | sudo debconf-set-selections
+echo "percona-server-server-8.0 percona-server-server/re-root-pass password nem4540" | sudo debconf-set-selections
+echo "percona-server-server percona-server-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)" | sudo debconf-set-selections
+echo "percona-server-server-8.0 percona-server-server/use-exist-apparmor-profile select Use existent AppArmor profile (RECOMMENDED)" | sudo debconf-set-selections
 
 # Install Percona server packages
-sudo apt-get update \
- && sudo apt-get install -y \
-    percona-server-server-8.0 percona-server-client-8.0 percona-server-common-8.0
+sudo percona-release setup ps80
+sudo apt-get update -y \
+ && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    percona-server-server percona-server-client percona-server-common
 
 # Change ownership of MySQL directories
 sudo chown -R gitpod:gitpod /etc/mysql /var/run/mysqld /var/log/mysql /var/lib/mysql /var/lib/mysql-files /var/lib/mysql-keyring
