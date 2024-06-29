@@ -67,8 +67,8 @@ def index():
             <button onclick="startProcess('system_info')">System Info</button>
             <button onclick="startProcess('disk_space')">Disk Space</button>
             <button onclick="startProcess('home_space')">Home Space</button>
-            <button onclick="startProcess('install_magento_2.4.4')">Install Magento 2.4.4</button>
-            <button onclick="startProcess('install_magento_2.4.3_p2')">Install Magento 2.4.3-p2</button>
+            <button onclick="startProcess('install_magento_2.4.7')">Install Magento 2.4.7</button>
+            <button onclick="startProcess('install_magento_2.4.6_p6')">Install Magento 2.4.6-p6</button>
             <button onclick="startProcess('install_magento_2.4_dev')">Install Magento 2.4-dev</button>
             <button onclick="startProcess('install_baler')">Install Baler</button>
             <button onclick="startProcess('install_magepack')">Install MagePack</button>
@@ -93,6 +93,7 @@ def index():
             <button onclick="startProcess('switch_php_7.3')">Switch to PHP 7.3</button>
             <button onclick="startProcess('switch_php_8.1')">Switch to PHP 8.1</button>
             <button onclick="startProcess('switch_php_8.2')">Switch to PHP 8.2</button>
+            <button onclick="startProcess('switch_php_8.3')">Switch to PHP 8.3</button>
             <button onclick="startProcess('switch_mysql_8')">Switch to MySQL 8</button>
             <button onclick="startProcess('start_varnish_6')">Start Varnish 6</button>
             <button onclick="startProcess('start_varnish_7')">Start Varnish 7</button>

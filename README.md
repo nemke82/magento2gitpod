@@ -1,7 +1,7 @@
 # magento2gitpod
 Magento 2 optimized setup for https://gitpod.io workspace -- Nginx, MySQL (switch to Percona MySQL 8.x available in the menu), PHP 7.4 (older and newer versions available in the menu), PHP-FPM, and a lot more...
 
-![](magento2gitpod.gif)
+![](magento2gitpod.png)
 
 Watch full video how you can easily setup Magento 2 Dev environment right in your browser:
 https://youtu.be/ZydOkPWJPT8
@@ -36,6 +36,8 @@ Services/Tools installed:
   '$ES_HOME68/bin/elasticsearch -d -p $ES_HOME68/pid -Ediscovery.type=single-node' <BR>
 - **ElasticSearch 7.9.3**. Note: Please run following command to start it: <BR>
   '$ES_HOME79/bin/elasticsearch -d -p $ES_HOME79/pid -Ediscovery.type=single-node' <BR>
+
+  Select newer ElasticSearch or OpenSearch installations from Magento 2 Gitpod Manager menu <BR>
   
   Some extensions like ElasticSuite (https://github.com/Smile-SA/elasticsuite/wiki/ServerConfig-5.x) requires two ElasticSearch plugins to be installed. You can install them with the following commands:<BR>
   
@@ -65,7 +67,7 @@ or run manually with following command: bash /workspace/magento2gitpod/pwa-studi
 Start service: <BR>
 bash /workspace/magento2gitpod/pwa/start.sh &
 
-TO INSTALL Magento 2.4.4 (latest): <BR>
+TO INSTALL Magento 2.4.6-p6 (latest): <BR>
 **./m2-install.sh**
 
 For Magento 2.4-dev branch replicated from https://github.com/magento/magento2 please run: <BR>
@@ -81,9 +83,6 @@ mysql -e 'create database nemanja;' <BR>
 
 In case you need to adjust certain my.cnf settings, please edit https://github.com/nemke82/magento2gitpod/blob/master/mysql.cnf file and redeploy GitPod workspace.
 
-**Discovered bugs:**
-Sometimes it may happen that the exposed port 8002 used for Nginx does not work when tab is loaded in browser. To fix that, either stop/start workspace or destroy it and start process again. <BR>
-
 If you are moving your own installation don't foget to adjust following cookie paths: <BR>
 **web/cookie/path to "/"** <BR>
 **web/cookie/domain to ".gitpod.io"** <BR>
@@ -92,91 +91,5 @@ If you are moving your own installation don't foget to adjust following cookie p
 You may fork this repo and boot it on your own server or local computer:
 https://www.gitpod.io/docs/self-hosted/latest/self-hosted/
 
-**Changelog 2020-07-03:**
-- Updated m2-install.sh script to install latest Magento 2.3.5 version
-- Support for ElasticSearch 5.6, 6.8 and 7.8
-- Menu installer (menu.sh) added.
-- Option to start/stop services from menu.sh file added.
-- MySQL (my.cnf) file adjusted with new settings.
-- NodeJS/NPM NVM Manager.
-- Baler installer added based on https://nemanja.io/optimize-magento-2-store-using-baler-method/ article.
-- MagePack installer added based on https://nemanja.io/speed-up-magento-2-page-load-rendering-using-magepack-method/ article.
-- MySQL switched to Percona 5.7 (latest). Root password defined (it was not previously). Check above for changes.
-
-**Changelog 2020-10-14:**
-- PHP 7.2 depreciated and left as optional in the Dockerfile
-- PHP 7.3 latest support
-- php-fpm.conf file updated to use PHP 7.3 latest
-
-**Changelog 2020-11-03:**
-- RabbitMQ Support and integrated to m2-install.sh and m2-install-solo.sh (dev github repo) installations
-
-**Changelog 2020-12-11:**
-- Completely rewritten menu.sh file and it's location (now in the editor area) and labeled.
-- menu.sh file updated with Magento 2 Loop cron task.
-- Added installer for Magento 2.4.1 using composer and Magento 2.4-develop using Git clone ways.
-
-**Changelog 2020-12-15:**
-- Command lh added. It provides Google lighhouse report as preview in your Gitpod tab. You can check demo here:
-https://youtu.be/vbPi8zzZyBk
-
-**Changelog 2021-04-13:**
-- Updated m2-install.sh script to install latest Magento 2.4.2 version
-
-**Changelog 2021-05-13:**
-- Added supervisord to the Dockerfile
-- MySQL service moved from cold start to supervisord service (type sudo supervisorctl to check all services integrated)
-
-**Changelog 2021-05-26:**
-- Default PHP moved to PHP 7.4
-
-**Changelog 2021-07-17:**
-- Dockerfile heavily refactored as per new sudo instructions (https://www.gitpod.io/docs/config-docker#configure-a-custom-dockerfile)
-
-**Changelog 2021-08-06:**
-- PWA Studio installer added to menu.sh and separate as a bash file pwa-studio-installer.sh
-
-**Changelog 2021-12-09:**
-- CloudBeaver.io SQL tool added to menu.sh and separate as a bash file cloudbeaver.sh
-  
-**Changelog 2021-12-10:**
-- MailHog SMTP server added to menu.sh and separate as a bash file mailhog.sh
-Please watch video how it works: https://youtu.be/AFOtKNPTY0M
-
-**Changelog 2022-01-02:**
-- Happy New year! Support for PHP 7.3 and xDebug 2.9 added for troubleshooting legacy Magento installations.
-  you can start it from menu.sh or as separate process using file:
-  /workspace/magento2gitpod/switch-php73.sh
-  
-**Changelog 2022-01-09:**
-- Updated m2-install.sh and m2-install-solo.sh files. Added --no-interaction --no-progress to composer require and composer install due magento/magento2#34831
-
-**Changelog 2022-01-15:**
-- Varnish 6 support with Magento configuration/switch. Start/Stop added to menu.sh menu
-  To purge cache you can execute:
-  curl -X 'PURGE' -H'X-Magento-Tags-Pattern: .*' 127.0.0.1
-
-  also, useful to add invalidation to env.php:
-  php bin/magento setup:config:set --http-cache-hosts=127.0.0.1
-
-**Changelog 2022-01-25:**
-- Composer config added to m2-install.sh installation script to fix --no-interaction mode used when installing Magento
-
-**Changelog 2022-02-09:**
-- php-fpm 7.4 moved to supervisord, you can now reload php-fpm with sudo supervisorctl reload php-fpm command.
-- mysql data-directory is moved from /var/lib/mysql to /workspace/magento2gitpod/mysql to make it persistent when workspace times out
-- redis and elasticsearch are now automatically started when workspace started using supervisord.
-
-**Changelog 2022-04-23:**
-- PHP 8.1 support. Switch added to menu.sh and separate bash installer switch-php81.sh script
-- Installer for Magento 2.4.4 added to menu.sh (2.4.3-p2 installer left active in the menu)
-- MySQL 8 support. Switch added to menu.sh and separate bash installer switch-mysql8.sh script
-
-**Changelog 2022-05-17:**
-- Varnish 7.1 support. Switch added to menu.sh and separate bash installer switch-varnish7.sh script
-
-**Changelog 2022-06-24:**
-- m2-install.sh and m2-install-solo.sh scripts updated with web/secure/offloader_header X-Forwarded-Proto to avoid redirect loop. Menu installer remains the same.
-
-**Changelog 2022-07-06:**
-- Blackfire installer updated to support any PHP version used (old or new). You can install it using blackfire-run.sh script or through menu.sh installer.
+CHANGELOG:
+https://github.com/nemke82/magento2gitpod/wiki/Changelog
