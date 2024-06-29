@@ -7,7 +7,7 @@ sudo supervisorctl stop mysql
 
 # Temporarily move existing MySQL data directory
 if [ -d /workspace/magento2gitpod/mysql ]; then
-    sudo mv /workspace/magento2gitpod /workspace/magento2gitpod.bak
+    sudo mv /workspace/magento2gitpod/mysql /workspace/magento2gitpod/mysql.bak
 fi
 
 # Enable Percona release and import Google signing key
@@ -21,6 +21,9 @@ echo "percona-server-server percona-server-server/root_password_again password n
 echo "percona-server-server-8.0 percona-server-server/root-pass password nem4540" | sudo debconf-set-selections
 echo "percona-server-server-8.0 percona-server-server/re-root-pass password nem4540" | sudo debconf-set-selections
 echo "percona-server-server percona-server-server/default-auth-override select Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)" | sudo debconf-set-selections
+
+#fix apparmor profile
+sudo rm -f /etc/apparmor.d/usr.sbin.mysqld
 
 # Install Percona server packages
 sudo apt-get install -y percona-server-server percona-server-client percona-server-common
