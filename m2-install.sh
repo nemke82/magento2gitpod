@@ -29,6 +29,9 @@ sudo chmod a+rwx n98-magerun2
 
 echo "n98-magerun2 has been updated to the latest version."
 
+# Change back to workspace directory
+cd /workspace/magento2gitpod
+
 n98-magerun2 module:disable Magento_AdminAdobeImsTwoFactorAuth &&
 n98-magerun2 module:disable Magento_TwoFactorAuth &&
 n98-magerun2 setup:upgrade &&
