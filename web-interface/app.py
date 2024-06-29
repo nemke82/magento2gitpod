@@ -2,9 +2,49 @@ from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 import subprocess
 import threading
+import json
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='gevent')
+
+def get_version_info():
+    versions = {}
+    try:
+        php_version = subprocess.check_output(['php', '-v'], stderr=subprocess.STDOUT).decode().split('\n')[0]
+        versions['PHP'] = php_version
+    except Exception as e:
+        versions['PHP'] = f"Error: {str(e)}"
+
+    try:
+        mysql_version = subprocess.check_output(['mysql', '--version'], stderr=subprocess.STDOUT).decode().strip()
+        versions['MySQL'] = mysql_version
+    except Exception as e:
+        versions['MySQL'] = f"Error: {str(e)}"
+
+    try:
+        es_version_raw = subprocess.check_output(['curl', '-s', 'localhost:9200'], stderr=subprocess.STDOUT).decode()
+        es_version = json.loads(es_version_raw)['version']['number']
+        versions['ElasticSearch'] = f"ElasticSearch {es_version}"
+    except Exception as e:
+        versions['ElasticSearch'] = f"Error: {str(e)}"
+
+    try:
+        rabbitmq_version = subprocess.check_output(
+            "sudo rabbitmqctl status | grep 'RabbitMQ\\|rabbitmq' | head -1", 
+            shell=True, stderr=subprocess.STDOUT
+        ).decode().strip()
+        versions['RabbitMQ'] = rabbitmq_version
+    except Exception as e:
+        versions['RabbitMQ'] = f"Error: {str(e)}"
+
+    try:
+        redis_version = subprocess.check_output(['redis-server', '--version'], stderr=subprocess.STDOUT).decode().strip()
+        redis_version = redis_version.split(' ')[2].split('=')[1]
+        versions['Redis'] = f"Redis {redis_version}"
+    except Exception as e:
+        versions['Redis'] = f"Error: {str(e)}"
+
+    return versions
 
 def run_script(command_key, sid):
     commands = {
@@ -120,6 +160,16 @@ def index():
                 document.getElementById('output').innerText = 'Error: ' + data.output;
             });
         </script>
+    '''
+
+@app.route('/version_info')
+def version_info():
+    version_info = get_version_info()
+    version_info_html = ''.join([f"<div><strong>{key}:</strong> {value}</div>" for key, value in version_info.items()])
+    return f'''
+        <h1>System Version Information</h1>
+        <div>{version_info_html}</div>
+        <a href="/">Back to main page</a>
     '''
 
 @socketio.on('start_process')
