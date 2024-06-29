@@ -15,7 +15,24 @@ echo $url &&
 mysql -u root -pnem4540 -e 'create database nemanja;' &&
 url=$(gp url | awk -F"//" {'print $2'});url+="/";url="https://8002-"$url;cd /workspace/magento2gitpod && composer install --no-interaction --no-progress && php bin/magento setup:install --db-name='nemanja' --db-user='root' --db-password='nem4540' --base-url=$url --backend-frontname='admin' --admin-user='admin' --admin-password='adm4540' --admin-email='ne@nemanja.io' --admin-firstname='Nemanja' --admin-lastname='Djuric' --use-rewrites='1' --use-secure='1' --base-url-secure=$url --use-secure-admin='1' --language='en_US' --db-host='127.0.0.1' --cleanup-database --timezone='America/New_York' --currency='USD' --session-save='redis' --amqp-host="127.0.0.1" --amqp-port="5672" --amqp-user="guest" --amqp-password="guest" --amqp-virtualhost="/"
 
-n98-magerun2 module:disable Magento_Csp &&
+# Remove the existing n98-magerun2 if it exists
+sudo rm -f /usr/local/bin/n98-magerun2
+
+# Change to the /usr/local/bin directory
+cd /usr/local/bin
+
+# Download the latest version of n98-magerun2
+sudo wget -c https://files.magerun.net/n98-magerun2.phar
+
+# Rename the downloaded file
+sudo mv n98-magerun2.phar n98-magerun2
+
+# Make the file executable
+sudo chmod a+rwx n98-magerun2
+
+echo "n98-magerun2 has been updated to the latest version."
+
+n98-magerun2 module:disable Magento_AdminAdobeImsTwoFactorAuth &&
 n98-magerun2 module:disable Magento_TwoFactorAuth &&
 n98-magerun2 setup:upgrade &&
 
