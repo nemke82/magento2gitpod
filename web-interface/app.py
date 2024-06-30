@@ -46,6 +46,13 @@ def get_version_info():
 
     return versions
 
+def get_supervisor_status():
+    try:
+        result = subprocess.run(['sudo', 'supervisorctl', 'status'], capture_output=True, text=True, check=True)
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        return f"Error: {e.output}"
+
 def run_script(command_key, sid):
     commands = {
         'system_info': 'echo "Hostname: $HOSTNAME"; uptime',
@@ -81,7 +88,8 @@ def run_script(command_key, sid):
         'switch_mysql_8': 'cd /workspace/magento2gitpod && sudo bash switch-mysql8.sh',
         'start_varnish_6': 'sudo apt-get update; sudo apt-get install varnish -y; sudo rm -f /etc/varnish; sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish; sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 2; n98-magerun2 config:set system/full_page_cache/ttl 86400; n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1; php bin/magento setup:config:set --http-cache-hosts=127.0.0.1; sudo service nginx restart & sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &',
         'start_varnish_7': 'sudo apt-get update; sudo apt install debian-archive-keyring curl gnupg apt-transport-https -y; sudo rm -f /etc/apt/trusted.gpg.d/varnish.gpg; sudo curl -fsSL https://packagecloud.io/varnishcache/varnish71/gpgkey|sudo gpg --always-trust --dearmor -o /etc/apt/trusted.gpg.d/varnish.gpg; echo "deb https://packagecloud.io/varnishcache/varnish71/ubuntu/ focal main" | sudo tee /etc/apt/sources.list.d/varnishcache_varnish71.list; sudo apt-get update; sudo apt-get install varnish -y; sudo rm -f /etc/varnish; sudo cp /workspace/magento2gitpod/default.vcl /etc/varnish; sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx-varnish.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 2; n98-magerun2 config:set system/full_page_cache/ttl 86400; n98-magerun2 config:set system/full_page_cache/varnish/backend_host 127.0.0.1; php bin/magento setup:config:set --http-cache-hosts=127.0.0.1; sudo service nginx restart & sudo varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s file,/etc/varnish/varnish.cache,1024M -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &',
-        'stop_varnish': 'sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 1; n98-magerun2 config:set system/full_page_cache/ttl 86400; sudo service nginx restart &'
+        'stop_varnish': 'sudo service nginx stop; sudo ps aux | grep nginx | awk \'{print $2}\' | xargs kill -s 9; sudo rm -f /etc/nginx/nginx.conf; sudo cp /workspace/magento2gitpod/nginx.conf /etc/nginx/nginx.conf; n98-magerun2 config:set system/full_page_cache/caching_application 1; n98-magerun2 config:set system/full_page_cache/ttl 86400; sudo service nginx restart &',
+        'restart_services': 'sudo supervisorctl restart all'
     }
 
     if command_key in commands:
@@ -104,8 +112,19 @@ def run_script(command_key, sid):
 
 @app.route('/')
 def index():
-    return '''
+    version_info = get_version_info()
+    version_info_html = ''.join([f"<div><strong>{key}:</strong> {value}</div>" for key, value in version_info.items()])
+    supervisor_status = get_supervisor_status()
+    return f'''
         <h1>Magento 2 Gitpod Manager</h1>
+        <h3>System Version Information</h3>
+        <div>{version_info_html}</div>
+        <h3>Supervisor Status</h3>
+        <pre>{supervisor_status}</pre>
+        <button onclick="startProcess('restart_services')">Restart Services</button>
+        <br>
+        <br>
+        <br>
         <div id="button-container" style="display: flex; flex-wrap: wrap; gap: 10px;">
             <button onclick="startProcess('system_info')">System Info</button>
             <button onclick="startProcess('disk_space')">Disk Space</button>
@@ -147,29 +166,19 @@ def index():
         <script>
             var socket = io();
 
-            function startProcess(command) {
+            function startProcess(command) {{
                 document.getElementById('output').innerText = 'Process started...';
-                socket.emit('start_process', { command: command });
-            }
+                socket.emit('start_process', {{ command: command }});
+            }}
 
-            socket.on('process_complete', function(data) {
+            socket.on('process_complete', function(data) {{
                 document.getElementById('output').innerText = data.output;
-            });
+            }});
 
-            socket.on('process_error', function(data) {
+            socket.on('process_error', function(data) {{
                 document.getElementById('output').innerText = 'Error: ' + data.output;
-            });
+            }});
         </script>
-    '''
-
-@app.route('/version_info')
-def version_info():
-    version_info = get_version_info()
-    version_info_html = ''.join([f"<div><strong>{key}:</strong> {value}</div>" for key, value in version_info.items()])
-    return f'''
-        <h1>System Version Information</h1>
-        <div>{version_info_html}</div>
-        <a href="/">Back to main page</a>
     '''
 
 @socketio.on('start_process')
