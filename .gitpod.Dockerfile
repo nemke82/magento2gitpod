@@ -1,4 +1,4 @@
-# Modern Magento 2.4.8 Development Environment for Ona
+# Modern Magento 2 Development Environment for Ona
 # With configurable versions via build arguments
 
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
@@ -276,7 +276,7 @@ RUN curl -fsSL https://packages.blackfire.io/gpg.key | apt-key add - && \
 # sudo apt-get update && sudo apt-get install -y newrelic-php5
 # sudo newrelic-install install
 
-# Create New Relic setup script for later use
+# New Relic setup script for later use
 RUN echo '#!/bin/bash' > /usr/local/bin/newrelic-setup && \
     echo 'echo "Installing New Relic..."' >> /usr/local/bin/newrelic-setup && \
     echo 'curl -fsSL https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -' >> /usr/local/bin/newrelic-setup && \
@@ -299,7 +299,7 @@ RUN if [ -f /etc/php/${PHP_VERSION}/cli/conf.d/newrelic.ini ]; then \
 RUN mkdir -p /var/log/blackfire /var/run/blackfire /etc/blackfire && \
     chown -R vscode:vscode /var/log/blackfire /var/run/blackfire /etc/blackfire
 
-# Create default Blackfire configuration files
+# Default Blackfire configuration files
 RUN echo '[blackfire]' > /etc/blackfire/agent && \
     echo '; Blackfire agent configuration' >> /etc/blackfire/agent && \
     echo '; server-id=' >> /etc/blackfire/agent && \
@@ -313,7 +313,7 @@ RUN echo '[blackfire]' > /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.
     echo '; blackfire.agent_socket=unix:///tmp/agent.sock' >> /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
     cp /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini /etc/php/${PHP_VERSION}/fpm/conf.d/92-blackfire-config.ini
 
-# Create Blackfire setup script
+# Blackfire setup script
 RUN echo '#!/bin/bash' > /usr/local/bin/blackfire-setup && \
     echo 'echo "Setting up Blackfire..."' >> /usr/local/bin/blackfire-setup && \
     echo 'echo "Enter your Blackfire Server ID:"' >> /usr/local/bin/blackfire-setup && \
@@ -349,7 +349,7 @@ RUN mkdir -p /var/lib/rabbitmq /var/log/rabbitmq && \
 # Enable RabbitMQ management plugin and configure
 RUN rabbitmq-plugins enable rabbitmq_management
 
-# Create RabbitMQ configuration for container environment
+# RabbitMQ configuration for container environment
 RUN echo '# RabbitMQ configuration for development' > /etc/rabbitmq/rabbitmq.conf && \
     echo 'loopback_users.guest = false' >> /etc/rabbitmq/rabbitmq.conf && \
     echo 'listeners.tcp.default = 5672' >> /etc/rabbitmq/rabbitmq.conf && \
@@ -357,7 +357,7 @@ RUN echo '# RabbitMQ configuration for development' > /etc/rabbitmq/rabbitmq.con
     echo 'log.file.level = info' >> /etc/rabbitmq/rabbitmq.conf && \
     echo 'log.console = true' >> /etc/rabbitmq/rabbitmq.conf
 
-# Create improved RabbitMQ setup script (using service commands only)
+# Improved RabbitMQ setup script (using service commands only)
 RUN echo '#!/bin/bash' > /usr/local/bin/rabbitmq-setup && \
     echo 'echo "🐰 Setting up RabbitMQ..."' >> /usr/local/bin/rabbitmq-setup && \
     echo '' >> /usr/local/bin/rabbitmq-setup && \
@@ -410,7 +410,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/rabbitmq-setup && \
     echo 'echo "👤 Login: admin/admin or guest/guest"' >> /usr/local/bin/rabbitmq-setup && \
     chmod +x /usr/local/bin/rabbitmq-setup
 
-# Create RabbitMQ diagnostic script (no systemctl)
+# RabbitMQ diagnostic script (no systemctl as no systed support for ONA)
 RUN echo '#!/bin/bash' > /usr/local/bin/rabbitmq-diagnose && \
     echo 'echo "🐰 RabbitMQ Diagnostic"' >> /usr/local/bin/rabbitmq-diagnose && \
     echo 'echo "===================="' >> /usr/local/bin/rabbitmq-diagnose && \
@@ -446,7 +446,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/rabbitmq-diagnose && \
 RUN mkdir -p /var/log/blackfire /var/run/blackfire /workspaces/magento2gitpod/var/log && \
     chown -R vscode:vscode /var/log/blackfire /var/run/blackfire /workspaces/magento2gitpod
 
-# Create modern MySQL configuration (use standard datadir initially)
+# Modern MySQL configuration (use standard datadir initially)
 RUN echo '[mysqld]' > /etc/mysql/conf.d/magento.cnf && \
     echo 'bind-address = 127.0.0.1' >> /etc/mysql/conf.d/magento.cnf && \
     echo 'port = 3306' >> /etc/mysql/conf.d/magento.cnf && \
@@ -497,7 +497,7 @@ RUN mkdir -p /var/run/mysqld && \
     mkdir -p /workspaces/magento2gitpod/var/log && \
     chown vscode:vscode /workspaces/magento2gitpod/var/log
 
-# Create .my.cnf for passwordless MySQL access
+# .my.cnf for passwordless MySQL access
 RUN echo '[client]' > /home/vscode/.my.cnf && \
     echo 'user=root' >> /home/vscode/.my.cnf && \
     echo 'password=nem4540' >> /home/vscode/.my.cnf && \
@@ -509,7 +509,7 @@ RUN echo '[client]' > /home/vscode/.my.cnf && \
 # Skip MariaDB initialization during build - do it at runtime instead
 RUN echo "MariaDB will be initialized at first startup"
 
-# Create MariaDB setup script to handle unix_socket authentication
+# MariaDB setup script to handle unix_socket authentication
 RUN echo '#!/bin/bash' > /usr/local/bin/setup-mysql-data && \
     echo 'echo "🔧 Setting up MariaDB..."' >> /usr/local/bin/setup-mysql-data && \
     echo '' >> /usr/local/bin/setup-mysql-data && \
@@ -556,7 +556,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/setup-mysql-data && \
     echo 'echo "✅ MariaDB setup completed"' >> /usr/local/bin/setup-mysql-data && \
     chmod +x /usr/local/bin/setup-mysql-data
 
-# Create MariaDB connection test script
+# MariaDB connection test script
 RUN echo '#!/bin/bash' > /usr/local/bin/test-mysql && \
     echo 'echo "🔍 Testing MariaDB connection..."' >> /usr/local/bin/test-mysql && \
     echo 'echo ""' >> /usr/local/bin/test-mysql && \
@@ -602,7 +602,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/test-mysql && \
     echo 'fi' >> /usr/local/bin/test-mysql && \
     chmod +x /usr/local/bin/test-mysql
 
-# Create Nginx configuration for Magento 2
+# Nginx configuration for Magento 2
 RUN echo 'upstream fastcgi_backend {' > /etc/nginx/sites-available/magento && \
     echo '    server unix:/run/php/php8.2-fpm.sock;' >> /etc/nginx/sites-available/magento && \
     echo '}' >> /etc/nginx/sites-available/magento && \
@@ -659,7 +659,7 @@ RUN echo 'upstream fastcgi_backend {' > /etc/nginx/sites-available/magento && \
 # Enable the site
 RUN ln -sf /etc/nginx/sites-available/magento /etc/nginx/sites-enabled/default
 
-# Create helpful scripts
+# Helpful scripts
 RUN echo '#!/bin/bash' > /usr/local/bin/magento-xdebug-enable && \
     echo 'mv /etc/php/8.2/cli/conf.d/20-xdebug.ini.disabled /etc/php/8.2/cli/conf.d/20-xdebug.ini 2>/dev/null || true' >> /usr/local/bin/magento-xdebug-enable && \
     echo 'mv /etc/php/8.2/fpm/conf.d/20-xdebug.ini.disabled /etc/php/8.2/fpm/conf.d/20-xdebug.ini 2>/dev/null || true' >> /usr/local/bin/magento-xdebug-enable && \
@@ -672,7 +672,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-xdebug-disable && \
     echo 'systemctl reload php8.2-fpm 2>/dev/null || service php8.2-fpm reload 2>/dev/null || true' >> /usr/local/bin/magento-xdebug-disable && \
     echo 'echo "Xdebug disabled!"' >> /usr/local/bin/magento-xdebug-disable
 
-# Create version information script
+# Version information script
 RUN echo '#!/bin/bash' > /usr/local/bin/magento-versions && \
     echo 'echo "=== Magento 2.4.8 Development Environment ==="' >> /usr/local/bin/magento-versions && \
     echo 'echo "PHP Version: $(php --version | head -n1)"' >> /usr/local/bin/magento-versions && \
@@ -702,7 +702,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-versions && \
 
 RUN chmod +x /usr/local/bin/magento-xdebug-enable /usr/local/bin/magento-xdebug-disable /usr/local/bin/magento-versions
 
-# Create quick fix script for MariaDB authentication
+# A quick fix script for MariaDB authentication
 RUN echo '#!/bin/bash' > /usr/local/bin/fix-mysql-auth && \
     echo 'echo "🔧 Fixing MariaDB authentication..."' >> /usr/local/bin/fix-mysql-auth && \
     echo 'echo "This fixes the unix_socket authentication issue in MariaDB 10.6"' >> /usr/local/bin/fix-mysql-auth && \
@@ -722,7 +722,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/fix-mysql-auth && \
     echo 'fi' >> /usr/local/bin/fix-mysql-auth && \
     chmod +x /usr/local/bin/fix-mysql-auth
 
-# Create service management script
+# Service management script
 RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo 'case "$1" in' >> /usr/local/bin/magento-services && \
     echo '  start)' >> /usr/local/bin/magento-services && \
@@ -732,16 +732,31 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    sudo service redis-server start && echo "✅ Redis started" || echo "❌ Redis failed"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm start && echo "✅ PHP-FPM started" || echo "❌ PHP-FPM failed"' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx start && echo "✅ Nginx started" || echo "❌ Nginx failed"' >> /usr/local/bin/magento-services && \
-    echo '    echo "🐰 Starting RabbitMQ (this may take a moment)..."' >> /usr/local/bin/magento-services && \
+    echo '    echo "Starting Elasticsearch..."' >> /usr/local/bin/magento-services && \
+    echo '    if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
+    echo '      export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '      sleep 3 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '    else' >> /usr/local/bin/magento-services && \
+    echo '      echo "⚠️  Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '    fi' >> /usr/local/bin/magento-services && \
+    echo '    echo "Starting RabbitMQ (this may take a moment)..."' >> /usr/local/bin/magento-services && \
     echo '    /usr/local/bin/rabbitmq-setup && echo "✅ RabbitMQ started and configured" || echo "⚠️  RabbitMQ setup failed"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
-    echo '    echo "🎉 Core services started!"' >> /usr/local/bin/magento-services && \
+    echo '    echo "🎉 All services started!"' >> /usr/local/bin/magento-services && \
     echo '    echo "🔍 Run: test-db to verify database connection"' >> /usr/local/bin/magento-services && \
     echo '    echo "🌐 Web server should be available on port 8002"' >> /usr/local/bin/magento-services && \
+    echo '    echo "🔎 Elasticsearch should be available on port 9200"' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  stop)' >> /usr/local/bin/magento-services && \
     echo '    echo "Stopping Magento 2 services..."' >> /usr/local/bin/magento-services && \
     echo '    sudo service rabbitmq-server stop 2>/dev/null && echo "🛑 RabbitMQ stopped" || echo "⚠️  RabbitMQ was not running"' >> /usr/local/bin/magento-services && \
+    echo '    # Stop Elasticsearch' >> /usr/local/bin/magento-services && \
+    echo '    if [ -f "$ES_HOME/pid" ]; then' >> /usr/local/bin/magento-services && \
+    echo '      kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch PID not found"' >> /usr/local/bin/magento-services && \
+    echo '      rm -f "$ES_HOME/pid"' >> /usr/local/bin/magento-services && \
+    echo '    else' >> /usr/local/bin/magento-services && \
+    echo '      pkill -f elasticsearch && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch was not running"' >> /usr/local/bin/magento-services && \
+    echo '    fi' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx stop && echo "🛑 Nginx stopped"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm stop && echo "🛑 PHP-FPM stopped"' >> /usr/local/bin/magento-services && \
     echo '    sudo service redis-server stop && echo "🛑 Redis stopped"' >> /usr/local/bin/magento-services && \
@@ -751,7 +766,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '  restart)' >> /usr/local/bin/magento-services && \
     echo '    echo "Restarting Magento 2 services..."' >> /usr/local/bin/magento-services && \
     echo '    $0 stop' >> /usr/local/bin/magento-services && \
-    echo '    sleep 3' >> /usr/local/bin/magento-services && \
+    echo '    sleep 5' >> /usr/local/bin/magento-services && \
     echo '    $0 start' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  status)' >> /usr/local/bin/magento-services && \
@@ -760,35 +775,80 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    if sudo service redis-server status >/dev/null 2>&1; then echo "✅ Redis: Running"; else echo "❌ Redis: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service php8.2-fpm status >/dev/null 2>&1; then echo "✅ PHP-FPM: Running"; else echo "❌ PHP-FPM: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service nginx status >/dev/null 2>&1; then echo "✅ Nginx: Running"; else echo "❌ Nginx: Stopped"; fi' >> /usr/local/bin/magento-services && \
+    echo '    # Check Elasticsearch status' >> /usr/local/bin/magento-services && \
+    echo '    if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch: Running"; else echo "❌ Elasticsearch: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service rabbitmq-server status >/dev/null 2>&1; then echo "✅ RabbitMQ: Running"; else echo "❌ RabbitMQ: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "📂 Data directories:"' >> /usr/local/bin/magento-services && \
     echo '    echo "  MySQL: /workspaces/magento2gitpod/mysql"' >> /usr/local/bin/magento-services && \
     echo '    echo "  Logs: /workspaces/magento2gitpod/var/log"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  Elasticsearch: $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '    echo ""' >> /usr/local/bin/magento-services && \
+    echo '    echo "🔍 Service URLs:"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  Elasticsearch: http://localhost:9200"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  RabbitMQ Management: http://localhost:15672"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "🔍 Run: test-db to check database connectivity"' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  start-quick)' >> /usr/local/bin/magento-services && \
-    echo '    echo "Starting core services (skip RabbitMQ)..."' >> /usr/local/bin/magento-services && \
+    echo '    echo "Starting core services (skip RabbitMQ and Elasticsearch)..."' >> /usr/local/bin/magento-services && \
     echo '    /usr/local/bin/setup-mysql-data' >> /usr/local/bin/magento-services && \
     echo '    sudo service mariadb start && echo "✅ MariaDB started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service redis-server start && echo "✅ Redis started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm start && echo "✅ PHP-FPM started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx start && echo "✅ Nginx started"' >> /usr/local/bin/magento-services && \
-    echo '    echo "🚀 Core services ready! Start RabbitMQ manually if needed."' >> /usr/local/bin/magento-services && \
+    echo '    echo "🚀 Core services ready! Start Elasticsearch and RabbitMQ manually if needed."' >> /usr/local/bin/magento-services && \
+    echo '    echo "💡 To start Elasticsearch: services elasticsearch start"' >> /usr/local/bin/magento-services && \
+    echo '    echo "💡 To start RabbitMQ: rabbitmq-setup"' >> /usr/local/bin/magento-services && \
+    echo '    ;;' >> /usr/local/bin/magento-services && \
+    echo '  elasticsearch)' >> /usr/local/bin/magento-services && \
+    echo '    case "$2" in' >> /usr/local/bin/magento-services && \
+    echo '      start)' >> /usr/local/bin/magento-services && \
+    echo '        if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
+    echo '          export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '          sleep 3 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '        else' >> /usr/local/bin/magento-services && \
+    echo '          echo "❌ Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '        fi' >> /usr/local/bin/magento-services && \
+    echo '        ;;' >> /usr/local/bin/magento-services && \
+    echo '      stop)' >> /usr/local/bin/magento-services && \
+    echo '        if [ -f "$ES_HOME/pid" ]; then' >> /usr/local/bin/magento-services && \
+    echo '          kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Elasticsearch stopped"' >> /usr/local/bin/magento-services && \
+    echo '          rm -f "$ES_HOME/pid"' >> /usr/local/bin/magento-services && \
+    echo '        else' >> /usr/local/bin/magento-services && \
+    echo '          pkill -f elasticsearch && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch was not running"' >> /usr/local/bin/magento-services && \
+    echo '        fi' >> /usr/local/bin/magento-services && \
+    echo '        ;;' >> /usr/local/bin/magento-services && \
+    echo '      status)' >> /usr/local/bin/magento-services && \
+    echo '        if curl -s http://localhost:9200 >/dev/null 2>&1; then' >> /usr/local/bin/magento-services && \
+    echo '          echo "✅ Elasticsearch is running"' >> /usr/local/bin/magento-services && \
+    echo '          curl -s http://localhost:9200 | jq . 2>/dev/null || curl -s http://localhost:9200' >> /usr/local/bin/magento-services && \
+    echo '        else' >> /usr/local/bin/magento-services && \
+    echo '          echo "❌ Elasticsearch is not running"' >> /usr/local/bin/magento-services && \
+    echo '        fi' >> /usr/local/bin/magento-services && \
+    echo '        ;;' >> /usr/local/bin/magento-services && \
+    echo '      *)' >> /usr/local/bin/magento-services && \
+    echo '        echo "Usage: $0 elasticsearch {start|stop|status}"' >> /usr/local/bin/magento-services && \
+    echo '        ;;' >> /usr/local/bin/magento-services && \
+    echo '    esac' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  *)' >> /usr/local/bin/magento-services && \
-    echo '    echo "Usage: $0 {start|stop|restart|status|start-quick}"' >> /usr/local/bin/magento-services && \
+    echo '    echo "Usage: $0 {start|stop|restart|status|start-quick|elasticsearch}"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "Commands:"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  start         # Start all services (including RabbitMQ)"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  start-quick   # Start core services (skip RabbitMQ)"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  start         # Start all services (including RabbitMQ and Elasticsearch)"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  start-quick   # Start core services (skip RabbitMQ and Elasticsearch)"' >> /usr/local/bin/magento-services && \
     echo '    echo "  status        # Check service status"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  elasticsearch # Manage Elasticsearch (start|stop|status)"' >> /usr/local/bin/magento-services && \
     echo '    echo "  test-db       # Test database connection"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "Aliases:"' >> /usr/local/bin/magento-services && \
     echo '    echo "  start-all     # Same as start"' >> /usr/local/bin/magento-services && \
     echo '    echo "  start-core    # Same as start-quick"' >> /usr/local/bin/magento-services && \
+    echo '    echo ""' >> /usr/local/bin/magento-services && \
+    echo '    echo "Examples:"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  $0 elasticsearch start   # Start only Elasticsearch"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  $0 elasticsearch status  # Check Elasticsearch status"' >> /usr/local/bin/magento-services && \
     echo '    exit 1' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo 'esac' >> /usr/local/bin/magento-services && \
@@ -836,5 +896,5 @@ USER vscode
 EXPOSE 8002 9001 15672 8000 3306 6379 9200 9300
 
 # Add build info
-RUN echo "🚀 Modern Magento 2.4.8 environment ready!" && \
+RUN echo "🚀 Modern Magento 2 environment ready!" && \
     echo "📦 PHP ${PHP_VERSION}, MariaDB ${MARIADB_VERSION}, Elasticsearch ${ELASTICSEARCH_VERSION}"
