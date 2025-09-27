@@ -1,128 +1,149 @@
-# ONA Platform Automations for Magento 2.4.8 Development Environment
-# Simplified automation that uses the built-in service management commands
+# ONA Platform Automations for Magento 2 Development Environment
+# Uses the correct ONA YAML format with services and tasks
 
-automations:
-  # Primary automation to start all Magento 2 services
-  - name: start_magento_environment
-    description: Initialize and start all Magento 2.4.8 services
-    trigger: on_workspace_start
-    commands:
-      - name: start_services
-        run: |
-          echo "Starting Magento 2.4.8 Development Environment..."
-          echo "=============================================="
-          
-          # Show environment info
-          versions
-          
-          echo ""
-          echo "Starting all services..."
-          
-          # Use the built-in start-all command from the Dockerfile
-          start-all
-          
-          echo ""
-          echo "Environment setup complete!"
-          echo ""
-          echo "Next steps:"
-          echo "  1. Install Magento: ./m2-install.sh"
-          echo "  2. Check service status: status-all"
-          echo "  3. Test database: test-db"
-          echo ""
-          echo "Web interface will be available on port 8002"
-          echo "RabbitMQ Management: port 15672 (admin/admin)"
-
-  # Optional automation for development mode setup
-  - name: setup_development_tools
-    description: Configure development tools and debugging
-    trigger: manual
-    commands:
-      - name: configure_dev_tools
-        run: |
-          echo "Setting up development tools..."
-          
-          # Ensure services are running
-          if ! status-all | grep -q "MariaDB: Running"; then
-            echo "Services not running. Starting them first..."
-            start-core
-          fi
-          
-          echo "Development tools ready!"
-          echo ""
-          echo "Available commands:"
-          echo "  xdebug-on/off     - Toggle Xdebug"
-          echo "  blackfire-config  - Setup Blackfire profiling"
-          echo "  newrelic-install  - Install New Relic monitoring"
-          echo "  rabbitmq-config   - Configure RabbitMQ"
-
-  # Quick service restart automation
-  - name: restart_services
-    description: Restart all Magento 2 services
-    trigger: manual
-    commands:
-      - name: restart_all_services
-        run: |
-          echo "Restarting all services..."
-          restart-all
-          echo "All services restarted!"
-
-  # Database troubleshooting automation
-  - name: fix_database_issues
-    description: Troubleshoot and fix common database issues
-    trigger: manual
-    commands:
-      - name: database_diagnostics
-        run: |
-          echo "Running database diagnostics..."
-          
-          # Test database connection
-          test-db
-          
-          # If connection fails, try to fix it
-          if ! test-db >/dev/null 2>&1; then
-            echo "Database connection issues detected. Attempting fix..."
-            fix-mysql
-          fi
-          
-          echo "Database diagnostics complete!"
-
-# Port configuration for ONA platform
-ports:
-  - port: 8002
-    name: Magento Web Interface
-    description: Main Magento 2 storefront and admin
-    visibility: public
-    protocol: https
-  
-  - port: 15672
-    name: RabbitMQ Management
-    description: RabbitMQ management interface
-    visibility: public
-    protocol: https
-  
-  - port: 3306
+# Services are long-running processes that should remain active
+services:
+  # Database service - handles MariaDB setup and startup
+  database:
     name: MariaDB Database
-    description: Database server (internal access only)
-    visibility: private
-  
-  - port: 6379
-    name: Redis Cache
-    description: Redis cache server (internal access only)
-    visibility: private
-  
-  - port: 9200
-    name: Elasticsearch
-    description: Search engine (internal access only)
-    visibility: private
+    description: MariaDB database server for Magento 2
+    triggeredBy:
+      - postDevcontainerStart
+    commands:
+      start: |
+        echo "Starting MariaDB service..."
+        setup-mysql-data
+        sudo service mariadb start
+      ready: sudo service mariadb status
+      stop: sudo service mariadb stop
 
-# Environment-specific settings
-environment:
-  # Ensure we're using the correct workspace directory
-  WORKSPACE_ROOT: /workspaces/magento2gitpod
-  
-  # Magento development mode
-  MAGENTO_MODE: developer
-  
-  # PHP memory and execution settings
-  PHP_MEMORY_LIMIT: 4G
-  PHP_MAX_EXECUTION_TIME: 1800
+  # Redis cache service
+  redis:
+    name: Redis Cache
+    description: Redis cache server for Magento 2
+    triggeredBy:
+      - postDevcontainerStart
+    commands:
+      start: sudo service redis-server start
+      ready: sudo service redis-server status
+      stop: sudo service redis-server stop
+
+  # PHP-FPM service
+  php-fpm:
+    name: PHP-FPM
+    description: PHP FastCGI Process Manager
+    triggeredBy:
+      - postDevcontainerStart
+    commands:
+      start: sudo service php8.2-fpm start
+      ready: sudo service php8.2-fpm status
+      stop: sudo service php8.2-fpm stop
+
+  # Nginx web server
+  nginx:
+    name: Nginx Web Server
+    description: Nginx web server for Magento 2
+    triggeredBy:
+      - postDevcontainerStart
+    commands:
+      start: sudo service nginx start
+      ready: sudo service nginx status
+      stop: sudo service nginx stop
+
+  # RabbitMQ message queue (optional, manual start)
+  rabbitmq:
+    name: RabbitMQ Message Queue
+    description: RabbitMQ server for Magento 2 queues
+    triggeredBy:
+      - manual
+    commands:
+      start: rabbitmq-setup
+      ready: sudo rabbitmqctl status
+      stop: sudo service rabbitmq-server stop
+
+# Tasks are one-time operations that run and complete
+tasks:
+  # Environment initialization task
+  initialize-environment:
+    name: Initialize Development Environment
+    description: Setup and start all core Magento 2 services
+    triggeredBy:
+      - postDevcontainerStart
+    dependsOn:
+      - database
+      - redis
+      - php-fpm
+      - nginx
+    command: |
+      echo "Magento 2.4.8 Development Environment Ready!"
+      echo "=============================================="
+      versions
+      echo ""
+      echo "Next steps:"
+      echo "1. Install Magento: ./m2-install.sh"
+      echo "2. Check services: status-all"
+      echo "3. Test database: test-db"
+      echo ""
+      echo "Web interface: Port 8002"
+      echo "RabbitMQ Management: Port 15672 (start manually if needed)"
+
+  # Manual task to start all services including RabbitMQ
+  start-all-services:
+    name: Start All Services
+    description: Start all services including RabbitMQ
+    triggeredBy:
+      - manual
+    command: start-all
+
+  # Manual task to restart services
+  restart-services:
+    name: Restart All Services
+    description: Restart all Magento 2 services
+    triggeredBy:
+      - manual
+    command: restart-all
+
+  # Manual database diagnostics
+  database-diagnostics:
+    name: Database Diagnostics
+    description: Test and fix database connectivity issues
+    triggeredBy:
+      - manual
+    command: |
+      echo "Running database diagnostics..."
+      test-db
+      if ! test-db >/dev/null 2>&1; then
+        echo "Attempting to fix database authentication..."
+        fix-mysql
+      fi
+      echo "Database diagnostics complete!"
+
+  # Development tools setup
+  setup-dev-tools:
+    name: Setup Development Tools
+    description: Configure debugging and monitoring tools
+    triggeredBy:
+      - manual
+    command: |
+      echo "Development tools available:"
+      echo "- xdebug-on/off     : Toggle Xdebug debugging"
+      echo "- blackfire-config  : Setup Blackfire profiling" 
+      echo "- newrelic-install  : Install New Relic monitoring"
+      echo "- rabbitmq-config   : Configure RabbitMQ users"
+      echo ""
+      echo "Run any of these commands to configure tools as needed."
+
+  # Magento installation helper
+  install-magento:
+    name: Install Magento 2
+    description: Install fresh Magento 2.4.8 instance
+    triggeredBy:
+      - manual
+    dependsOn:
+      - initialize-environment
+    command: |
+      echo "Choose Magento installation method:"
+      echo "1. Latest release: ./m2-install.sh"
+      echo "2. Development branch: ./m2-install-solo.sh"
+      echo ""
+      echo "Run the appropriate command to install Magento 2."
