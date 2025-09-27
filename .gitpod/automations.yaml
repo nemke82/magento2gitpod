@@ -3,51 +3,51 @@
 
 automations:
   # Primary automation to start all Magento 2 services
-  - name: "start_magento_environment"
-    description: "Initialize and start all Magento 2.4.8 services"
-    trigger: "on_workspace_start"
+  - name: start_magento_environment
+    description: Initialize and start all Magento 2.4.8 services
+    trigger: on_workspace_start
     commands:
-      - name: "start_services"
+      - name: start_services
         run: |
-          echo "🚀 Starting Magento 2.4.8 Development Environment..."
+          echo "Starting Magento 2.4.8 Development Environment..."
           echo "=============================================="
           
           # Show environment info
           versions
           
           echo ""
-          echo "🔧 Starting all services..."
+          echo "Starting all services..."
           
           # Use the built-in start-all command from the Dockerfile
           start-all
           
           echo ""
-          echo "✅ Environment setup complete!"
+          echo "Environment setup complete!"
           echo ""
-          echo "📋 Next steps:"
+          echo "Next steps:"
           echo "  1. Install Magento: ./m2-install.sh"
           echo "  2. Check service status: status-all"
           echo "  3. Test database: test-db"
           echo ""
-          echo "🌐 Web interface will be available on port 8002"
-          echo "🐰 RabbitMQ Management: port 15672 (admin/admin)"
+          echo "Web interface will be available on port 8002"
+          echo "RabbitMQ Management: port 15672 (admin/admin)"
 
   # Optional automation for development mode setup
-  - name: "setup_development_tools"
-    description: "Configure development tools and debugging"
-    trigger: "manual"
+  - name: setup_development_tools
+    description: Configure development tools and debugging
+    trigger: manual
     commands:
-      - name: "configure_dev_tools"
+      - name: configure_dev_tools
         run: |
-          echo "🛠️ Setting up development tools..."
+          echo "Setting up development tools..."
           
           # Ensure services are running
           if ! status-all | grep -q "MariaDB: Running"; then
-            echo "⚠️  Services not running. Starting them first..."
+            echo "Services not running. Starting them first..."
             start-core
           fi
           
-          echo "🔧 Development tools ready!"
+          echo "Development tools ready!"
           echo ""
           echo "Available commands:"
           echo "  xdebug-on/off     - Toggle Xdebug"
@@ -56,73 +56,73 @@ automations:
           echo "  rabbitmq-config   - Configure RabbitMQ"
 
   # Quick service restart automation
-  - name: "restart_services"
-    description: "Restart all Magento 2 services"
-    trigger: "manual"
+  - name: restart_services
+    description: Restart all Magento 2 services
+    trigger: manual
     commands:
-      - name: "restart_all_services"
+      - name: restart_all_services
         run: |
-          echo "🔄 Restarting all services..."
+          echo "Restarting all services..."
           restart-all
-          echo "✅ All services restarted!"
+          echo "All services restarted!"
 
   # Database troubleshooting automation
-  - name: "fix_database_issues"
-    description: "Troubleshoot and fix common database issues"
-    trigger: "manual"
+  - name: fix_database_issues
+    description: Troubleshoot and fix common database issues
+    trigger: manual
     commands:
-      - name: "database_diagnostics"
+      - name: database_diagnostics
         run: |
-          echo "🔍 Running database diagnostics..."
+          echo "Running database diagnostics..."
           
           # Test database connection
           test-db
           
           # If connection fails, try to fix it
           if ! test-db >/dev/null 2>&1; then
-            echo "⚠️  Database connection issues detected. Attempting fix..."
+            echo "Database connection issues detected. Attempting fix..."
             fix-mysql
           fi
           
-          echo "✅ Database diagnostics complete!"
+          echo "Database diagnostics complete!"
 
 # Port configuration for ONA platform
 ports:
   - port: 8002
-    name: "Magento Web Interface"
-    description: "Main Magento 2 storefront and admin"
-    visibility: "public"
-    protocol: "https"
+    name: Magento Web Interface
+    description: Main Magento 2 storefront and admin
+    visibility: public
+    protocol: https
   
   - port: 15672
-    name: "RabbitMQ Management"
-    description: "RabbitMQ management interface"
-    visibility: "public"
-    protocol: "https"
+    name: RabbitMQ Management
+    description: RabbitMQ management interface
+    visibility: public
+    protocol: https
   
   - port: 3306
-    name: "MariaDB Database"
-    description: "Database server (internal access only)"
-    visibility: "private"
+    name: MariaDB Database
+    description: Database server (internal access only)
+    visibility: private
   
   - port: 6379
-    name: "Redis Cache"
-    description: "Redis cache server (internal access only)"
-    visibility: "private"
+    name: Redis Cache
+    description: Redis cache server (internal access only)
+    visibility: private
   
   - port: 9200
-    name: "Elasticsearch"
-    description: "Search engine (internal access only)"
-    visibility: "private"
+    name: Elasticsearch
+    description: Search engine (internal access only)
+    visibility: private
 
 # Environment-specific settings
 environment:
   # Ensure we're using the correct workspace directory
-  WORKSPACE_ROOT: "/workspaces/magento2gitpod"
+  WORKSPACE_ROOT: /workspaces/magento2gitpod
   
   # Magento development mode
-  MAGENTO_MODE: "developer"
+  MAGENTO_MODE: developer
   
   # PHP memory and execution settings
-  PHP_MEMORY_LIMIT: "4G"
-  PHP_MAX_EXECUTION_TIME: "1800"
+  PHP_MEMORY_LIMIT: 4G
+  PHP_MAX_EXECUTION_TIME: 1800
