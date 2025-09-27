@@ -8,7 +8,7 @@ services:
     name: MariaDB Database
     description: MariaDB database server for Magento 2
     triggeredBy:
-      - postDevcontainerStart
+      - manual
     commands:
       start: |
         echo "Starting MariaDB service..."
@@ -22,7 +22,7 @@ services:
     name: Redis Cache
     description: Redis cache server for Magento 2
     triggeredBy:
-      - postDevcontainerStart
+      - manual
     commands:
       start: sudo service redis-server start
       ready: sudo service redis-server status
@@ -33,7 +33,7 @@ services:
     name: PHP-FPM
     description: PHP FastCGI Process Manager
     triggeredBy:
-      - postDevcontainerStart
+      - manual
     commands:
       start: sudo service php8.2-fpm start
       ready: sudo service php8.2-fpm status
@@ -44,7 +44,7 @@ services:
     name: Nginx Web Server
     description: Nginx web server for Magento 2
     triggeredBy:
-      - postDevcontainerStart
+      - manual
     commands:
       start: sudo service nginx start
       ready: sudo service nginx status
@@ -61,26 +61,34 @@ services:
       ready: sudo rabbitmqctl status
       stop: sudo service rabbitmq-server stop
 
+  # ElasticSearch service
+  elasticsearch:
+    name: ElasticSearch
+    description: ElasticSearch for Magento 2 search functionality
+    triggeredBy:
+      - manual
+    commands:
+      start: sudo service elasticsearch start
+      ready: curl -X GET "localhost:9200/"
+      stop: sudo service elasticsearch stop     
+
 # Tasks are one-time operations that run and complete
 tasks:
   # Environment initialization task
   initialize-environment:
     name: Initialize Development Environment
-    description: Setup and start all core Magento 2 services
+    description: Welcome to Magento 2 ONA (former Gitpod) Development Environment
     triggeredBy:
       - postDevcontainerStart
     command: |
-      echo "Magento 2.4.8 Development Environment Ready!"
+      echo "Magento 2 Development Environment Ready!"
       echo "=============================================="
-      versions
       echo ""
       echo "Next steps:"
-      echo "1. Install Magento: ./m2-install.sh"
-      echo "2. Check services: status-all"
-      echo "3. Test database: test-db"
+      echo "1. start-all
+      echo "2. Install Magento: ./m2-install.sh"
       echo ""
       echo "Web interface: Port 8002"
-      echo "RabbitMQ Management: Port 15672 (start manually if needed)"
 
   # Manual task to start all services including RabbitMQ
   start-all-services:
