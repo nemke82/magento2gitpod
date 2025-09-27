@@ -10,7 +10,7 @@ A modern, fully-configured Magento 2.4.8 development environment optimized for [
 
 **For ONA Cloud:**
 1. Fork this repository
-2. Install the [Gitpod browser extension](https://chrome.google.com/webstore/detail/gitpod-online-ide/dodmmooeoklaejobgleioelladacbeki) (still works with ONA)
+2. Install the [Gitpod browser extension](https://chrome.google.com/webstore/detail/gitpod-online-ide/dodmmooeoklaejobgleioelladacbeki) Firefox: https://addons.mozilla.org/en-US/firefox/addon/onahq/ (still works with ONA)
 3. Click the ONA button above or visit `https://ona.com/#https://github.com/your-username/magento2gitpod`
 
 **For ONA Self-Hosted:**
