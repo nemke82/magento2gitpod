@@ -602,9 +602,20 @@ RUN echo '#!/bin/bash' > /usr/local/bin/test-mysql && \
     echo 'fi' >> /usr/local/bin/test-mysql && \
     chmod +x /usr/local/bin/test-mysql
 
-# Nginx configuration for Magento 2
+# PHP-FPM pool configuration
+RUN echo '[www]' > /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'listen = 127.0.0.1:9000' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'listen.owner = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'listen.group = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'pm = dynamic' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'pm.max_children = 20' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'pm.start_servers = 3' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'pm.min_spare_servers = 1' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'pm.max_spare_servers = 10' >> /etc/php/8.2/fpm/pool.d/www.conf
+
+# Nginx configuration to use TCP connection
 RUN echo 'upstream fastcgi_backend {' > /etc/nginx/sites-available/magento && \
-    echo '    server unix:/run/php/php8.2-fpm.sock;' >> /etc/nginx/sites-available/magento && \
+    echo '    server 127.0.0.1:9000;' >> /etc/nginx/sites-available/magento && \
     echo '}' >> /etc/nginx/sites-available/magento && \
     echo '' >> /etc/nginx/sites-available/magento && \
     echo 'server {' >> /etc/nginx/sites-available/magento && \
@@ -616,45 +627,201 @@ RUN echo 'upstream fastcgi_backend {' > /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
     echo '    root $MAGE_ROOT/pub;' >> /etc/nginx/sites-available/magento && \
     echo '    index index.php;' >> /etc/nginx/sites-available/magento && \
+    echo '    autoindex off;' >> /etc/nginx/sites-available/magento && \
+    echo '    charset UTF-8;' >> /etc/nginx/sites-available/magento && \
+    echo '    error_page 404 403 = /errors/404.php;' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
     echo '    access_log /var/log/nginx/access.log;' >> /etc/nginx/sites-available/magento && \
     echo '    error_log /var/log/nginx/error.log;' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # Deny access to sensitive files' >> /etc/nginx/sites-available/magento && \
+    echo '    location /.user.ini {' >> /etc/nginx/sites-available/magento && \
+    echo '        deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # PHP entry point for setup application' >> /etc/nginx/sites-available/magento && \
+    echo '    location ~* ^/setup($|/) {' >> /etc/nginx/sites-available/magento && \
+    echo '        root $MAGE_ROOT;' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/setup/index.php {' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_pass   fastcgi_backend;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_param  PHP_FLAG  "session.auto_start=off \\n suhosin.session.cryptua=off";' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_param  PHP_VALUE "memory_limit=4G \\n max_execution_time=1800";' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_read_timeout 600s;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_connect_timeout 600s;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_index  index.php;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;' >> /etc/nginx/sites-available/magento && \
+    echo '            include        fastcgi_params;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/setup/(?!pub/). {' >> /etc/nginx/sites-available/magento && \
+    echo '            deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/setup/pub/ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # PHP entry point for update application' >> /etc/nginx/sites-available/magento && \
+    echo '    location ~* ^/update($|/) {' >> /etc/nginx/sites-available/magento && \
+    echo '        root $MAGE_ROOT;' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/update/index.php {' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_split_path_info ^(/update/index.php)(/.+)$;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_pass   fastcgi_backend;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_index  index.php;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;' >> /etc/nginx/sites-available/magento && \
+    echo '            fastcgi_param  PATH_INFO        $fastcgi_path_info;' >> /etc/nginx/sites-available/magento && \
+    echo '            include        fastcgi_params;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/update/(?!pub/). {' >> /etc/nginx/sites-available/magento && \
+    echo '            deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/update/pub/ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
     echo '    location / {' >> /etc/nginx/sites-available/magento && \
     echo '        try_files $uri $uri/ /index.php$is_args$args;' >> /etc/nginx/sites-available/magento && \
     echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    location /pub/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/pub/media/(downloadable|customer|import|custom_options|theme_customization/.*\\.xml) {' >> /etc/nginx/sites-available/magento && \
+    echo '            deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        alias $MAGE_ROOT/pub/;' >> /etc/nginx/sites-available/magento && \
+    echo '        add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
     echo '    location /static/ {' >> /etc/nginx/sites-available/magento && \
-    echo '        expires 1y;' >> /etc/nginx/sites-available/magento && \
-    echo '        add_header Cache-Control "public";' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/static/version\\d*/ {' >> /etc/nginx/sites-available/magento && \
+    echo '            rewrite ^/static/version\\d*/(.*)$ /static/$1 last;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~* \\.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header Cache-Control "public, max-age=31536000, immutable";' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '            if (!-f $request_filename) {' >> /etc/nginx/sites-available/magento && \
+    echo '                rewrite ^/static/(version\\d*/)?(.*)$ /static.php?resource=$2 last;' >> /etc/nginx/sites-available/magento && \
+    echo '            }' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~* \\.(zip|gz|gzip|bz2|csv|xml)$ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header Cache-Control "no-store";' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '            expires    off;' >> /etc/nginx/sites-available/magento && \
+    echo '            if (!-f $request_filename) {' >> /etc/nginx/sites-available/magento && \
+    echo '               rewrite ^/static/(version\\d*/)?(.*)$ /static.php?resource=$2 last;' >> /etc/nginx/sites-available/magento && \
+    echo '            }' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        if (!-f $request_filename) {' >> /etc/nginx/sites-available/magento && \
+    echo '            rewrite ^/static/(version\\d*/)?(.*)$ /static.php?resource=$2 last;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
     echo '        add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
     echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
     echo '    location /media/ {' >> /etc/nginx/sites-available/magento && \
     echo '        try_files $uri $uri/ /get.php$is_args$args;' >> /etc/nginx/sites-available/magento && \
-    echo '        expires 1y;' >> /etc/nginx/sites-available/magento && \
-    echo '        add_header Cache-Control "public";' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~ ^/media/theme_customization/.*\\.xml {' >> /etc/nginx/sites-available/magento && \
+    echo '            deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~* \\.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2)$ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header Cache-Control "public";' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '            expires +1y;' >> /etc/nginx/sites-available/magento && \
+    echo '            try_files $uri $uri/ /get.php$is_args$args;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~* \\.(zip|gz|gzip|bz2|csv|xml)$ {' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header Cache-Control "no-store";' >> /etc/nginx/sites-available/magento && \
+    echo '            add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
+    echo '            expires    off;' >> /etc/nginx/sites-available/magento && \
+    echo '            try_files $uri $uri/ /get.php$is_args$args;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
     echo '        add_header X-Frame-Options "SAMEORIGIN";' >> /etc/nginx/sites-available/magento && \
     echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
-    echo '    location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {' >> /etc/nginx/sites-available/magento && \
-    echo '        try_files $uri =404;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_pass fastcgi_backend;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_buffers 16 16k;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_buffer_size 32k;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_param PHP_FLAG "session.auto_start=off \n suhosin.session.cryptua=off";' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_param PHP_VALUE "memory_limit=4G \n max_execution_time=18000";' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_read_timeout 600s;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_connect_timeout 600s;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_index index.php;' >> /etc/nginx/sites-available/magento && \
-    echo '        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;' >> /etc/nginx/sites-available/magento && \
-    echo '        include fastcgi_params;' >> /etc/nginx/sites-available/magento && \
+    echo '    location /media/customer/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        deny all;' >> /etc/nginx/sites-available/magento && \
     echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '    ' >> /etc/nginx/sites-available/magento && \
-    echo '    location ~* \.php$ {' >> /etc/nginx/sites-available/magento && \
+    echo '    location /media/downloadable/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    location /media/import/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    location /media/custom_options/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    location /errors/ {' >> /etc/nginx/sites-available/magento && \
+    echo '        location ~* \\.xml$ {' >> /etc/nginx/sites-available/magento && \
+    echo '            deny all;' >> /etc/nginx/sites-available/magento && \
+    echo '        }' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # PHP entry point for main application' >> /etc/nginx/sites-available/magento && \
+    echo '    location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\\.php$ {' >> /etc/nginx/sites-available/magento && \
+    echo '        try_files $uri =404;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_pass   fastcgi_backend;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_buffers 16 16k;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_buffer_size 32k;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_param  PHP_FLAG  "session.auto_start=off \\n suhosin.session.cryptua=off";' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_param  PHP_VALUE "memory_limit=4G \\n max_execution_time=1800";' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_read_timeout 600s;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_connect_timeout 600s;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_index  index.php;' >> /etc/nginx/sites-available/magento && \
+    echo '        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;' >> /etc/nginx/sites-available/magento && \
+    echo '        include        fastcgi_params;' >> /etc/nginx/sites-available/magento && \
+    echo '    }' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # Gzip compression' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip on;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_disable "msie6";' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_comp_level 6;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_min_length 1100;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_buffers 16 8k;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_proxied any;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_types' >> /etc/nginx/sites-available/magento && \
+    echo '        text/plain' >> /etc/nginx/sites-available/magento && \
+    echo '        text/css' >> /etc/nginx/sites-available/magento && \
+    echo '        text/js' >> /etc/nginx/sites-available/magento && \
+    echo '        text/xml' >> /etc/nginx/sites-available/magento && \
+    echo '        text/javascript' >> /etc/nginx/sites-available/magento && \
+    echo '        application/javascript' >> /etc/nginx/sites-available/magento && \
+    echo '        application/x-javascript' >> /etc/nginx/sites-available/magento && \
+    echo '        application/json' >> /etc/nginx/sites-available/magento && \
+    echo '        application/xml' >> /etc/nginx/sites-available/magento && \
+    echo '        application/xml+rss' >> /etc/nginx/sites-available/magento && \
+    echo '        image/svg+xml;' >> /etc/nginx/sites-available/magento && \
+    echo '    gzip_vary on;' >> /etc/nginx/sites-available/magento && \
+    echo '    ' >> /etc/nginx/sites-available/magento && \
+    echo '    # Banned locations' >> /etc/nginx/sites-available/magento && \
+    echo '    location ~* (\\.php$|\\.phtml$|\\.htaccess$|\\.htpasswd$|\\.git) {' >> /etc/nginx/sites-available/magento && \
     echo '        deny all;' >> /etc/nginx/sites-available/magento && \
     echo '    }' >> /etc/nginx/sites-available/magento && \
     echo '}' >> /etc/nginx/sites-available/magento
+
+# Magento permissions script for vscode user
+RUN echo '#!/bin/bash' > /usr/local/bin/fix-magento-permissions && \
+    echo 'echo "Setting Magento file permissions for vscode user..."' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'cd /workspaces/magento2gitpod' >> /usr/local/bin/fix-magento-permissions && \
+    echo '# Set ownership to vscode:vscode' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'sudo chown -R vscode:vscode /workspaces/magento2gitpod' >> /usr/local/bin/fix-magento-permissions && \
+    echo '# Set directory permissions to 755' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'find /workspaces/magento2gitpod -type d -exec chmod 755 {} \\;' >> /usr/local/bin/fix-magento-permissions && \
+    echo '# Set file permissions to 644' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'find /workspaces/magento2gitpod -type f -exec chmod 644 {} \\;' >> /usr/local/bin/fix-magento-permissions && \
+    echo '# Make specific files executable' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod +x /workspaces/magento2gitpod/bin/magento' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod +x /workspaces/magento2gitpod/m2-install.sh' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod +x /workspaces/magento2gitpod/m2-install-solo.sh' >> /usr/local/bin/fix-magento-permissions && \
+    echo '# Set writable permissions for var, generated, pub directories' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod -R 775 /workspaces/magento2gitpod/var 2>/dev/null || true' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod -R 775 /workspaces/magento2gitpod/generated 2>/dev/null || true' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod -R 775 /workspaces/magento2gitpod/pub/static 2>/dev/null || true' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod -R 775 /workspaces/magento2gitpod/pub/media 2>/dev/null || true' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'chmod -R 775 /workspaces/magento2gitpod/app/etc 2>/dev/null || true' >> /usr/local/bin/fix-magento-permissions && \
+    echo 'echo "Magento permissions fixed!"' >> /usr/local/bin/fix-magento-permissions && \
+    chmod +x /usr/local/bin/fix-magento-permissions
 
 # Enable the site
 RUN ln -sf /etc/nginx/sites-available/magento /etc/nginx/sites-enabled/default
