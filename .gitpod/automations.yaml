@@ -88,7 +88,7 @@ tasks:
     description: Start all services including RabbitMQ
     triggeredBy:
       - manual
-    command: start-all
+    command: magento-services start
 
   # Manual task to restart services
   restart-services:
@@ -141,7 +141,7 @@ tasks:
       # Ensure services are running
       if ! status-all | grep -q "MariaDB: Running"; then
         echo "Checking to make sure all required Magento 2 services are running..."
-        start-all
+        magento-services start
         sleep 5
       fi
       
