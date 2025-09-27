@@ -308,7 +308,7 @@ RUN echo '[blackfire]' > /etc/blackfire/agent && \
     echo 'log-level=1' >> /etc/blackfire/agent
 
 RUN echo '[blackfire]' > /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
-    echo 'extension=blackfire.so' >> /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
+    echo ';extension=blackfire.so' >> /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
     echo '; Blackfire PHP configuration' >> /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
     echo '; blackfire.agent_socket=unix:///tmp/agent.sock' >> /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini && \
     cp /etc/php/${PHP_VERSION}/cli/conf.d/92-blackfire-config.ini /etc/php/${PHP_VERSION}/fpm/conf.d/92-blackfire-config.ini
@@ -604,6 +604,8 @@ RUN echo '#!/bin/bash' > /usr/local/bin/test-mysql && \
 
 # PHP-FPM pool configuration
 RUN echo '[www]' > /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'user = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
+    echo 'group = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
     echo 'listen = 127.0.0.1:9000' >> /etc/php/8.2/fpm/pool.d/www.conf && \
     echo 'listen.owner = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
     echo 'listen.group = vscode' >> /etc/php/8.2/fpm/pool.d/www.conf && \
