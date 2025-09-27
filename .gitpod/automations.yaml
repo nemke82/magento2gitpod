@@ -130,13 +130,24 @@ tasks:
 
   # Magento installation helper
   install-magento:
-    name: Install Magento 2
-    description: Install fresh Magento 2.4.8 instance
+    name: Install Magento 2.4.8-p2
+    description: Install fresh Magento 2.4.8-p2 instance with all configurations
     triggeredBy:
       - manual
     command: |
-      echo "Choose Magento installation method:"
-      echo "1. Latest release: ./m2-install.sh"
-      echo "2. Development branch: ./m2-install-solo.sh"
-      echo ""
-      echo "Run the appropriate command to install Magento 2."
+      echo "Starting Magento 2.4.8-p2 installation..."
+      echo "This will take several minutes..."
+      
+      # Ensure services are running
+      if ! status-all | grep -q "MariaDB: Running"; then
+        echo "Checking to make sure all required Magento 2 services are running..."
+        start-all
+        sleep 5
+      fi
+      
+      # Run the installation script
+      chmod +x /workspaces/magento2gitpod/m2-install.sh
+      /workspaces/magento2gitpod/m2-install.sh
+      
+      echo "Magento installation completed!"
+      echo "Check the output above for access URLs and credentials."
