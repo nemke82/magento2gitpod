@@ -1,4 +1,4 @@
-# ONA Platform Automations for Magento 2 Development Environment
+# ONA Platform Automations for Magento 2.4.8 Development Environment
 # Uses the correct ONA YAML format with services and tasks
 
 # Services are long-running processes that should remain active
@@ -69,11 +69,6 @@ tasks:
     description: Setup and start all core Magento 2 services
     triggeredBy:
       - postDevcontainerStart
-    dependsOn:
-      - database
-      - redis
-      - php-fpm
-      - nginx
     command: |
       echo "Magento 2.4.8 Development Environment Ready!"
       echo "=============================================="
@@ -139,8 +134,6 @@ tasks:
     description: Install fresh Magento 2.4.8 instance
     triggeredBy:
       - manual
-    dependsOn:
-      - initialize-environment
     command: |
       echo "Choose Magento installation method:"
       echo "1. Latest release: ./m2-install.sh"
