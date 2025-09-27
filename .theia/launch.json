@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "php",
+      "name": "Launch",
+      "request": "launch",
+      "port": 9003,
+      "stopOnEntry": true,
+      "program": "${file}",
+      "cwd": "${workspaceRoot}",
+      "externalConsole": false
+    }
+  ]
+}

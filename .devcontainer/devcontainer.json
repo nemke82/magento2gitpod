@@ -1,0 +1,125 @@
+{
+  "name": "Magento 2 Development Environment",
+  "build": {
+    "dockerfile": "../.gitpod.Dockerfile",
+    "context": "..",
+    "args": {
+      "PHP_VERSION": "8.2",
+      "MARIADB_VERSION": "10.6",
+      "ELASTICSEARCH_VERSION": "8.11.4",
+      "NODE_VERSION": "18.19.0",
+      "COMPOSER_VERSION": "2.6.6",
+      "REDIS_VERSION": "7.0"
+    }
+  },
+  "workspaceFolder": "/workspaces/magento2gitpod",
+  "remoteUser": "vscode",
+  
+  "forwardPorts": [8002, 9001, 15672, 8000, 3306, 6379, 9200],
+  "portsAttributes": {
+    "8002": {
+      "label": "Nginx Web Server",
+      "visibility": "public",
+      "protocol": "https"
+    },
+    "9001": {
+      "label": "PHP-FPM Status",
+      "visibility": "private"
+    },
+    "15672": {
+      "label": "RabbitMQ Management",
+      "visibility": "public",
+      "protocol": "https"
+    },
+    "8000": {
+      "label": "Services Web Interface",
+      "visibility": "public",
+      "protocol": "https"
+    },
+    "3306": {
+      "label": "MariaDB Database",
+      "visibility": "private"
+    },
+    "6379": {
+      "label": "Redis Cache",
+      "visibility": "private"
+    },
+    "9200": {
+      "label": "Elasticsearch",
+      "visibility": "private"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/bin/php",
+        "php.debug.executablePath": "/usr/bin/php",
+        "intelephense.files.maxSize": 5000000,
+        "intelephense.completion.triggerParameterHints": true,
+        "intelephense.completion.insertUseDeclaration": true,
+        "files.associations": {
+          "*.phtml": "php",
+          "*.module": "php",
+          "*.install": "php",
+          "*.theme": "php"
+        },
+        "emmet.includeLanguages": {
+          "php": "html"
+        }
+      }
+    }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
+  },
+
+  "containerEnv": {
+    "MYSQL_ROOT_PASSWORD": "nem4540",
+    "MYSQL_DATABASE": "magento2",
+    "PHP_VERSION": "8.2",
+    "MARIADB_VERSION": "10.6",
+    "ELASTICSEARCH_VERSION": "8.11.4",
+    "COMPOSER_ALLOW_SUPERUSER": "1",
+    "COMPOSER_MEMORY_LIMIT": "-1",
+    "MAGENTO_MODE": "developer"
+  },
+
+  "mounts": [
+    "source=magento-mysql-data,target=/workspaces/magento2gitpod/mysql,type=volume",
+    "source=magento-composer-cache,target=/home/vscode/.composer,type=volume",
+    "source=magento-npm-cache,target=/home/vscode/.npm,type=volume"
+  ],
+
+  "postCreateCommand": "echo 'Container created successfully! Run: versions'",
+  "onCreateCommand": "sudo chown -R vscode:vscode /workspaces/magento2gitpod",
+
+  "hostRequirements": {
+    "cpus": 6,
+    "memory": "12gb",
+    "storage": "50gb"
+  },
+
+  "capAdd": ["SYS_PTRACE"],
+  "securityOpt": ["seccomp:unconfined"],
+
+  "waitFor": "postCreateCommand",
+  "shutdownAction": "stopCompose"
+}

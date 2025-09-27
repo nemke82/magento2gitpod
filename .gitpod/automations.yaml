@@ -1,0 +1,159 @@
+name: "Magento 2 Environment Setup"
+description: "Automated setup for Magento 2 development environment with all services"
+
+# Define reusable commands
+commands:
+  setup_lighthouse_config: &setup_lighthouse_config
+    - name: "Setup Lighthouse Configuration"
+      run: |
+        cat /etc/lighthouse.conf >> /home/vscode/.bashrc
+        source /home/vscode/.bashrc
+
+  setup_web_interface: &setup_web_interface
+    - name: "Setup Web Interface"
+      run: |
+        cd /workspaces/magento2gitpod/web-interface
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo apt-get -y update
+        sudo apt install -y python3.8-venv
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install Flask Flask-SocketIO gunicorn gevent
+        
+  start_web_interface: &start_web_interface
+    - name: "Start Web Interface"
+      run: |
+        cd /workspaces/magento2gitpod/web-interface
+        source venv/bin/activate
+        gunicorn -w 1 -k gevent -b 0.0.0.0:8000 app:app --daemon
+        sleep 5
+
+  setup_services: &setup_services
+    - name: "Configure and Start Services"
+      run: |
+        # Start Nginx
+        sudo service nginx start
+        
+        # Remove Tideways config
+        sudo rm -f /etc/php/7.4/cli/conf.d/20-tideways.ini
+        sudo rm -f /etc/php/7.4/fpm/conf.d/20-tideways.ini
+        
+        # Setup Supervisor configurations
+        sudo cp /workspaces/magento2gitpod/sp-redis.conf /etc/supervisor/conf.d/redis.conf
+        sudo cp /workspaces/magento2gitpod/sp-elasticsearch.conf /etc/supervisor/conf.d/elasticsearch.conf
+        sudo sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
+        sudo /etc/init.d/supervisor start
+        sleep 30
+
+  setup_mysql: &setup_mysql
+    - name: "Configure MySQL for Persistent Storage"
+      run: |
+        # Stop MySQL temporarily
+        sudo supervisorctl stop mysql || true
+        
+        # Move MySQL data to workspace for persistence
+        if [ ! -d "/workspaces/magento2gitpod/mysql" ]; then
+          sudo chown -R vscode:vscode /workspaces/magento2gitpod/mysql
+        fi
+        
+        # Update MySQL configuration paths
+        sudo sed -i 's#/var/lib/mysql#/workspaces/magento2gitpod/mysql#g' /etc/mysql/conf.d/mysqld.cnf
+        sudo sed -i 's#/var/lib/mysql#/workspaces/magento2gitpod/mysql#g' /etc/supervisor/conf.d/mysql.conf
+        
+        # Reload supervisor configuration
+        sudo supervisorctl update
+        sudo supervisorctl reload
+
+  setup_rabbitmq: &setup_rabbitmq
+    - name: "Setup and Configure RabbitMQ"
+      run: |
+        sudo /etc/init.d/rabbitmq-server start
+        sleep 15
+        
+        # Enable management plugin
+        sudo rabbitmq-plugins enable rabbitmq_management
+        
+        # Setup default user
+        sudo rabbitmqctl add_user guest guest || true
+        sudo rabbitmqctl set_user_tags guest administrator
+        sudo rabbitmqctl set_permissions -p / guest ".*" ".*" ".*"
+
+# Main automation workflows
+automations:
+  - name: "installer-and-services-menu"
+    description: "Setup web interface and services menu"
+    trigger:
+      - onCreate
+    steps:
+      - <<: *setup_lighthouse_config
+      - <<: *setup_web_interface
+      - <<: *start_web_interface
+      - name: "Open Web Interface"
+        run: |
+          sleep 5
+          echo "Web interface should be available on port 8000"
+
+  - name: "services-setup"
+    description: "Configure and start all backend services"
+    trigger:
+      - onCreate
+    depends_on: ["installer-and-services-menu"]
+    steps:
+      - <<: *setup_services
+      - <<: *setup_mysql
+      - <<: *setup_rabbitmq
+      - name: "Verify Services"
+        run: |
+          echo "Services setup completed!"
+          sudo supervisorctl status
+          echo "RabbitMQ Management: Available on port 15672"
+          echo "Nginx: Available on port 8002"
+
+  - name: "development-ready"
+    description: "Final setup and welcome message"
+    trigger:
+      - onCreate
+    depends_on: ["services-setup"]
+    steps:
+      - name: "Setup Development Environment"
+        run: |
+          source /etc/lighthouse.conf
+          echo "================================================"
+          echo "🚀 Magento 2 Development Environment Ready!"
+          echo "================================================"
+          echo "📱 Web Interface: Port 8000"
+          echo "🌐 Nginx Web Server: Port 8002"
+          echo "🐰 RabbitMQ Management: Port 15672"
+          echo "🗄️ MySQL: localhost:3306 (user: root, pass: nem4540)"
+          echo "================================================"
+          echo "Good luck. Happy coding and testing!"
+          echo "================================================"
+
+  # Optional: Quick restart automation
+  - name: "restart-services"
+    description: "Restart all services"
+    trigger:
+      - manual
+    steps:
+      - name: "Restart All Services"
+        run: |
+          sudo supervisorctl restart all
+          sudo service nginx restart
+          sudo /etc/init.d/rabbitmq-server restart
+          echo "All services restarted successfully!"
+
+  # Optional: Magento installation automation
+  - name: "install-magento"
+    description: "Install Magento 2 (run manually when needed)"
+    trigger:
+      - manual
+    steps:
+      - name: "Run Magento Installation"
+        run: |
+          cd /workspaces/magento2gitpod
+          if [ -f "m2-install.sh" ]; then
+            chmod +x m2-install.sh
+            ./m2-install.sh
+          else
+            echo "Magento installation script not found!"
+          fi
