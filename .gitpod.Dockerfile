@@ -734,8 +734,8 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    sudo service nginx start && echo "✅ Nginx started" || echo "❌ Nginx failed"' >> /usr/local/bin/magento-services && \
     echo '    echo "Starting Elasticsearch..."' >> /usr/local/bin/magento-services && \
     echo '    if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
-    echo '      export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
-    echo '      sleep 3 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '      export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E xpack.security.enabled=false -E xpack.security.http.ssl.enabled=false -E xpack.security.transport.ssl.enabled=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '      sleep 20 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
     echo '    else' >> /usr/local/bin/magento-services && \
     echo '      echo "⚠️  Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
     echo '    fi' >> /usr/local/bin/magento-services && \
@@ -805,8 +805,8 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    case "$2" in' >> /usr/local/bin/magento-services && \
     echo '      start)' >> /usr/local/bin/magento-services && \
     echo '        if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
-    echo '          export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
-    echo '          sleep 3 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '          export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E xpack.security.enabled=false -E xpack.security.http.ssl.enabled=false -E xpack.security.transport.ssl.enabled=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '          sleep 20 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
     echo '        else' >> /usr/local/bin/magento-services && \
     echo '          echo "❌ Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
     echo '        fi' >> /usr/local/bin/magento-services && \
