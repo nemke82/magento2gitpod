@@ -85,7 +85,7 @@ tasks:
       echo "=============================================="
       echo ""
       echo "Next steps:"
-      echo "1. start-all
+      echo "1. start-all"
       echo "2. Install Magento: ./m2-install.sh"
       echo ""
       echo "Web interface: Port 8002"
