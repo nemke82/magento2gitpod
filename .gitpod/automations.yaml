@@ -68,9 +68,9 @@ services:
     triggeredBy:
       - manual
     commands:
-      start: sudo service elasticsearch start
+      start: magento-services opensearch start
       ready: curl -X GET "localhost:9200/"
-      stop: sudo service elasticsearch stop     
+      stop: magento-services opensearch stop   
 
 # Tasks are one-time operations that run and complete
 tasks:

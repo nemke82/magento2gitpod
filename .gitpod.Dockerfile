@@ -8,7 +8,7 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 # ==============================================
 ARG PHP_VERSION=8.2
 ARG MARIADB_VERSION=10.6
-ARG ELASTICSEARCH_VERSION=8.11.4
+ARG OPENSEARCH_VERSION=2.19.0
 ARG NODE_VERSION=18.19.0
 ARG COMPOSER_VERSION=2.6.6
 ARG REDIS_VERSION=7.0
@@ -25,7 +25,7 @@ ARG ELASTICSEARCH_LEGACY_79=7.9.3
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PHP_VERSION=${PHP_VERSION}
 ENV MARIADB_VERSION=${MARIADB_VERSION}
-ENV ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
+ENV OPENSEARCH_VERSION=${OPENSEARCH_VERSION}
 ENV NODE_VERSION=${NODE_VERSION}
 ENV MYSQL_ROOT_PASSWORD=nem4540
 ENV MYSQL_DATABASE=magento2
@@ -40,9 +40,10 @@ ENV BLACKFIRE_SOCKET=unix:///tmp/agent.sock
 ENV BLACKFIRE_SOURCEDIR=/etc/blackfire
 ENV BLACKFIRE_USER=vscode
 
-# NVM and Elasticsearch paths
+# NVM and Opensearch/Elasticsearch paths
 ENV NVM_DIR=/usr/local/nvm
-ENV ES_HOME="/home/vscode/elasticsearch-${ELASTICSEARCH_VERSION}"
+ENV ES_HOME="/home/vscode/opensearch-${OPENSEARCH_VERSION}"
+ENV OPENSEARCH_HOME=/home/vscode/opensearch-${OPENSEARCH_VERSION}
 ENV ES_HOME56="/home/vscode/elasticsearch-${ELASTICSEARCH_LEGACY_56}"
 ENV ES_HOME68="/home/vscode/elasticsearch-${ELASTICSEARCH_LEGACY_68}" 
 ENV ES_HOME79="/home/vscode/elasticsearch-${ELASTICSEARCH_LEGACY_79}"
@@ -219,14 +220,14 @@ ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # ==============================================
-# ELASTICSEARCH INSTALLATION
+# OPENSEARCH/ELASTICSEARCH INSTALLATION
 # ==============================================
 
-# Install modern Elasticsearch for Magento 2.4.8
+# Install Opensearch service
 RUN cd /home/vscode && \
-    wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}-linux-x86_64.tar.gz && \
-    tar -xzf elasticsearch-${ELASTICSEARCH_VERSION}-linux-x86_64.tar.gz && \
-    rm elasticsearch-${ELASTICSEARCH_VERSION}-linux-x86_64.tar.gz
+    wget https://artifacts.opensearch.org/releases/bundle/opensearch/${OPENSEARCH_VERSION}/opensearch-${OPENSEARCH_VERSION}-linux-x64.tar.gz && \
+    tar -xzf opensearch-${OPENSEARCH_VERSION}-linux-x64.tar.gz && \
+    rm opensearch-${OPENSEARCH_VERSION}-linux-x64.tar.gz
 
 # Install legacy Elasticsearch versions (optional)
 RUN cd /home/vscode && \
@@ -849,7 +850,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-versions && \
     echo 'echo "Composer Version: $(composer --version)"' >> /usr/local/bin/magento-versions && \
     echo 'echo "Node.js Version: $(node --version 2>/dev/null || echo "Not available")"' >> /usr/local/bin/magento-versions && \
     echo 'echo "NPM Version: $(npm --version 2>/dev/null || echo "Not available")"' >> /usr/local/bin/magento-versions && \
-    echo 'echo "Elasticsearch: 8.11.4"' >> /usr/local/bin/magento-versions && \
+    echo 'echo "Opensearch: 2.19"' >> /usr/local/bin/magento-versions && \
     echo 'echo "Redis: $(redis-server --version 2>/dev/null | head -n1 || echo "Not available")"' >> /usr/local/bin/magento-versions && \
     echo 'echo "RabbitMQ: $(rabbitmqctl version 2>/dev/null || echo "Not started")"' >> /usr/local/bin/magento-versions && \
     echo 'echo "Nginx: $(nginx -v 2>&1 | head -n1)"' >> /usr/local/bin/magento-versions && \
@@ -901,12 +902,12 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    sudo service redis-server start && echo "✅ Redis started" || echo "❌ Redis failed"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm start && echo "✅ PHP-FPM started" || echo "❌ PHP-FPM failed"' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx start && echo "✅ Nginx started" || echo "❌ Nginx failed"' >> /usr/local/bin/magento-services && \
-    echo '    echo "Starting Elasticsearch..."' >> /usr/local/bin/magento-services && \
+    echo '    echo "Starting Opensearch..."' >> /usr/local/bin/magento-services && \
     echo '    if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
-    echo '      export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E xpack.security.enabled=false -E xpack.security.http.ssl.enabled=false -E xpack.security.transport.ssl.enabled=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
-    echo '      sleep 40 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '      export OPENSEARCH_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$OPENSEARCH_HOME" && nohup ./bin/opensearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E plugins.security.disabled=true > /tmp/opensearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '      sleep 40 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ OpenSearch ${OPENSEARCH_VERSION} started successfully"; else echo "❌ OpenSearch startup failed, check /tmp/opensearch.log"; fi' >> /usr/local/bin/magento-services && \
     echo '    else' >> /usr/local/bin/magento-services && \
-    echo '      echo "⚠️  Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '      echo "⚠️  OpenSearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
     echo '    fi' >> /usr/local/bin/magento-services && \
     echo '    echo "Starting RabbitMQ (this may take a moment)..."' >> /usr/local/bin/magento-services && \
     echo '    /usr/local/bin/rabbitmq-setup && echo "✅ RabbitMQ started and configured" || echo "⚠️  RabbitMQ setup failed"' >> /usr/local/bin/magento-services && \
@@ -914,17 +915,17 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    echo "🎉 All services started!"' >> /usr/local/bin/magento-services && \
     echo '    echo "🔍 Run: test-db to verify database connection"' >> /usr/local/bin/magento-services && \
     echo '    echo "🌐 Web server should be available on port 8002"' >> /usr/local/bin/magento-services && \
-    echo '    echo "🔎 Elasticsearch should be available on port 9200"' >> /usr/local/bin/magento-services && \
+    echo '    echo "🔎 Opensearch should be available on port 9200"' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  stop)' >> /usr/local/bin/magento-services && \
     echo '    echo "Stopping Magento 2 services..."' >> /usr/local/bin/magento-services && \
     echo '    sudo service rabbitmq-server stop 2>/dev/null && echo "🛑 RabbitMQ stopped" || echo "⚠️  RabbitMQ was not running"' >> /usr/local/bin/magento-services && \
-    echo '    # Stop Elasticsearch' >> /usr/local/bin/magento-services && \
+    echo '    # Stop Opensearch' >> /usr/local/bin/magento-services && \
     echo '    if [ -f "$ES_HOME/pid" ]; then' >> /usr/local/bin/magento-services && \
-    echo '      kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch PID not found"' >> /usr/local/bin/magento-services && \
+    echo '      kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Opensearch stopped" || echo "⚠️  Opensearch PID not found"' >> /usr/local/bin/magento-services && \
     echo '      rm -f "$ES_HOME/pid"' >> /usr/local/bin/magento-services && \
     echo '    else' >> /usr/local/bin/magento-services && \
-    echo '      pkill -f elasticsearch && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch was not running"' >> /usr/local/bin/magento-services && \
+    echo '      pkill -f opensearch && echo "🛑 Opensearch stopped" || echo "⚠️  Opensearch was not running"' >> /usr/local/bin/magento-services && \
     echo '    fi' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx stop && echo "🛑 Nginx stopped"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm stop && echo "🛑 PHP-FPM stopped"' >> /usr/local/bin/magento-services && \
@@ -944,71 +945,71 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    if sudo service redis-server status >/dev/null 2>&1; then echo "✅ Redis: Running"; else echo "❌ Redis: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service php8.2-fpm status >/dev/null 2>&1; then echo "✅ PHP-FPM: Running"; else echo "❌ PHP-FPM: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service nginx status >/dev/null 2>&1; then echo "✅ Nginx: Running"; else echo "❌ Nginx: Stopped"; fi' >> /usr/local/bin/magento-services && \
-    echo '    # Check Elasticsearch status' >> /usr/local/bin/magento-services && \
-    echo '    if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch: Running"; else echo "❌ Elasticsearch: Stopped"; fi' >> /usr/local/bin/magento-services && \
+    echo '    # Check Opensearch status' >> /usr/local/bin/magento-services && \
+    echo '    if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Opensearch: Running"; else echo "❌ Opensearch: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    if sudo service rabbitmq-server status >/dev/null 2>&1; then echo "✅ RabbitMQ: Running"; else echo "❌ RabbitMQ: Stopped"; fi' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "📂 Data directories:"' >> /usr/local/bin/magento-services && \
     echo '    echo "  MySQL: /workspaces/magento2gitpod/mysql"' >> /usr/local/bin/magento-services && \
     echo '    echo "  Logs: /workspaces/magento2gitpod/var/log"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  Elasticsearch: $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  Opensearch: $ES_HOME"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "🔍 Service URLs:"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  Elasticsearch: http://localhost:9200"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  Opensearch: http://localhost:9200"' >> /usr/local/bin/magento-services && \
     echo '    echo "  RabbitMQ Management: http://localhost:15672"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "🔍 Run: test-db to check database connectivity"' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  start-quick)' >> /usr/local/bin/magento-services && \
-    echo '    echo "Starting core services (skip RabbitMQ and Elasticsearch)..."' >> /usr/local/bin/magento-services && \
+    echo '    echo "Starting core services (skip RabbitMQ and Opensearch)..."' >> /usr/local/bin/magento-services && \
     echo '    /usr/local/bin/setup-mysql-data' >> /usr/local/bin/magento-services && \
     echo '    sudo service mariadb start && echo "✅ MariaDB started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service redis-server start && echo "✅ Redis started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service php8.2-fpm start && echo "✅ PHP-FPM started"' >> /usr/local/bin/magento-services && \
     echo '    sudo service nginx start && echo "✅ Nginx started"' >> /usr/local/bin/magento-services && \
-    echo '    echo "🚀 Core services ready! Start Elasticsearch and RabbitMQ manually if needed."' >> /usr/local/bin/magento-services && \
-    echo '    echo "💡 To start Elasticsearch: services elasticsearch start"' >> /usr/local/bin/magento-services && \
+    echo '    echo "🚀 Core services ready! Start Opensearch and RabbitMQ manually if needed."' >> /usr/local/bin/magento-services && \
+    echo '    echo "💡 To start Opensearch: /usr/local/bin/magento-services opensearch start"' >> /usr/local/bin/magento-services && \
     echo '    echo "💡 To start RabbitMQ: rabbitmq-setup"' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
-    echo '  elasticsearch)' >> /usr/local/bin/magento-services && \
+    echo '  opensearch)' >> /usr/local/bin/magento-services && \
     echo '    case "$2" in' >> /usr/local/bin/magento-services && \
     echo '      start)' >> /usr/local/bin/magento-services && \
     echo '        if [ -d "$ES_HOME" ]; then' >> /usr/local/bin/magento-services && \
-    echo '          export ES_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$ES_HOME" && nohup ./bin/elasticsearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E xpack.security.enabled=false -E xpack.security.http.ssl.enabled=false -E xpack.security.transport.ssl.enabled=false > /tmp/elasticsearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
-    echo '          sleep 20 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ Elasticsearch ${ELASTICSEARCH_VERSION} started successfully"; else echo "❌ Elasticsearch startup failed, check /tmp/elasticsearch.log"; fi' >> /usr/local/bin/magento-services && \
+    echo '          export OPENSEARCH_JAVA_OPTS="-Xms512m -Xmx512m" && cd "$OPENSEARCH_HOME" && nohup ./bin/opensearch -E discovery.type=single-node -E network.host=0.0.0.0 -E http.port=9200 -E cluster.name=magento -E node.name=magento-node -E bootstrap.memory_lock=false -E plugins.security.disabled=true > /tmp/opensearch.log 2>&1 & echo $! > ./pid' >> /usr/local/bin/magento-services && \
+    echo '          sleep 40 && if curl -s http://localhost:9200 >/dev/null 2>&1; then echo "✅ OpenSearch ${OPENSEARCH_VERSION} started successfully"; else echo "❌ OpenSearch startup failed, check /tmp/opensearch.log"; fi' >> /usr/local/bin/magento-services && \
     echo '        else' >> /usr/local/bin/magento-services && \
-    echo '          echo "❌ Elasticsearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
+    echo '          echo "❌ Opensearch not found at $ES_HOME"' >> /usr/local/bin/magento-services && \
     echo '        fi' >> /usr/local/bin/magento-services && \
     echo '        ;;' >> /usr/local/bin/magento-services && \
     echo '      stop)' >> /usr/local/bin/magento-services && \
     echo '        if [ -f "$ES_HOME/pid" ]; then' >> /usr/local/bin/magento-services && \
-    echo '          kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Elasticsearch stopped"' >> /usr/local/bin/magento-services && \
+    echo '          kill $(cat "$ES_HOME/pid") 2>/dev/null && echo "🛑 Opensearch stopped"' >> /usr/local/bin/magento-services && \
     echo '          rm -f "$ES_HOME/pid"' >> /usr/local/bin/magento-services && \
     echo '        else' >> /usr/local/bin/magento-services && \
-    echo '          pkill -f elasticsearch && echo "🛑 Elasticsearch stopped" || echo "⚠️  Elasticsearch was not running"' >> /usr/local/bin/magento-services && \
+    echo '          pkill -f opensearch && echo "🛑 Opensearch stopped" || echo "⚠️  Opensearch was not running"' >> /usr/local/bin/magento-services && \
     echo '        fi' >> /usr/local/bin/magento-services && \
     echo '        ;;' >> /usr/local/bin/magento-services && \
     echo '      status)' >> /usr/local/bin/magento-services && \
     echo '        if curl -s http://localhost:9200 >/dev/null 2>&1; then' >> /usr/local/bin/magento-services && \
-    echo '          echo "✅ Elasticsearch is running"' >> /usr/local/bin/magento-services && \
+    echo '          echo "✅ Opensearch is running"' >> /usr/local/bin/magento-services && \
     echo '          curl -s http://localhost:9200 | jq . 2>/dev/null || curl -s http://localhost:9200' >> /usr/local/bin/magento-services && \
     echo '        else' >> /usr/local/bin/magento-services && \
-    echo '          echo "❌ Elasticsearch is not running"' >> /usr/local/bin/magento-services && \
+    echo '          echo "❌ Opensearch is not running"' >> /usr/local/bin/magento-services && \
     echo '        fi' >> /usr/local/bin/magento-services && \
     echo '        ;;' >> /usr/local/bin/magento-services && \
     echo '      *)' >> /usr/local/bin/magento-services && \
-    echo '        echo "Usage: $0 elasticsearch {start|stop|status}"' >> /usr/local/bin/magento-services && \
+    echo '        echo "Usage: $0 opensearch {start|stop|status}"' >> /usr/local/bin/magento-services && \
     echo '        ;;' >> /usr/local/bin/magento-services && \
     echo '    esac' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo '  *)' >> /usr/local/bin/magento-services && \
-    echo '    echo "Usage: $0 {start|stop|restart|status|start-quick|elasticsearch}"' >> /usr/local/bin/magento-services && \
+    echo '    echo "Usage: $0 {start|stop|restart|status|start-quick|opensearch}"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "Commands:"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  start         # Start all services (including RabbitMQ and Elasticsearch)"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  start-quick   # Start core services (skip RabbitMQ and Elasticsearch)"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  start         # Start all services (including RabbitMQ and Opensearch)"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  start-quick   # Start core services (skip RabbitMQ and Opensearch)"' >> /usr/local/bin/magento-services && \
     echo '    echo "  status        # Check service status"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  elasticsearch # Manage Elasticsearch (start|stop|status)"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  opensearch    # Manage Opensearch (start|stop|status)"' >> /usr/local/bin/magento-services && \
     echo '    echo "  test-db       # Test database connection"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "Aliases:"' >> /usr/local/bin/magento-services && \
@@ -1016,8 +1017,8 @@ RUN echo '#!/bin/bash' > /usr/local/bin/magento-services && \
     echo '    echo "  start-core    # Same as start-quick"' >> /usr/local/bin/magento-services && \
     echo '    echo ""' >> /usr/local/bin/magento-services && \
     echo '    echo "Examples:"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  $0 elasticsearch start   # Start only Elasticsearch"' >> /usr/local/bin/magento-services && \
-    echo '    echo "  $0 elasticsearch status  # Check Elasticsearch status"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  $0 opensearch start   # Start only Opensearch"' >> /usr/local/bin/magento-services && \
+    echo '    echo "  $0 opensearch status  # Check Opensearch status"' >> /usr/local/bin/magento-services && \
     echo '    exit 1' >> /usr/local/bin/magento-services && \
     echo '    ;;' >> /usr/local/bin/magento-services && \
     echo 'esac' >> /usr/local/bin/magento-services && \
@@ -1066,4 +1067,4 @@ EXPOSE 8002 9001 15672 8000 3306 6379 9200 9300
 
 # Add build info
 RUN echo "🚀 Modern Magento 2 environment ready!" && \
-    echo "📦 PHP ${PHP_VERSION}, MariaDB ${MARIADB_VERSION}, Elasticsearch ${ELASTICSEARCH_VERSION}"
+    echo "📦 PHP ${PHP_VERSION}, MariaDB ${MARIADB_VERSION}, Opensearch ${OPENSEARCH_VERSION}"
