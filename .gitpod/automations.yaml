@@ -180,6 +180,7 @@ tasks:
       echo "🔧 Allowing external DB connections (bind-address)..."
       if grep -q "bind-address = 127.0.0.1" /etc/mysql/conf.d/magento.cnf; then
         sudo sed -i 's/bind-address = 127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/conf.d/magento.cnf
+        sudo sed -i 's/bind-address = 127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
         sudo service mariadb restart
       fi
 
