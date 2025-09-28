@@ -1,6 +1,6 @@
 # Magento 2 Development Environment for ONA Platform (formerly Magento 2 Gitpod)
 
-A modern, fully-configured Magento 2.4.8 development environment optimized for [ONA Platform](https://ona.com) (formerly Gitpod) with configurable versions, MariaDB, and comprehensive tooling.
+A modern, fully-configured Magento 2 development environment optimized for [ONA Platform](https://ona.com) (formerly Gitpod) with configurable versions, MariaDB, and comprehensive tooling.
 
 [![Open in ONA](https://ona.com/button/open-in-ona.svg)](https://ona.com/#https://github.com/nemke82/magento2gitpod)
 
@@ -52,14 +52,19 @@ restart-all     # Restart all services
 
 # Full services (includes RabbitMQ)
 start-all       # Start everything including RabbitMQ
+
+# Start restart particular service (example)
+/usr/local/bin/magento-services start opensearch
+/usr/local/bin/magento-services status opensearch
 ```
+** types: nginx, mariadb, redis... type status-all to check.
 
 ### 3. Install Magento 2
 
 After services are running, install Magento 2:
 
 ```bash
-# For latest Magento 2.4.8 release
+# For latest Magento 2.4.8-p2 release
 ./m2-install.sh
 
 # For development branch (bleeding edge)
