@@ -1,4 +1,4 @@
-# Magento 2 Development Environment for ONA Platform (formed Magento 2 Gitpod)
+# Magento 2 Development Environment for ONA Platform (formerly Magento 2 Gitpod)
 
 A modern, fully-configured Magento 2.4.8 development environment optimized for [ONA Platform](https://ona.com) (formerly Gitpod) with configurable versions, MariaDB, and comprehensive tooling.
 
