@@ -74,7 +74,7 @@ After services are running, install Magento 2:
 - **Web Server**: Nginx with optimized Magento 2 configuration
 - **Process Manager**: PHP-FPM 8.2
 - **Cache**: Redis 7.0
-- **Search**: Elasticsearch 8.11.4 + legacy versions (5.6, 6.8, 7.9)
+- **Search**: Opensearch 2.19 + legacy versions (5.6, 6.8, 7.9)
 - **Queue**: RabbitMQ with management interface
 - **Package Manager**: Composer 2.6.6
 - **Runtime**: Node.js 18.19.0 via NVM
@@ -101,7 +101,7 @@ After services are running, install Magento 2:
 - **RabbitMQ Management**: 15672 (HTTPS)
 - **MariaDB**: 3306 (Internal)
 - **Redis**: 6379 (Internal)
-- **Elasticsearch**: 9200 (Internal)
+- **Opensearch**: 9200 (Internal)
 
 ## 🔧 Customizing Versions
 
@@ -113,7 +113,7 @@ Update `devcontainer.json` to change software versions:
     "args": {
       "PHP_VERSION": "8.1",           // Change PHP version
       "MARIADB_VERSION": "10.8",      // Change MariaDB version
-      "ELASTICSEARCH_VERSION": "7.17.0", // Change Elasticsearch
+      "OPENSEARCH_VERSION": "2.19.0", // Change Opensearch
       "NODE_VERSION": "20.0.0",       // Change Node.js version
       "COMPOSER_VERSION": "2.7.0"     // Change Composer version
     }
