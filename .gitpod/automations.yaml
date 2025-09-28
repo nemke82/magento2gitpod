@@ -159,3 +159,101 @@ tasks:
       
       echo "Magento installation completed!"
       echo "Check the output above for access URLs and credentials."
+
+  cloudbeaver:
+    name: CloudBeaver (DB Manager)
+    description: Launch CloudBeaver web UI on port 8003
+    triggeredBy:
+      - manual
+    command: |
+      set -e
+      echo "🔧 Ensuring MariaDB is running..."
+      if ! sudo service mariadb status >/devnull 2>&1; then
+        magento-services start-quick || {
+          sudo service mariadb start
+          sudo service redis-server start
+          sudo service php8.2-fpm start
+          sudo service nginx start
+        }
+      fi
+
+      echo "🔧 Allowing external DB connections (bind-address)..."
+      if grep -q "bind-address = 127.0.0.1" /etc/mysql/conf.d/magento.cnf; then
+        sudo sed -i 's/bind-address = 127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/conf.d/magento.cnf
+        sudo service mariadb restart
+      fi
+
+      echo "🔑 Granting root access from any host..."
+      mariadb -uroot -pnem4540 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'nem4540' WITH GRANT OPTION; FLUSH PRIVILEGES;" || true
+
+      echo "🐳 Starting CloudBeaver container on port 8003..."
+      if ! command -v docker >/dev/null 2>&1; then
+        echo "Docker is required (docker-in-docker feature must be enabled)."; exit 1
+      fi
+      CB_LOCAL_HOST_ADDR=$(ip route get 1 | awk '{print $7; exit}')
+      docker rm -f cloudbeaver >/dev/null 2>&1 || true
+      docker run --name cloudbeaver -d --restart unless-stopped \
+        -p 8003:8978 \
+        --add-host=host.docker.internal:${CB_LOCAL_HOST_ADDR} \
+        -v /var/cloudbeaver/workspace:/opt/cloudbeaver/workspace \
+        dbeaver/cloudbeaver:latest
+
+      echo "🌐 Exposing port 8003 publicly in ONA..."
+      gitpod environment port open 8003 --name cloudbeaver || true
+
+      echo "✅ CloudBeaver running: open port 8003"
+      echo "DB connection in CloudBeaver → host: host.docker.internal, port: 3306, user: root, pass: nem4540"
+  
+  mailhog:
+    name: MailHog (Mail Catcher)
+    description: Launch MailHog (SMTP:1025, Web UI:8025) and configure PHP sendmail
+    triggeredBy:
+      - manual
+    command: |
+      set -e
+
+      echo "🐳 Starting MailHog container..."
+      if ! command -v docker >/dev/null 2>&1; then
+        echo "Docker is required (docker-in-docker feature must be enabled)."; exit 1
+      fi
+      docker rm -f mailhog >/dev/null 2>&1 || true
+      docker run -d --name mailhog --restart unless-stopped \
+        -p 8025:8025 -p 1025:1025 \
+        mailhog/mailhog:latest
+
+      echo "⬇️ Installing mhsendmail..."
+      TMP_BIN=/tmp/mhsendmail_linux_amd64
+      wget -q https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 -O "$TMP_BIN"
+      sudo chmod +x "$TMP_BIN"
+      sudo mv "$TMP_BIN" /usr/local/bin/mhsendmail
+
+      echo "🛠 Configuring PHP sendmail_path for MailHog..."
+      PHPV="${PHP_VERSION:-8.2}"
+      for sapi in cli fpm; do
+        INI="/etc/php/${PHPV}/${sapi}/php.ini"
+        if [ -f "$INI" ]; then
+          if grep -q '^;sendmail_path =' "$INI"; then
+            sudo sed -i 's#^;sendmail_path =#sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=127.0.0.1:1025"#' "$INI"
+          elif ! grep -q '^sendmail_path=' "$INI"; then
+            echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=127.0.0.1:1025"' | sudo tee -a "$INI" >/dev/null
+          fi
+        fi
+      done
+
+      echo "🔁 Reloading PHP-FPM (if available)..."
+      sudo service php${PHPV}-fpm reload >/dev/null 2>&1 || sudo service php8.2-fpm reload >/dev/null 2>&1 || true
+
+      echo "🌐 Exposing MailHog web UI port publicly in ONA..."
+      gitpod environment port open 8025 --name mailhog || true
+      # Optionally expose SMTP too (usually not necessary):
+      # gitpod environment port open 1025 --name mailhog-smtp || true
+
+      echo "✅ MailHog running: Web UI on port 8025, SMTP on port 1025"
+      echo "PHP mail() will now go to MailHog."
+
+  stop-mailhog:
+    name: Stop MailHog
+    description: Stop and remove the MailHog container
+    triggeredBy:
+      - manual
+    command: docker rm -f mailhog >/dev/null 2>&1 || true

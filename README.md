@@ -231,6 +231,23 @@ Once services are running:
 - **RabbitMQ Management**: Exposed on port 15672
   - Username: `admin` / Password: `admin`
   - Or: `guest` / `guest`
+- **CloudBeaver (DB Manager)**: Exposed on port 8003 (public when task runs)
+  - Connect in CloudBeaver to `host.docker.internal:3306` with `root` / `nem4540`
+- **MailHog**: Web UI on port 8025 (public when task runs); SMTP on port 1025 (internal)
+
+## 📦 Optional Tools: CloudBeaver & MailHog
+
+### CloudBeaver (DB Manager)
+- Start via ONA Automations: open the Automations panel and run task `CloudBeaver (DB Manager)`.
+- The task ensures MariaDB is running, opens DB bind-address for external connections, grants root access, starts the CloudBeaver container, and exposes port 8003 publicly in ONA.
+- Open the public URL on port 8003 and create a connection to `host.docker.internal` on port `3306` with `root` / `nem4540`.
+- Stop with the `Stop CloudBeaver` task.
+
+### MailHog (Email service simulator)
+- Start via ONA Automations: run task `MailHog (Mail Catcher)`.
+- The task installs `mhsendmail`, configures PHP `sendmail_path` to route `mail()` to MailHog, starts the container, and exposes the web UI on port 8025 publicly in ONA.
+- Visit the public URL on port 8025 to view captured emails. SMTP listens on port 1025 (internal).
+- Stop with the `Stop MailHog` task.
 
 ## 🔍 Troubleshooting
 
